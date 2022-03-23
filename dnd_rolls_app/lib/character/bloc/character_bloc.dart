@@ -9,7 +9,11 @@ part 'character_state.dart';
 
 class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
   final CharacterService _characterService;
-  CharacterBloc(this._characterService) : super(CharacterInitial()) {
+  CharacterBloc(this._characterService) : super(RegisteringServiceState()) {
+    on<RegisterServiceEvent>((event, emit) async {
+      await _characterService.init();
+      add(const LoadCharacterEvent());
+    });
     on<LoadCharacterEvent>((event, emit) {
       final characters = _characterService.getCharacters();
       emit(CharacterLoadedState(characters));

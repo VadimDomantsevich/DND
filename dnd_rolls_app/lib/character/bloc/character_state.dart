@@ -17,3 +17,8 @@ class CharacterLoadedState extends CharacterState {
   @override
   List<Object> get props => [characters];
 }
+
+class RegisteringServiceState extends CharacterState {
+  @override
+  List<Object> get props => [];
+}

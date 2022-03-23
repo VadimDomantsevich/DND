@@ -69,3 +69,8 @@ class RemoveCharacterEvent extends CharacterEvent {
   @override
   List<Object> get props => [name];
 }
+
+class RegisterServiceEvent extends CharacterEvent {
+  @override
+  List<Object> get props => [];
+}

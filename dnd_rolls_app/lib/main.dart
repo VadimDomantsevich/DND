@@ -1,7 +1,11 @@
 import 'package:dnd_rolls_app/presentation/router/app_router.dart';
+import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
   runApp(MyApp(
     appRouter: AppRouter(),
   ));
@@ -13,12 +17,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DND',
-      onGenerateRoute: appRouter.onGenerateRoutes,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(create: ((context) => CharacterService())),
+      ],
+      child: MaterialApp(
+        title: 'DND',
+        onGenerateRoute: appRouter.onGenerateRoutes,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
       ),
     );
   }
