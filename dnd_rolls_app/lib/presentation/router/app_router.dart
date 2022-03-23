@@ -1,5 +1,6 @@
-import 'package:dnd_rolls_app/presentation/screens/characters_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../../character/character_screen.dart';
 
 class AppRouter {
   Route onGenerateRoutes(RouteSettings routeSettings) {
