@@ -9,10 +9,10 @@ abstract class CharacterState extends Equatable {
 
 class CharacterInitial extends CharacterState {}
 
-class CharacterLoadedState extends CharacterState {
+class CharactersLoadedState extends CharacterState {
   final List<Character> characters;
 
-  const CharacterLoadedState(this.characters);
+  const CharactersLoadedState(this.characters);
 
   @override
   List<Object> get props => [characters];

@@ -19,32 +19,17 @@ class CharacterAdapter extends TypeAdapter<Character> {
     return Character(
       fields[0] as String,
       fields[1] as int,
-      fields[2] as int,
-      fields[3] as int,
-      fields[4] as int,
-      fields[5] as int,
-      fields[6] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Character obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.strength)
-      ..writeByte(2)
-      ..write(obj.dexterity)
-      ..writeByte(3)
-      ..write(obj.constitution)
-      ..writeByte(4)
-      ..write(obj.intelligence)
-      ..writeByte(5)
-      ..write(obj.wisdom)
-      ..writeByte(6)
-      ..write(obj.charisma);
+      ..write(obj.skillBonus);
   }
 
   @override

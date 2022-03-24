@@ -2,7 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../model/character.dart';
+import '../../../model/character.dart';
+
 
 part 'character_event.dart';
 part 'character_state.dart';
@@ -16,29 +17,19 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     });
     on<LoadCharacterEvent>((event, emit) {
       final characters = _characterService.getCharacters();
-      emit(CharacterLoadedState(characters));
+      emit(CharactersLoadedState(characters));
     });
     on<AddCharacterEvent>((event, emit) {
       _characterService.addCharacter(
           event.name,
-          event.strength,
-          event.dexterity,
-          event.constitution,
-          event.intelligence,
-          event.wisdom,
-          event.charisma);
+          event.skillBonus);
       add(const LoadCharacterEvent());
     });
     on<UpdateCharacterEvent>((event, emit) {
       _characterService.updateCharacter(
           event.name,
           event.newName,
-          event.strength,
-          event.dexterity,
-          event.constitution,
-          event.intelligence,
-          event.wisdom,
-          event.charisma);
+          event.skillBonus);
       add(const LoadCharacterEvent());
     });
     on<RemoveCharacterEvent>((event, emit) {
