@@ -44,10 +44,17 @@ class CharactersScreen extends StatelessWidget {
                           builder: (context) => const Dialog(
                                 child: CreateCharacter(),
                               ));
-                      if (result.length == 7) {
+                      if (result.length == 8) {
                         BlocProvider.of<CharacterBloc>(context).add(
-                            AddCharacterEvent(result[0], result[1], result[2],
-                                result[3], result[4], result[5], result[6]));
+                            AddCharacterEvent(
+                                result[0],
+                                result[1],
+                                result[2],
+                                result[3],
+                                result[4],
+                                result[5],
+                                result[6],
+                                result[7]));
                       }
                     },
                   ),
