@@ -18,12 +18,10 @@ class CharacterService {
   }
 
   Character getCharacter(final String name) {
-    final character =
-        _characters.values.firstWhere((element) => element.name == name);
-    return character;
+    return _characters.values.firstWhere((element) => element.name == name);
   }
 
-  void addCharacter(
+  Future<void> addCharacter(
       final String name,
       final int skillBonus,
       final int strength,
@@ -31,15 +29,15 @@ class CharacterService {
       final int constitution,
       final int intelligence,
       final int wisdom,
-      final int charisma) {
-    _characters.add(Character(name, skillBonus, strength, dexterity,
+      final int charisma) async {
+    await _characters.add(Character(name, skillBonus, strength, dexterity,
         constitution, intelligence, wisdom, charisma));
   }
 
   Future<void> removeCharacter(final String name) async {
-    final characterToRemove =
-        _characters.values.firstWhere((element) => element.name == name);
-    await characterToRemove.delete();
+    await _characters.values
+        .firstWhere((element) => element.name == name)
+        .delete();
   }
 
   Future<void> updateCharacter(
