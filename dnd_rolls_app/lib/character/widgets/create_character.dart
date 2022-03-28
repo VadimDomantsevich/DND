@@ -1,4 +1,5 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
+import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 
 class CreateCharacter extends StatefulWidget {
@@ -12,7 +13,7 @@ class _CreateCharacterState extends State<CreateCharacter> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
-  final _skillBonusController = TextEditingController();
+  int _skillBonusValue = 3;
   int _strengthValue = 10;
   int _dexterityValue = 10;
   int _constitutionValue = 10;
@@ -26,38 +27,51 @@ class _CreateCharacterState extends State<CreateCharacter> {
       child: Column(
         children: [
           const Text('Создание персонажа'),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.person),
-                hintText: 'Как вас будут называть',
-                labelText: 'Имя персонажа *',
-              ),
-              validator: (value) {
-                return (value == null || value.isEmpty)
-                    ? 'Поле не должно быть пустым'
-                    : null;
-              },
-            ), //Не влазит
-            TextFormField(
-              keyboardType: TextInputType.number,
-              controller: _skillBonusController,
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.class__outlined),
-                labelText: 'Бонус мастерства',
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Поле не должно быть пустым';
-                } else if (int.parse(value) < 1 || int.parse(value) > 6) {
-                  return 'От 1 до 6';
-                } else {
-                  return null;
-                }
-              },
-            ),
-          ]),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 230,
+                    child: TextFormField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.person),
+                        hintText: 'Как вас будут называть',
+                        labelText: 'Имя персонажа *',
+                      ),
+                      validator: (value) {
+                        return (value == null || value.isEmpty)
+                            ? 'Поле не должно быть пустым'
+                            : null;
+                      },
+                    ),
+                  ), //Не влазит
+                  FloatingActionButton(
+                    mini: true,
+                    onPressed: () {
+                      decrementSkillBonus(_skillBonusValue);
+                    },
+                    tooltip: 'Уменьшить',
+                    child: const Icon(Icons.remove),
+                  ),
+                  Column(
+                    children: [
+                      const Text('Бонус'),
+                      Text('$_skillBonusValue'),
+                    ],
+                  ),
+                  FloatingActionButton(
+                    mini: true,
+                    onPressed: () {
+                      incrementSkillBonus(_skillBonusValue);
+                    },
+                    tooltip: 'Увеличить',
+                    child: const Icon(Icons.add),
+                  ),
+                ]),
+          ),
           buildCharacteristic(CharacteristicsEnum.strength),
           buildCharacteristic(CharacteristicsEnum.dexterity),
           buildCharacteristic(CharacteristicsEnum.constitution),
@@ -69,7 +83,7 @@ class _CreateCharacterState extends State<CreateCharacter> {
                 if (_formKey.currentState!.validate()) {
                   final result = [
                     _nameController.text,
-                    3,
+                    _skillBonusValue,
                     _strengthValue,
                     _dexterityValue,
                     _constitutionValue,
@@ -84,6 +98,22 @@ class _CreateCharacterState extends State<CreateCharacter> {
         ],
       ),
     );
+  }
+
+  void incrementSkillBonus(int value) {
+    setState(() {
+      if (value < 6) {
+        _skillBonusValue++;
+      }
+    });
+  }
+
+  void decrementSkillBonus(int value) {
+    setState(() {
+      if (value > 1) {
+        _skillBonusValue--;
+      }
+    });
   }
 
   void incrementCharacteristic(CharacteristicsEnum characteristic) {
@@ -140,50 +170,53 @@ class _CreateCharacterState extends State<CreateCharacter> {
     String characteristicText = '';
     int characteristicValue = 10;
     if (characteristicsEnum == CharacteristicsEnum.strength) {
-      characteristicText = 'Сила';
+      characteristicText = Strings.strengthText;
       characteristicValue = _strengthValue;
     } else if (characteristicsEnum == CharacteristicsEnum.dexterity) {
-      characteristicText = 'Ловкость';
+      characteristicText = Strings.dexterityText;
       characteristicValue = _dexterityValue;
     } else if (characteristicsEnum == CharacteristicsEnum.constitution) {
-      characteristicText = 'Телосложение';
+      characteristicText = Strings.constitutionText;
       characteristicValue = _constitutionValue;
     } else if (characteristicsEnum == CharacteristicsEnum.intelligence) {
-      characteristicText = 'Интеллект';
+      characteristicText = Strings.intelligenceText;
       characteristicValue = _intelligenceValue;
     } else if (characteristicsEnum == CharacteristicsEnum.wisdom) {
-      characteristicText = 'Мудрость';
+      characteristicText = Strings.wisdomText;
       characteristicValue = _wisdomValue;
     } else if (characteristicsEnum == CharacteristicsEnum.charisma) {
-      characteristicText = 'Харизма';
+      characteristicText = Strings.charismaText;
       characteristicValue = _charismaValue;
     }
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        FloatingActionButton(
-          mini: true,
-          onPressed: () {
-            decrementCharacteristic(characteristicsEnum);
-          },
-          tooltip: 'Уменьшить',
-          child: const Icon(Icons.remove),
-        ),
-        Column(
-          children: [
-            Text(characteristicText),
-            Text('$characteristicValue'),
-          ],
-        ),
-        FloatingActionButton(
-          mini: true,
-          onPressed: () {
-            incrementCharacteristic(characteristicsEnum);
-          },
-          tooltip: 'Увеличить',
-          child: const Icon(Icons.add),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          FloatingActionButton(
+            mini: true,
+            onPressed: () {
+              decrementCharacteristic(characteristicsEnum);
+            },
+            tooltip: 'Уменьшить',
+            child: const Icon(Icons.remove),
+          ),
+          Column(
+            children: [
+              Text(characteristicText),
+              Text('$characteristicValue'),
+            ],
+          ),
+          FloatingActionButton(
+            mini: true,
+            onPressed: () {
+              incrementCharacteristic(characteristicsEnum);
+            },
+            tooltip: 'Увеличить',
+            child: const Icon(Icons.add),
+          ),
+        ],
+      ),
     );
   }
 }

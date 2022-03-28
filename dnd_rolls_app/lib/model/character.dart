@@ -7,18 +7,20 @@ class Character extends HiveObject {
   @HiveField(0)
   final String name;
   @HiveField(1)
-  final int strength;
+  final int skillBonus;
   @HiveField(2)
-  final int dexterity;
+  final int strength;
   @HiveField(3)
-  final int constitution;
+  final int dexterity;
   @HiveField(4)
-  final int intelligence;
+  final int constitution;
   @HiveField(5)
-  final int wisdom;
+  final int intelligence;
   @HiveField(6)
+  final int wisdom;
+  @HiveField(7)
   final int charisma;
 
-  Character(this.name, this.strength, this.dexterity, this.constitution,
-      this.intelligence, this.wisdom, this.charisma);
+  Character(this.name, this.skillBonus, this.strength, this.dexterity,
+      this.constitution, this.intelligence, this.wisdom, this.charisma);
 }

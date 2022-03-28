@@ -21,6 +21,7 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     on<AddCharacterEvent>((event, emit) {
       _characterService.addCharacter(
           event.name,
+          event.skillBonus,
           event.strength,
           event.dexterity,
           event.constitution,
@@ -33,6 +34,7 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
       _characterService.updateCharacter(
           event.name,
           event.newName,
+          event.skillBonus,
           event.strength,
           event.dexterity,
           event.constitution,

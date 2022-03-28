@@ -9,8 +9,8 @@ class CharacterService {
     _characters = await Hive.openBox('charactersBox');
 
     await _characters.clear();
-    await _characters.add(Character('Рагнар', 13, 17, 15, 11, 16, 12));
-    await _characters.add(Character('Хироки', 14, 11, 15, 18, 12, 18));
+    await _characters.add(Character('Рагнар', 3, 13, 17, 15, 11, 16, 12));
+    await _characters.add(Character('Хироки', 3, 14, 11, 15, 18, 12, 18));
   }
 
   List<Character> getCharacters() {
@@ -25,14 +25,15 @@ class CharacterService {
 
   void addCharacter(
       final String name,
+      final int skillBonus,
       final int strength,
       final int dexterity,
       final int constitution,
       final int intelligence,
       final int wisdom,
       final int charisma) {
-    _characters.add(Character(name, strength, dexterity, constitution,
-        intelligence, wisdom, charisma));
+    _characters.add(Character(name, skillBonus, strength, dexterity,
+        constitution, intelligence, wisdom, charisma));
   }
 
   Future<void> removeCharacter(final String name) async {
@@ -44,6 +45,7 @@ class CharacterService {
   Future<void> updateCharacter(
       final String name,
       final String newName,
+      final int skillBonus,
       final int strength,
       final int dexterity,
       final int constitution,
@@ -55,7 +57,7 @@ class CharacterService {
     final index = characterToUpdate.key as int;
     await _characters.put(
         index,
-        Character(newName, strength, dexterity, constitution, intelligence,
-            wisdom, charisma));
+        Character(newName, skillBonus, strength, dexterity, constitution,
+            intelligence, wisdom, charisma));
   }
 }

@@ -30,7 +30,7 @@ class CharactersScreen extends StatelessWidget {
                   ...state.characters.map(
                     (e) => ListTile(
                       title: Text(
-                          '${e.name} ${e.strength} ${e.dexterity} ${e.constitution} ${e.intelligence} ${e.wisdom} ${e.charisma}'),
+                          '${e.name} ${e.skillBonus} ${e.strength} ${e.dexterity} ${e.constitution} ${e.intelligence} ${e.wisdom} ${e.charisma}'),
                       trailing: IconButton(
                           onPressed: () {}, icon: const Icon(Icons.create)),
                     ),

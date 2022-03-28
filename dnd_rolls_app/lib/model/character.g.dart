@@ -24,26 +24,29 @@ class CharacterAdapter extends TypeAdapter<Character> {
       fields[4] as int,
       fields[5] as int,
       fields[6] as int,
+      fields[7] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Character obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.strength)
+      ..write(obj.skillBonus)
       ..writeByte(2)
-      ..write(obj.dexterity)
+      ..write(obj.strength)
       ..writeByte(3)
-      ..write(obj.constitution)
+      ..write(obj.dexterity)
       ..writeByte(4)
-      ..write(obj.intelligence)
+      ..write(obj.constitution)
       ..writeByte(5)
-      ..write(obj.wisdom)
+      ..write(obj.intelligence)
       ..writeByte(6)
+      ..write(obj.wisdom)
+      ..writeByte(7)
       ..write(obj.charisma);
   }
 
