@@ -26,7 +26,10 @@ class _CreateCharacterState extends State<CreateCharacter> {
       key: _formKey,
       child: Column(
         children: [
-          const Text('Создание персонажа'),
+          const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Text('Создание персонажа'),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -39,7 +42,7 @@ class _CreateCharacterState extends State<CreateCharacter> {
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.person),
                         hintText: 'Как вас будут называть',
-                        labelText: 'Имя персонажа *',
+                        labelText: 'Имя персонажа',
                       ),
                       validator: (value) {
                         return (value == null || value.isEmpty)
@@ -209,7 +212,7 @@ class _CreateCharacterState extends State<CreateCharacter> {
       characteristicValue = _charismaValue;
     }
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 84, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

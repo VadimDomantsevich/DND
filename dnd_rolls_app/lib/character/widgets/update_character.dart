@@ -41,7 +41,10 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
       key: _formKey,
       child: Column(
         children: [
-          Text('Редактирование персонажа ${widget.character.name}'),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text('Редактирование персонажа ${widget.character.name}'),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -225,7 +228,7 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
       characteristicValue = _charismaValue;
     }
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 84, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
