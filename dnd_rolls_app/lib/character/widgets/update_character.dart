@@ -1,17 +1,18 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
+import 'package:dnd_rolls_app/model/character.dart';
 import 'package:flutter/material.dart';
 
-class CreateCharacter extends StatefulWidget {
-  const CreateCharacter({Key? key}) : super(key: key);
+class UpdateCharacter extends StatefulWidget {
+  final Character character;
+  const UpdateCharacter({Key? key, required this.character}) : super(key: key);
 
   @override
-  State<CreateCharacter> createState() => _CreateCharacterState();
+  State<UpdateCharacter> createState() => _UpdateCharacterState();
 }
 
-class _CreateCharacterState extends State<CreateCharacter> {
+class _UpdateCharacterState extends State<UpdateCharacter> {
   final _formKey = GlobalKey<FormState>();
-
   final _nameController = TextEditingController();
   int _skillBonusValue = 3;
   int _strengthValue = 10;
@@ -20,13 +21,27 @@ class _CreateCharacterState extends State<CreateCharacter> {
   int _intelligenceValue = 10;
   int _wisdomValue = 10;
   int _charismaValue = 10;
+
+  @override
+  void initState() {
+    _nameController.text = widget.character.name;
+    _skillBonusValue = widget.character.skillBonus;
+    _strengthValue = widget.character.strength;
+    _dexterityValue = widget.character.dexterity;
+    _constitutionValue = widget.character.constitution;
+    _intelligenceValue = widget.character.intelligence;
+    _wisdomValue = widget.character.wisdom;
+    _charismaValue = widget.character.charisma;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          const Text('Создание персонажа'),
+          Text('Редактирование персонажа ${widget.character.name}'),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -98,6 +113,7 @@ class _CreateCharacterState extends State<CreateCharacter> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           final result = [
+                            widget.character.name,
                             _nameController.text,
                             _skillBonusValue,
                             _strengthValue,

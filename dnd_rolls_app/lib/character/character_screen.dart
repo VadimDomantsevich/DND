@@ -1,5 +1,6 @@
 import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
 import 'package:dnd_rolls_app/character/widgets/create_character.dart';
+import 'package:dnd_rolls_app/character/widgets/update_character.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:flutter/material.dart';
@@ -28,11 +29,33 @@ class CharactersScreen extends StatelessWidget {
               return ListView(
                 children: [
                   ...state.characters.map(
-                    (e) => ListTile(
+                    (character) => ListTile(
                       title: Text(
-                          '${e.name} ${e.skillBonus} ${e.strength} ${e.dexterity} ${e.constitution} ${e.intelligence} ${e.wisdom} ${e.charisma}'),
+                          '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}'),
                       trailing: IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.create)),
+                          tooltip: 'Редактировать',
+                          onPressed: () async {
+                            List<dynamic> result = await showDialog(
+                                context: context,
+                                builder: (context) => Dialog(
+                                      child:
+                                          UpdateCharacter(character: character),
+                                    ));
+                            if (result.isNotEmpty) {
+                              BlocProvider.of<CharacterBloc>(context).add(
+                                  UpdateCharacterEvent(
+                                      result[0],
+                                      result[1],
+                                      result[2],
+                                      result[3],
+                                      result[4],
+                                      result[5],
+                                      result[6],
+                                      result[7],
+                                      result[8]));
+                            }
+                          },
+                          icon: const Icon(Icons.create)),
                     ),
                   ),
                   ListTile(
@@ -44,7 +67,7 @@ class CharactersScreen extends StatelessWidget {
                           builder: (context) => const Dialog(
                                 child: CreateCharacter(),
                               ));
-                      if (result.length == 8) {
+                      if (result.isNotEmpty) {
                         BlocProvider.of<CharacterBloc>(context).add(
                             AddCharacterEvent(
                                 result[0],
