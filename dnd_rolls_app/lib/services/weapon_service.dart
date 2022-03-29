@@ -7,7 +7,9 @@ class WeaponService {
 
   Future<void> init() async {
     Hive.registerAdapter(WeaponAdapter());
-    _weapons = await Hive.openBox('weaponssBox');
+    Hive.registerAdapter(CharacteristicsEnumAdapter());
+    Hive.registerAdapter(DamageCubeAdapter());
+    _weapons = await Hive.openBox('weaponsBox');
 
     await _weapons.clear();
     await _weapons
