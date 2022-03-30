@@ -30,3 +30,5 @@ enum DamageCube {
   @HiveField(4)
   d12
 }
+
+enum CreationResult { success, failure, alreadyExists }

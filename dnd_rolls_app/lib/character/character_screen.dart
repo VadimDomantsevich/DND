@@ -23,7 +23,19 @@ class CharactersScreen extends StatelessWidget {
         create: (context) =>
             CharacterBloc(RepositoryProvider.of<CharacterService>(context))
               ..add(RegisterServiceEvent()),
-        child: BlocBuilder<CharacterBloc, CharacterState>(
+        child: BlocConsumer<CharacterBloc, CharacterState>(
+          listener: (context, state) {
+            if (state is CharacterLoadedState) {
+              if (state.error != null) {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: const Text("Ошибка"),
+                          content: Text(state.error!),
+                        ));
+              }
+            }
+          },
           builder: ((context, state) {
             if (state is CharacterLoadedState) {
               return ListView(
@@ -68,28 +80,28 @@ class CharactersScreen extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                          title: const Text('Создать нового персонажа'),
-                          trailing: const Icon(Icons.add_box_outlined),
-                          onTap: () async {
-                            List<dynamic> result = await showDialog(
-                                context: context,
-                                builder: (context) => const Dialog(
-                                      child: UpdateCharacter(),
-                                    ));
-                            if (result.isNotEmpty) {
-                              BlocProvider.of<CharacterBloc>(context).add(
-                                  AddCharacterEvent(
-                                      result[0],
-                                      result[1],
-                                      result[2],
-                                      result[3],
-                                      result[4],
-                                      result[5],
-                                      result[6],
-                                      result[7]));
-                            }
-                          },
-                        ),
+                    title: const Text('Создать нового персонажа'),
+                    trailing: const Icon(Icons.add_box_outlined),
+                    onTap: () async {
+                      List<dynamic> result = await showDialog(
+                          context: context,
+                          builder: (context) => const Dialog(
+                                child: UpdateCharacter(),
+                              ));
+                      if (result.isNotEmpty) {
+                        BlocProvider.of<CharacterBloc>(context).add(
+                            AddCharacterEvent(
+                                result[0],
+                                result[1],
+                                result[2],
+                                result[3],
+                                result[4],
+                                result[5],
+                                result[6],
+                                result[7]));
+                      }
+                    },
+                  ),
                 ],
               );
             }

@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:hive/hive.dart';
 
@@ -21,7 +22,7 @@ class CharacterService {
     return _characters.values.firstWhere((element) => element.name == name);
   }
 
-  void addCharacter(
+  Future<CreationResult> addCharacter(
       final String name,
       final int skillBonus,
       final int strength,
@@ -30,8 +31,18 @@ class CharacterService {
       final int intelligence,
       final int wisdom,
       final int charisma) async {
-     await _characters.add(Character(name, skillBonus, strength, dexterity,
-        constitution, intelligence, wisdom, charisma));
+    final alreadyExists = _characters.values
+        .any((element) => element.name.toLowerCase() == name.toLowerCase());
+    if (alreadyExists) {
+      return CreationResult.alreadyExists;
+    }
+    try {
+      await _characters.add(Character(name, skillBonus, strength, dexterity,
+          constitution, intelligence, wisdom, charisma));
+      return CreationResult.success;
+    } catch (e) {
+      return CreationResult.failure;
+    }
   }
 
   Future<void> removeCharacter(final String name) async {
@@ -40,7 +51,7 @@ class CharacterService {
         .delete();
   }
 
-  Future<void> updateCharacter(
+  Future<CreationResult> updateCharacter(
       final String name,
       final String newName,
       final int skillBonus,
@@ -52,10 +63,20 @@ class CharacterService {
       final int charisma) async {
     final characterToUpdate =
         _characters.values.firstWhere(((element) => element.name == name));
-    final index = characterToUpdate.key as int;
-    await _characters.put(
-        index,
-        Character(newName, skillBonus, strength, dexterity, constitution,
-            intelligence, wisdom, charisma));
+    final alreadyExists = _characters.values.any((element) =>
+        element.name.toLowerCase() == newName && element != characterToUpdate);
+    if (alreadyExists) {
+      return CreationResult.alreadyExists;
+    }
+    try {
+      final index = characterToUpdate.key as int;
+      await _characters.put(
+          index,
+          Character(newName, skillBonus, strength, dexterity, constitution,
+              intelligence, wisdom, charisma));
+      return CreationResult.success;
+    } catch (e) {
+      return CreationResult.failure;
+    }
   }
 }

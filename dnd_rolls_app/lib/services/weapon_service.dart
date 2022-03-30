@@ -26,9 +26,19 @@ class WeaponService {
     return _weapons.values.firstWhere((element) => element.name == name);
   }
 
-  Future<void> addWeapon(final String name, final DamageCube damage,
+  Future<CreationResult> addWeapon(final String name, final DamageCube damage,
       final CharacteristicsEnum characteristic) async {
-    await _weapons.add(Weapon(name, damage, characteristic));
+    final alreadyExists = _weapons.values
+        .any((element) => element.name.toLowerCase() == name.toLowerCase());
+    if (alreadyExists) {
+      return CreationResult.alreadyExists;
+    }
+    try {
+      await _weapons.add(Weapon(name, damage, characteristic));
+      return CreationResult.success;
+    } catch (e) {
+      return CreationResult.failure;
+    }
   }
 
   Future<void> removeWeapon(final String name) async {
@@ -37,11 +47,21 @@ class WeaponService {
         .delete();
   }
 
-  Future<void> updateWeapon(final String name, final String newName,
+  Future<CreationResult> updateWeapon(final String name, final String newName,
       final DamageCube damage, final CharacteristicsEnum characteristic) async {
     final weaponToUpdate =
         _weapons.values.firstWhere((element) => element.name == name);
-    final index = weaponToUpdate.key as int;
-    await _weapons.put(index, Weapon(newName, damage, characteristic));
+    final alreadyExists = _weapons.values.any((element) =>
+        element.name.toLowerCase() == newName && element != weaponToUpdate);
+    if (alreadyExists) {
+      return CreationResult.alreadyExists;
+    }
+    try {
+      final index = weaponToUpdate.key as int;
+      await _weapons.put(index, Weapon(newName, damage, characteristic));
+      return CreationResult.success;
+    } catch (e) {
+      return CreationResult.failure;
+    }
   }
 }

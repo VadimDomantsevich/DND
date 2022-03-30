@@ -19,14 +19,40 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
       emit(WeaponLoadedState(weapons));
     });
     on<AddWeaponEvent>((event, emit) async {
-      await _weaponService.addWeapon(
+      final result = await _weaponService.addWeapon(
           event.name, event.damage, event.characteristic);
-      add(const LoadWeaponEvent());
+      switch (result) {
+        case CreationResult.success:
+          add(const LoadWeaponEvent());
+          break;
+        case CreationResult.failure:
+          final weapons = _weaponService.getWeapons();
+          emit(WeaponLoadedState(weapons, error: 'Не удалось создать'));
+          break;
+        case CreationResult.alreadyExists:
+          final weapons = _weaponService.getWeapons();
+          emit(WeaponLoadedState(weapons,
+              error: 'Оружие с таким именем уже создано'));
+          break;
+      }
     });
     on<UpdateWeaponEvent>((event, emit) async {
-      await _weaponService.updateWeapon(
+      final result = await _weaponService.updateWeapon(
           event.name, event.newName, event.damage, event.characteristic);
-      add(const LoadWeaponEvent());
+      switch (result) {
+        case CreationResult.success:
+          add(const LoadWeaponEvent());
+          break;
+        case CreationResult.failure:
+          final weapons = _weaponService.getWeapons();
+          emit(WeaponLoadedState(weapons, error: 'Не удалось отредактировать'));
+          break;
+        case CreationResult.alreadyExists:
+          final weapons = _weaponService.getWeapons();
+          emit(WeaponLoadedState(weapons,
+              error: 'Оружие с таким именем уже создано'));
+          break;
+      }
     });
     on<RemoveWeaponEvent>((event, emit) async {
       await _weaponService.removeWeapon(event.name);

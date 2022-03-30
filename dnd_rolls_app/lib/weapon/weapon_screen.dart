@@ -24,7 +24,19 @@ class WeaponScreen extends StatelessWidget {
         create: (context) =>
             WeaponBloc(RepositoryProvider.of<WeaponService>(context))
               ..add(RegisterServiceEvent()),
-        child: BlocBuilder<WeaponBloc, WeaponState>(
+        child: BlocConsumer<WeaponBloc, WeaponState>(
+          listener: (context, state) {
+            if (state is WeaponLoadedState) {
+              if (state.error != null) {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: const Text("Ошибка"),
+                          content: Text(state.error!),
+                        ));
+              }
+            }
+          },
           builder: ((context, state) {
             if (state is WeaponLoadedState) {
               return ListView(
