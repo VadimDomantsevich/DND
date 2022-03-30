@@ -29,36 +29,42 @@ class WeaponScreen extends StatelessWidget {
             if (state is WeaponLoadedState) {
               return ListView(
                 children: [
-                  ...state.weapons.map((weapon) => Slidable(
-                        key: const ValueKey(1),
-                        startActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: ((context) async => {
-                                    BlocProvider.of<WeaponBloc>(context)
-                                        .add(RemoveWeaponEvent(weapon.name))
-                                  }),
-                              backgroundColor: const Color(0xFFFE4A49),
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: 'Удалить',
-                            ),
-                            SlidableAction(
-                              onPressed: (((context) async =>
-                                  {update(context, weapon)})),
-                              backgroundColor: Colors.blue.shade200,
-                              foregroundColor: Colors.white,
-                              icon: Icons.create,
-                              label: 'Исправить',
-                            ),
-                          ],
+                  ...state.weapons.map(
+                    (weapon) => Column(
+                      children: [
+                        Slidable(
+                          key: const ValueKey(1),
+                          startActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: ((newContext) async => {
+                                      BlocProvider.of<WeaponBloc>(context)
+                                          .add(RemoveWeaponEvent(weapon.name))
+                                    }),
+                                backgroundColor: const Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Удалить',
+                              ),
+                              SlidableAction(
+                                onPressed: (((newContext) async =>
+                                    {update(context, weapon)})),
+                                backgroundColor: Colors.blue.shade200,
+                                foregroundColor: Colors.white,
+                                icon: Icons.create,
+                                label: 'Исправить',
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                            title: Text(
+                                '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)}'),
+                          ),
                         ),
-                        child: ListTile(
-                          title: Text(
-                              '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)}'),
-                        ),
-                      )),
+                      ],
+                    ),
+                  ),
                   ListTile(
                     title: const Text('Создать новое оружие'),
                     trailing: const Icon(Icons.add_box_outlined),
