@@ -33,7 +33,6 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.weapon == null) {}
     return Form(
       key: _formKey,
       child: Column(

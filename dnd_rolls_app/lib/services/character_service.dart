@@ -21,7 +21,7 @@ class CharacterService {
     return _characters.values.firstWhere((element) => element.name == name);
   }
 
-  Future<void> addCharacter(
+  void addCharacter(
       final String name,
       final int skillBonus,
       final int strength,
@@ -30,7 +30,7 @@ class CharacterService {
       final int intelligence,
       final int wisdom,
       final int charisma) async {
-    await _characters.add(Character(name, skillBonus, strength, dexterity,
+     await _characters.add(Character(name, skillBonus, strength, dexterity,
         constitution, intelligence, wisdom, charisma));
   }
 

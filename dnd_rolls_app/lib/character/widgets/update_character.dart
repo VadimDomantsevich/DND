@@ -4,8 +4,8 @@ import 'package:dnd_rolls_app/model/character.dart';
 import 'package:flutter/material.dart';
 
 class UpdateCharacter extends StatefulWidget {
-  final Character character;
-  const UpdateCharacter({Key? key, required this.character}) : super(key: key);
+  final Character? character;
+  const UpdateCharacter({Key? key, this.character}) : super(key: key);
 
   @override
   State<UpdateCharacter> createState() => _UpdateCharacterState();
@@ -13,6 +13,7 @@ class UpdateCharacter extends StatefulWidget {
 
 class _UpdateCharacterState extends State<UpdateCharacter> {
   final _formKey = GlobalKey<FormState>();
+  String _dialogHeader = '';
   final _nameController = TextEditingController();
   int _skillBonusValue = 3;
   int _strengthValue = 10;
@@ -24,14 +25,20 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
 
   @override
   void initState() {
-    _nameController.text = widget.character.name;
-    _skillBonusValue = widget.character.skillBonus;
-    _strengthValue = widget.character.strength;
-    _dexterityValue = widget.character.dexterity;
-    _constitutionValue = widget.character.constitution;
-    _intelligenceValue = widget.character.intelligence;
-    _wisdomValue = widget.character.wisdom;
-    _charismaValue = widget.character.charisma;
+    if (widget.character != null) {
+      _dialogHeader = 'Редактирование персонажа ${widget.character!.name}';
+      _nameController.text = widget.character!.name;
+      _skillBonusValue = widget.character!.skillBonus;
+      _strengthValue = widget.character!.strength;
+      _dexterityValue = widget.character!.dexterity;
+      _constitutionValue = widget.character!.constitution;
+      _intelligenceValue = widget.character!.intelligence;
+      _wisdomValue = widget.character!.wisdom;
+      _charismaValue = widget.character!.charisma;
+    } else {
+      _dialogHeader = 'Создание персонажа';
+    }
+
     super.initState();
   }
 
@@ -43,7 +50,7 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
         children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Text('Редактирование персонажа ${widget.character.name}'),
+            child: Text(_dialogHeader),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -57,7 +64,7 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.person),
                         hintText: 'Как вас будут называть',
-                        labelText: 'Имя персонажа *',
+                        labelText: 'Имя персонажа',
                       ),
                       validator: (value) {
                         return (value == null || value.isEmpty)
@@ -115,18 +122,32 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
                   child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          final result = [
-                            widget.character.name,
-                            _nameController.text,
-                            _skillBonusValue,
-                            _strengthValue,
-                            _dexterityValue,
-                            _constitutionValue,
-                            _intelligenceValue,
-                            _wisdomValue,
-                            _charismaValue
-                          ];
-                          Navigator.of(context).pop(result);
+                          if (widget.character != null) {
+                            final result = [
+                              widget.character!.name,
+                              _nameController.text,
+                              _skillBonusValue,
+                              _strengthValue,
+                              _dexterityValue,
+                              _constitutionValue,
+                              _intelligenceValue,
+                              _wisdomValue,
+                              _charismaValue
+                            ];
+                            Navigator.of(context).pop(result);
+                          } else {
+                            final result = [
+                              _nameController.text,
+                              _skillBonusValue,
+                              _strengthValue,
+                              _dexterityValue,
+                              _constitutionValue,
+                              _intelligenceValue,
+                              _wisdomValue,
+                              _charismaValue
+                            ];
+                            Navigator.of(context).pop(result);
+                          }
                         }
                       },
                       child: const Text('Сохранить')),

@@ -18,8 +18,8 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
       final characters = _characterService.getCharacters();
       emit(CharacterLoadedState(characters));
     });
-    on<AddCharacterEvent>((event, emit) async {
-      await _characterService.addCharacter(
+    on<AddCharacterEvent>((event, emit) {
+      _characterService.addCharacter(
           event.name,
           event.skillBonus,
           event.strength,
@@ -30,8 +30,8 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
           event.charisma);
       add(const LoadCharacterEvent());
     });
-    on<UpdateCharacterEvent>((event, emit) async {
-      await _characterService.updateCharacter(
+    on<UpdateCharacterEvent>((event, emit) {
+      _characterService.updateCharacter(
           event.name,
           event.newName,
           event.skillBonus,
@@ -43,8 +43,8 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
           event.charisma);
       add(const LoadCharacterEvent());
     });
-    on<RemoveCharacterEvent>((event, emit) async {
-      await _characterService.removeCharacter(event.name);
+    on<RemoveCharacterEvent>((event, emit) {
+      _characterService.removeCharacter(event.name);
       add(const LoadCharacterEvent());
     });
   }
