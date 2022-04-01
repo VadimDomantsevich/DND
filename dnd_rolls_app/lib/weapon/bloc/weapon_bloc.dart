@@ -9,7 +9,7 @@ part 'weapon_state.dart';
 
 class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
   final WeaponService _weaponService;
-  WeaponBloc(this._weaponService) : super(WeaponInitial()) {
+  WeaponBloc(this._weaponService) : super(RegisteringServiceState()) {
     on<RegisterServiceEvent>((event, emit) async {
       await _weaponService.init();
       add(const LoadWeaponEvent());
@@ -32,7 +32,7 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
         case CreationResult.alreadyExists:
           final weapons = _weaponService.getWeapons();
           emit(WeaponLoadedState(weapons,
-              error: 'Оружие с таким именем уже создано'));
+              error: 'Оружие с таким именем уже существует'));
           break;
       }
     });
@@ -50,7 +50,7 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
         case CreationResult.alreadyExists:
           final weapons = _weaponService.getWeapons();
           emit(WeaponLoadedState(weapons,
-              error: 'Оружие с таким именем уже создано'));
+              error: 'Оружие с таким именем уже существует'));
           break;
       }
     });

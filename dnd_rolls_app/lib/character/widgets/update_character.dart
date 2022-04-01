@@ -25,6 +25,7 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
 
   @override
   void initState() {
+    super.initState();
     if (widget.character != null) {
       _dialogHeader = 'Редактирование персонажа ${widget.character!.name}';
       _nameController.text = widget.character!.name;
@@ -38,8 +39,6 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
     } else {
       _dialogHeader = 'Создание персонажа';
     }
-
-    super.initState();
   }
 
   @override

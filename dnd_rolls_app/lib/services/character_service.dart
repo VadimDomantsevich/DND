@@ -22,7 +22,7 @@ class CharacterService {
     return _characters.values.firstWhere((element) => element.name == name);
   }
 
-  Future<CreationResult> addCharacter(
+  CreationResult addCharacter(
       final String name,
       final int skillBonus,
       final int strength,
@@ -30,14 +30,14 @@ class CharacterService {
       final int constitution,
       final int intelligence,
       final int wisdom,
-      final int charisma) async {
+      final int charisma) {
     final alreadyExists = _characters.values
         .any((element) => element.name.toLowerCase() == name.toLowerCase());
     if (alreadyExists) {
       return CreationResult.alreadyExists;
     }
     try {
-      await _characters.add(Character(name, skillBonus, strength, dexterity,
+      _characters.add(Character(name, skillBonus, strength, dexterity,
           constitution, intelligence, wisdom, charisma));
       return CreationResult.success;
     } catch (e) {

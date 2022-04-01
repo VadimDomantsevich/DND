@@ -20,6 +20,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
   CharacteristicsEnum _characteristic = CharacteristicsEnum.strength;
   @override
   void initState() {
+    super.initState();
     if (widget.weapon != null) {
       _dialogHeader = 'Редактирование оружия ${widget.weapon!.name}';
       _nameController.text = widget.weapon!.name;
@@ -28,7 +29,6 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
     } else {
       _dialogHeader = 'Создание оружия';
     }
-    super.initState();
   }
 
   @override

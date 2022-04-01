@@ -19,8 +19,8 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
       final characters = _characterService.getCharacters();
       emit(CharacterLoadedState(characters));
     });
-    on<AddCharacterEvent>((event, emit) async {
-      final result = await _characterService.addCharacter(
+    on<AddCharacterEvent>((event, emit) {
+      final result = _characterService.addCharacter(
           event.name,
           event.skillBonus,
           event.strength,
@@ -40,7 +40,7 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
         case CreationResult.alreadyExists:
           final characters = _characterService.getCharacters();
           emit(CharacterLoadedState(characters,
-              error: 'Персонаж с таким именем уже создан'));
+              error: 'Персонаж с таким именем уже существует'));
           break;
       }
     });
