@@ -48,7 +48,7 @@ void main() {
         'emits [WeaponLoadedState[_weapons]] when AddWeaponEvent is return CreationResult.success.',
         setUp: () {
           when((() => weaponService.addWeapon(any(), any(), any())))
-              .thenAnswer((invocation) => Future.value(CreationResult.success));
+              .thenAnswer((invocation) => CreationResult.success);
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
         build: () => WeaponBloc(weaponService),
@@ -60,7 +60,7 @@ void main() {
         'emits [WeaponLoadedState[_weapons, error: Не удалось создать]] when AddWeaponEvent is return CreationResult.failure.',
         setUp: () {
           when((() => weaponService.addWeapon(any(), any(), any())))
-              .thenAnswer((invocation) => Future.value(CreationResult.failure));
+              .thenAnswer((invocation) => CreationResult.failure);
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
         build: () => WeaponBloc(weaponService),
@@ -73,8 +73,8 @@ void main() {
       blocTest<WeaponBloc, WeaponState>(
         'emits [WeaponLoadedState[_weapons, error: Оружие с таким именем уже существует]] when AddWeaponEvent is return CreationResult.alreadyExists.',
         setUp: () {
-          when((() => weaponService.addWeapon(any(), any(), any()))).thenAnswer(
-              (invocation) => Future.value(CreationResult.alreadyExists));
+          when((() => weaponService.addWeapon(any(), any(), any())))
+              .thenAnswer((invocation) => CreationResult.alreadyExists);
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
         build: () => WeaponBloc(weaponService),

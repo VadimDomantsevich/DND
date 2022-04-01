@@ -18,6 +18,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
   final _nameController = TextEditingController();
   DamageCube _damage = DamageCube.d6;
   CharacteristicsEnum _characteristic = CharacteristicsEnum.strength;
+  
   @override
   void initState() {
     super.initState();

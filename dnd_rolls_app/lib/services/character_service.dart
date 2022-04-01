@@ -64,7 +64,7 @@ class CharacterService {
     final characterToUpdate =
         _characters.values.firstWhere(((element) => element.name == name));
     final alreadyExists = _characters.values.any((element) =>
-        element.name.toLowerCase() == newName && element != characterToUpdate);
+        element.name.toLowerCase() == newName.toLowerCase() && element != characterToUpdate);
     if (alreadyExists) {
       return CreationResult.alreadyExists;
     }

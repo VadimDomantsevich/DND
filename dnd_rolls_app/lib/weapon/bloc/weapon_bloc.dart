@@ -18,8 +18,8 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
       final weapons = _weaponService.getWeapons();
       emit(WeaponLoadedState(weapons));
     });
-    on<AddWeaponEvent>((event, emit) async {
-      final result = await _weaponService.addWeapon(
+    on<AddWeaponEvent>((event, emit) {
+      final result = _weaponService.addWeapon(
           event.name, event.damage, event.characteristic);
       switch (result) {
         case CreationResult.success:

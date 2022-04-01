@@ -1,12 +1,13 @@
 class Strings {
-  //CharactersScreen
-  static const charactersScreenTitle = 'Персонажи';
   static const strengthText = 'Сила';
   static const dexterityText = 'Ловкость';
   static const constitutionText = 'Телосложение';
   static const intelligenceText = 'Интеллект';
   static const wisdomText = 'Мудрость';
   static const charismaText = 'Харизма';
+
+  //CharactersScreen
+  static const charactersScreenTitle = 'Персонажи';
 
   //WeaponScreen
   static const weaponScreenTitle = 'Оружие';
@@ -15,4 +16,7 @@ class Strings {
   static const weaponDamageD8 = '1d8';
   static const weaponDamageD10 = '1d10';
   static const weaponDamageD12 = '1d12';
+
+  //EnemyScreen
+  static const enemyScreenTitle = 'Противник';
 }

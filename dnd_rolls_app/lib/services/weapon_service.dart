@@ -26,15 +26,15 @@ class WeaponService {
     return _weapons.values.firstWhere((element) => element.name == name);
   }
 
-  Future<CreationResult> addWeapon(final String name, final DamageCube damage,
-      final CharacteristicsEnum characteristic) async {
+  CreationResult addWeapon(final String name, final DamageCube damage,
+      final CharacteristicsEnum characteristic) {
     final alreadyExists = _weapons.values
         .any((element) => element.name.toLowerCase() == name.toLowerCase());
     if (alreadyExists) {
       return CreationResult.alreadyExists;
     }
     try {
-      await _weapons.add(Weapon(name, damage, characteristic));
+      _weapons.add(Weapon(name, damage, characteristic));
       return CreationResult.success;
     } catch (e) {
       return CreationResult.failure;
@@ -52,7 +52,7 @@ class WeaponService {
     final weaponToUpdate =
         _weapons.values.firstWhere((element) => element.name == name);
     final alreadyExists = _weapons.values.any((element) =>
-        element.name.toLowerCase() == newName && element != weaponToUpdate);
+        element.name.toLowerCase() == newName.toLowerCase() && element != weaponToUpdate);
     if (alreadyExists) {
       return CreationResult.alreadyExists;
     }

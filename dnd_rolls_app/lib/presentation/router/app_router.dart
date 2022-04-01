@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/enemy/enemy_screen.dart';
 import 'package:dnd_rolls_app/weapon/weapon_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,7 @@ class AppRouter {
     switch (routeSettings.name) {
       case '/':
         return MaterialPageRoute(
-          builder: (_) => const CharactersScreen(),
+          builder: (_) => const EnemyScreen(),
         );
       case '/characters':
         return MaterialPageRoute(
