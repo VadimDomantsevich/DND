@@ -14,6 +14,11 @@ class LoadCharacterEvent extends CharacterEvent {
   List<Object> get props => [];
 }
 
+class GetCharactersNamesEvent extends CharacterEvent{
+  @override
+  List<Object> get props => [];
+}
+
 class AddCharacterEvent extends CharacterEvent {
   final String name;
   final int skillBonus;

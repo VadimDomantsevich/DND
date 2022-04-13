@@ -1,4 +1,5 @@
 import 'package:dnd_rolls_app/enemy/enemy_screen.dart';
+import 'package:dnd_rolls_app/macros/macros_screen.dart';
 import 'package:dnd_rolls_app/weapon/weapon_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -9,15 +10,15 @@ class AppRouter {
     switch (routeSettings.name) {
       case '/':
         return MaterialPageRoute(
-          builder: (_) => const EnemyScreen(),
+          builder: (_) => const MacrosScreen(),
         );
       case '/characters':
         return MaterialPageRoute(
-          builder: (_) => const CharactersScreen(),
+          builder: (_) => const MacrosScreen(),
         );
       default:
         return MaterialPageRoute(
-          builder: (_) => const CharactersScreen(),
+          builder: (_) => const MacrosScreen(),
         );
     }
   }

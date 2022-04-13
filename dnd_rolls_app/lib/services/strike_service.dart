@@ -6,8 +6,13 @@ import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class StrikeService {
+  Future<void> init() async {
+    Hive.registerAdapter(StrikeAdapter());
+  }
+
   String getName(String characterName, String weaponName, bool isAdvantage,
       bool isHindrance) {
     String result = '$characterName удар оружием $weaponName';

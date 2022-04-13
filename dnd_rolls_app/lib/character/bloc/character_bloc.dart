@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../model/character.dart';
 
@@ -70,6 +71,15 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
               error: 'Персонаж с таким именем уже существует'));
           break;
       }
+    });
+    on<GetCharactersNamesEvent>((event, emit) async {
+      if (!Hive.isAdapterRegistered(1)) {
+        await _characterService.init();
+      }
+
+      final names =
+          _characterService.getCharacters().map((e) => e.name).toList();
+      emit(CharactersNamesLoadedState(names));
     });
     on<RemoveCharacterEvent>((event, emit) {
       _characterService.removeCharacter(event.name);

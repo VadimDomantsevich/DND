@@ -19,4 +19,7 @@ class Strings {
 
   //EnemyScreen
   static const enemyScreenTitle = 'Противник';
+
+  //MacrosScreen
+  static const macrosScreenTitle = 'Макросы';
 }
