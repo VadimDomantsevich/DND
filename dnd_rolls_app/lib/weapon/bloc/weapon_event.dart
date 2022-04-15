@@ -43,6 +43,14 @@ class RemoveWeaponEvent extends WeaponEvent {
   List<Object> get props => [name];
 }
 
+class SelectWeaponEvent extends WeaponEvent {
+  final Weapon weapon;
+
+  const SelectWeaponEvent(this.weapon);
+  @override
+  List<Object> get props => [weapon];
+}
+
 class RegisterServiceEvent extends WeaponEvent {
   @override
   List<Object> get props => [];

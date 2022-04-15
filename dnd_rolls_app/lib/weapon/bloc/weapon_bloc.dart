@@ -54,6 +54,10 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
           break;
       }
     });
+    on<SelectWeaponEvent>((event, emit) {
+      final weapons = _weaponService.getWeapons();
+      emit(SelectedWeaponState(weapons, event.weapon));
+    });
     on<RemoveWeaponEvent>((event, emit) async {
       await _weaponService.removeWeapon(event.name);
       add(const LoadWeaponEvent());

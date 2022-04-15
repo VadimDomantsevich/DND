@@ -26,6 +26,14 @@ class CharactersNamesLoadedState extends CharacterState {
   List<Object?> get props => [names];
 }
 
+class GetCharacterState extends CharacterState {
+  final Character character;
+
+  const GetCharacterState(this.character);
+  @override
+  List<Object?> get props => [character];
+}
+
 class RegisteringServiceState extends CharacterState {
   @override
   List<Object> get props => [];

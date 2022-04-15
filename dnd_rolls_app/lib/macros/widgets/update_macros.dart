@@ -1,12 +1,16 @@
+import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
+import 'package:dnd_rolls_app/services/character_service.dart';
+import 'package:dnd_rolls_app/weapon/weapon_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class UpdateMacros extends StatefulWidget {
   final Macros? macros;
-  final List<String>? charactersNames;
-  const UpdateMacros({Key? key, this.macros, this.charactersNames})
+  final String? characterName;
+  const UpdateMacros({Key? key, this.macros, this.characterName})
       : super(key: key);
 
   @override
@@ -17,9 +21,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
   final _formKey = GlobalKey<FormState>();
   String _dialogHeader = '';
   final _nameController = TextEditingController();
-  final _characterNameController = TextEditingController();
   List<Strike>? strikes = [];
-  //List<String> charactersNames = [];
 
   @override
   void initState() {
@@ -28,9 +30,8 @@ class _UpdateMacrosState extends State<UpdateMacros> {
       _dialogHeader = 'Редактирование макроса ${widget.macros!.name}';
       _nameController.text = widget.macros!.name;
       strikes = widget.macros!.strikes;
-    } else if (widget.charactersNames != null) {
+    } else if (widget.characterName != null) {
       _dialogHeader = 'Создание макроса';
-      _characterNameController.text = widget.charactersNames!.first;
     }
   }
 
@@ -57,7 +58,6 @@ class _UpdateMacrosState extends State<UpdateMacros> {
             },
           ),
         ),
-        buildCharacterNames(),
         buildStrikes(),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -88,7 +88,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                         } else {
                           final result = [
                             _nameController.text,
-                            _characterNameController.text,
+                            widget.characterName,
                             strikes
                           ];
                           Navigator.of(context).pop(result);
@@ -105,107 +105,98 @@ class _UpdateMacrosState extends State<UpdateMacros> {
   }
 
   Widget buildStrikes() {
-    if (strikes != null) {
-      return ListView(
-        shrinkWrap: true,
-        children: [
-          ...strikes!.map((strike) {
-            return Column(
-              children: [
-                Slidable(
-                  key: const ValueKey(0),
-                  startActionPane:
-                      ActionPane(motion: const ScrollMotion(), children: [
-                    SlidableAction(
-                      onPressed: ((_) => {strikes!.remove(strike)}),
-                      backgroundColor: const Color(0xFFFE4A49),
-                      foregroundColor: Colors.white,
-                      icon: Icons.delete,
-                      label: 'Удалить',
-                    ),
-                  ]),
-                  child: ListTile(
-                    title: Text(strike.name),
-                  ),
-                )
-              ],
-            );
-          }),
-          ListTile(
-            title: const Text('Добавить удар'),
-            trailing: const Icon(Icons.add_box_outlined),
-            onTap: () {
-              //TODO
-            },
-          )
-        ],
-      );
-    } else {
-      return ListTile(
-        title: const Text('Добавить удар'),
-        trailing: const Icon(Icons.add_box_outlined),
-        onTap: () {
-          //TODO
-        },
-      );
-    }
-  }
-
-  Widget buildCharacterNames() {
-    if (widget.macros == null) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            FloatingActionButton(
-              mini: true,
-              onPressed: () {
-                backCharactersName();
-              },
-              tooltip: 'Назад',
-              child: const Icon(Icons.arrow_back),
-            ),
-            Text(
-              _characterNameController.text,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            FloatingActionButton(
-              mini: true,
-              onPressed: () {
-                forwardCharactersName();
-              },
-              tooltip: 'Вперёд',
-              child: const Icon(Icons.arrow_forward),
-            ),
-          ],
+    if (strikes != null && strikes!.isNotEmpty) {
+      return BlocProvider(
+        create: (context) =>
+            CharacterBloc(RepositoryProvider.of<CharacterService>(context))
+              ..add(GetCharacterEvent(widget.macros!.characterName)),
+        child: BlocBuilder<CharacterBloc, CharacterState>(
+          builder: (context, state) {
+            if (state is GetCharacterState) {
+              return ListView(
+                shrinkWrap: true,
+                children: [
+                  ...strikes!.map((strike) {
+                    return Column(
+                      children: [
+                        Slidable(
+                          key: const ValueKey(0),
+                          startActionPane: ActionPane(
+                              motion: const ScrollMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: ((_) => {
+                                        setState((() {
+                                          strikes!.remove(strike);
+                                        }))
+                                      }),
+                                  backgroundColor: const Color(0xFFFE4A49),
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.delete,
+                                  label: 'Удалить',
+                                ),
+                              ]),
+                          child: ListTile(
+                            title: Text(strike.name),
+                          ),
+                        )
+                      ],
+                    );
+                  }),
+                  ListTile(
+                    title: const Text('Добавить удар'),
+                    trailing: const Icon(Icons.add_box_outlined),
+                    onTap: () async {
+                      Strike strike = await showDialog(
+                          context: context,
+                          builder: (context) => Dialog(
+                                child: WeaponScreen(
+                                  character: state.character,
+                                ),
+                              ));
+                      setState(() {
+                        strikes!.add(strike);
+                      });
+                    },
+                  )
+                ],
+              );
+            } else {
+              return Container();
+            }
+          },
         ),
       );
     } else {
-      return Container();
+      return BlocProvider(
+        create: (context) =>
+            CharacterBloc(RepositoryProvider.of<CharacterService>(context))
+              ..add(GetCharacterEvent(widget.characterName!)),
+        child: BlocBuilder<CharacterBloc, CharacterState>(
+          builder: (context, state) {
+            if (state is GetCharacterState) {
+              return ListTile(
+                title: const Text('Добавить удар'),
+                trailing: const Icon(Icons.add_box_outlined),
+                onTap: () async {
+                  Strike strike = await showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                            child: WeaponScreen(
+                              character: state.character,
+                            ),
+                          ));
+                  setState(() {
+                    strikes = <Strike>[strike];
+                  });
+                },
+              );
+            } else {
+              return Container();
+            }
+          },
+        ),
+      );
     }
-  }
-
-  void backCharactersName() {
-    setState(() {
-      if (widget.charactersNames!.indexOf(_characterNameController.text) == 0) {
-        _characterNameController.text = widget.charactersNames!.last;
-      } else {
-        _characterNameController.text = widget.charactersNames!.elementAt(
-            widget.charactersNames!.indexOf(_characterNameController.text) - 1);
-      }
-    });
-  }
-
-  void forwardCharactersName() {
-    setState(() {
-      if (widget.charactersNames!.indexOf(_characterNameController.text) ==
-          widget.charactersNames!.length) {
-        _characterNameController.text = widget.charactersNames!.first;
-      } else {
-        _characterNameController.text = widget.charactersNames!.elementAt(
-            widget.charactersNames!.indexOf(_characterNameController.text) + 1);
-      }
-    });
   }
 }

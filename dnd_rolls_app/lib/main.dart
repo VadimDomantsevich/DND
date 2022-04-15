@@ -2,6 +2,7 @@ import 'package:dnd_rolls_app/presentation/router/app_router.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:dnd_rolls_app/services/enemy_service.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
+import 'package:dnd_rolls_app/services/strike_service.dart';
 import 'package:dnd_rolls_app/services/weapon_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(create: ((context) => CharacterService())),
         RepositoryProvider(create: ((context) => WeaponService())),
         RepositoryProvider(create: ((context) => EnemyService())),
-        RepositoryProvider(create: ((context) => MacrosService()))
+        RepositoryProvider(create: ((context) => MacrosService())),
+        RepositoryProvider(create: ((context) => StrikeService()))
       ],
       child: MaterialApp(
         title: 'DND',

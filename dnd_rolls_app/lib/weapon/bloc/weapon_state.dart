@@ -18,6 +18,15 @@ class WeaponLoadedState extends WeaponState {
   List<Object?> get props => [weapons, error];
 }
 
+class SelectedWeaponState extends WeaponState {
+  final List<Weapon> weapons;
+  final Weapon weapon;
+
+  const SelectedWeaponState(this.weapons, this.weapon);
+  @override
+  List<Object?> get props => [weapons, weapon];
+}
+
 class RegisteringServiceState extends WeaponState {
   @override
   List<Object> get props => [];

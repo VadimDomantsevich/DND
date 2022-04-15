@@ -15,7 +15,8 @@ class MacrosBloc extends Bloc<MacrosEvent, MacrosState> {
       await _macrosService.init();
       add(const LoadAllMacrosEvent());
     });
-    on<LoadCharacterMacrosEvent>((event, emit) {
+    on<LoadCharacterMacrosEvent>((event, emit) async {
+      await _macrosService.init();
       final macros = _macrosService.getCharacterMacros(event.characterName);
       emit(MacrosLoadedState(macros));
     });
@@ -31,11 +32,11 @@ class MacrosBloc extends Bloc<MacrosEvent, MacrosState> {
           add(LoadCharacterMacrosEvent(event.characterName));
           break;
         case CreationResult.failure:
-          final macros = _macrosService.getAllMacros();
+          final macros = _macrosService.getCharacterMacros(event.characterName);
           emit(MacrosLoadedState(macros, error: 'Не удалось создать'));
           break;
         case CreationResult.alreadyExists:
-          final macros = _macrosService.getAllMacros();
+          final macros = _macrosService.getCharacterMacros(event.characterName);
           emit(MacrosLoadedState(macros,
               error: 'Макрос с таким именем уже существует'));
           break;
@@ -60,8 +61,8 @@ class MacrosBloc extends Bloc<MacrosEvent, MacrosState> {
       }
     });
     on<RemoveMacrosEvent>((event, emit) async {
-      await _macrosService.removeMacros(event.name);
-      add(const LoadAllMacrosEvent());
+      await _macrosService.removeMacros(event.name, event.characterName);
+      add(LoadCharacterMacrosEvent(event.characterName));
     });
   }
 }

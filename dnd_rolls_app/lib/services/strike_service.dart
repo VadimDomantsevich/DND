@@ -10,7 +10,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class StrikeService {
   Future<void> init() async {
-    Hive.registerAdapter(StrikeAdapter());
+    if (!Hive.isAdapterRegistered(6)) {
+      Hive.registerAdapter(StrikeAdapter());
+    }
   }
 
   String getName(String characterName, String weaponName, bool isAdvantage,

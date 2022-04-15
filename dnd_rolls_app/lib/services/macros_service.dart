@@ -6,7 +6,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 class MacrosService {
   late Box<Macros> _macros;
   Future<void> init() async {
-    Hive.registerAdapter(MacrosAdapter());
+    if (!Hive.isAdapterRegistered(7)) {
+      Hive.registerAdapter(MacrosAdapter());
+    }
     _macros = await Hive.openBox('macrosBox');
   }
 
@@ -26,8 +28,9 @@ class MacrosService {
 
   CreationResult addMacros(final String name, final String characterName,
       final List<Strike>? strikes) {
-    final alreadyExists = _macros.values
-        .any((element) => element.name.toLowerCase() == name.toLowerCase());
+    final alreadyExists = _macros.values.any((element) =>
+        element.name.toLowerCase() == name.toLowerCase() &&
+        element.characterName == characterName);
     if (alreadyExists) {
       return CreationResult.alreadyExists;
     }
@@ -39,8 +42,12 @@ class MacrosService {
     }
   }
 
-  Future<void> removeMacros(final String name) async {
-    await _macros.values.firstWhere((element) => element.name == name).delete();
+  Future<void> removeMacros(
+      final String name, final String characterName) async {
+    await _macros.values
+        .firstWhere((element) =>
+            element.name == name && element.characterName == characterName)
+        .delete();
   }
 
   Future<CreationResult> updateMacros(final String name, final String newName,
@@ -49,6 +56,7 @@ class MacrosService {
         _macros.values.firstWhere((element) => element.name == name);
     final alreadyExists = _macros.values.any((element) =>
         element.name.toLowerCase() == newName.toLowerCase() &&
+        element.characterName == characterName &&
         element != macrosToUpdate);
     if (alreadyExists) {
       return CreationResult.alreadyExists;

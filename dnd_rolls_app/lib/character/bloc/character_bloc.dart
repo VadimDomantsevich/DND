@@ -81,6 +81,10 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
           _characterService.getCharacters().map((e) => e.name).toList();
       emit(CharactersNamesLoadedState(names));
     });
+    on<GetCharacterEvent>((event, emit) {
+      final character = _characterService.getCharacter(event.characterName);
+      emit(GetCharacterState(character));
+    });
     on<RemoveCharacterEvent>((event, emit) {
       _characterService.removeCharacter(event.name);
       add(const LoadCharacterEvent());

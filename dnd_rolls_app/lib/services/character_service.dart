@@ -6,7 +6,9 @@ class CharacterService {
   late Box<Character> _characters;
 
   Future<void> init() async {
-    Hive.registerAdapter(CharacterAdapter());
+    if (!Hive.isAdapterRegistered(1)) {
+      Hive.registerAdapter(CharacterAdapter());
+    }
     _characters = await Hive.openBox('charactersBox');
 
     await _characters.clear();
@@ -64,7 +66,8 @@ class CharacterService {
     final characterToUpdate =
         _characters.values.firstWhere(((element) => element.name == name));
     final alreadyExists = _characters.values.any((element) =>
-        element.name.toLowerCase() == newName.toLowerCase() && element != characterToUpdate);
+        element.name.toLowerCase() == newName.toLowerCase() &&
+        element != characterToUpdate);
     if (alreadyExists) {
       return CreationResult.alreadyExists;
     }

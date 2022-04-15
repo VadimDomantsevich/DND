@@ -6,7 +6,9 @@ class EnemyService {
   late Box<Enemy> _enemies;
 
   Future<void> init() async {
-    Hive.registerAdapter(EnemyAdapter());
+    if (!Hive.isAdapterRegistered(5)) {
+      Hive.registerAdapter(EnemyAdapter());
+    }
     _enemies = await Hive.openBox('enemyBox');
 
     await _enemies.clear();

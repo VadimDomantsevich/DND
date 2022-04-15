@@ -6,9 +6,15 @@ class WeaponService {
   late Box<Weapon> _weapons;
 
   Future<void> init() async {
-    Hive.registerAdapter(WeaponAdapter());
-    Hive.registerAdapter(CharacteristicsEnumAdapter());
-    Hive.registerAdapter(DamageCubeAdapter());
+    if (!Hive.isAdapterRegistered(2)) {
+      Hive.registerAdapter(WeaponAdapter());
+    }
+    if (!Hive.isAdapterRegistered(3)) {
+      Hive.registerAdapter(CharacteristicsEnumAdapter());
+    }
+    if (!Hive.isAdapterRegistered(4)) {
+      Hive.registerAdapter(DamageCubeAdapter());
+    }
     _weapons = await Hive.openBox('weaponsBox');
 
     await _weapons.clear();
@@ -52,7 +58,8 @@ class WeaponService {
     final weaponToUpdate =
         _weapons.values.firstWhere((element) => element.name == name);
     final alreadyExists = _weapons.values.any((element) =>
-        element.name.toLowerCase() == newName.toLowerCase() && element != weaponToUpdate);
+        element.name.toLowerCase() == newName.toLowerCase() &&
+        element != weaponToUpdate);
     if (alreadyExists) {
       return CreationResult.alreadyExists;
     }

@@ -44,8 +44,8 @@ class UpdateMacrosEvent extends MacrosEvent {
 
 class RemoveMacrosEvent extends MacrosEvent {
   final String name;
-
-  const RemoveMacrosEvent(this.name);
+  final String characterName;
+  const RemoveMacrosEvent(this.name, this.characterName);
   @override
   List<Object> get props => [name];
 }
