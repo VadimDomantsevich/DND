@@ -85,6 +85,23 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
       final character = _characterService.getCharacter(event.characterName);
       emit(GetCharacterState(character));
     });
+    on<SelectCharacterEvent>((event, emit) {
+      final characters = _characterService.getCharacters();
+      event.selectedCharacters.add(event.character);
+      emit(SelectedCharacterState(characters, event.selectedCharacters));
+    });
+    on<UnselectCharacterEvent>((event, emit) {
+      if (event.selectedCharacters.isEmpty) {
+        add(const LoadCharacterEvent());
+      }
+      final characters = _characterService.getCharacters();
+      final index = event.selectedCharacters.indexOf(event.character);
+      event.selectedCharacters.removeAt(index);
+
+      event.selectedCharacters.isEmpty
+          ? add(const LoadCharacterEvent())
+          : emit(SelectedCharacterState(characters, event.selectedCharacters));
+    });
     on<RemoveCharacterEvent>((event, emit) {
       _characterService.removeCharacter(event.name);
       add(const LoadCharacterEvent());

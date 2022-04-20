@@ -34,6 +34,15 @@ class GetCharacterState extends CharacterState {
   List<Object?> get props => [character];
 }
 
+class SelectedCharacterState extends CharacterState {
+  final List<Character> characters;
+  final List<Character> selectedCharacters;
+
+  const SelectedCharacterState(this.characters, this.selectedCharacters);
+  @override
+  List<Object?> get props => [characters, selectedCharacters];
+}
+
 class RegisteringServiceState extends CharacterState {
   @override
   List<Object> get props => [];

@@ -94,6 +94,24 @@ class UpdateCharacterEvent extends CharacterEvent {
       ];
 }
 
+class SelectCharacterEvent extends CharacterEvent {
+  final Character character;
+  final List<Character> selectedCharacters;
+
+  const SelectCharacterEvent(this.character, this.selectedCharacters);
+  @override
+  List<Object> get props => [character, selectedCharacters];
+}
+
+class UnselectCharacterEvent extends CharacterEvent {
+  final Character character;
+  final List<Character> selectedCharacters;
+
+  const UnselectCharacterEvent(this.character, this.selectedCharacters);
+  @override
+  List<Object> get props => [character, selectedCharacters];
+}
+
 class RemoveCharacterEvent extends CharacterEvent {
   final String name;
 

@@ -32,5 +32,5 @@ class RegisterServiceEvent extends StrikeEvent {
 
   const RegisterServiceEvent(this.character, this.weapon);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [character, weapon];
 }

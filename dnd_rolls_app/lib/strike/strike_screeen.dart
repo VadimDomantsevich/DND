@@ -69,12 +69,17 @@ class _StrikeScreenState extends State<StrikeScreen> {
                     ...state.strikes.map((strike) {
                       return ListTile(
                         onTap: () {
-                          BlocProvider.of<StrikeBloc>(context).add(
-                              SelectStrikeEvent(
-                                  strike, widget.character, widget.weapon));
+                          if (state.strike.name != strike.name) {
+                            BlocProvider.of<StrikeBloc>(context).add(
+                                SelectStrikeEvent(
+                                    strike, widget.character, widget.weapon));
+                          } else {
+                            BlocProvider.of<StrikeBloc>(context).add(
+                                LoadStrikesEvent(
+                                    widget.character, widget.weapon));
+                          }
                         },
                         selected: strike.name == state.strike.name,
-                        selectedColor: Colors.blue,
                         title: Text(strike.name),
                       );
                     })

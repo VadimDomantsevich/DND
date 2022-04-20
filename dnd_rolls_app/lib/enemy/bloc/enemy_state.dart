@@ -18,6 +18,17 @@ class EnemyLoadedState extends EnemyState {
   List<Object?> get props => [enemies, error];
 }
 
+class SelectedEnemyState extends EnemyState {
+  final List<Enemy> enemies;
+  final List<Enemy> selectedEnemies;
+  final List<int> selectedEnemiesCount;
+
+  const SelectedEnemyState(
+      this.enemies, this.selectedEnemies, this.selectedEnemiesCount);
+  @override
+  List<Object?> get props => [enemies, selectedEnemies, selectedEnemiesCount];
+}
+
 class RegisteringServiceState extends EnemyState {
   @override
   List<Object?> get props => [];

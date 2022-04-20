@@ -147,8 +147,13 @@ class WeaponScreen extends StatelessWidget {
                   child: ListTile(
                     selected: state.weapon == weapon,
                     onTap: () {
-                      BlocProvider.of<WeaponBloc>(context)
-                          .add(SelectWeaponEvent(weapon));
+                      if (state.weapon != weapon) {
+                        BlocProvider.of<WeaponBloc>(context)
+                            .add(SelectWeaponEvent(weapon));
+                      } else {
+                        BlocProvider.of<WeaponBloc>(context)
+                            .add(const LoadWeaponEvent());
+                      }
                     },
                     title: Text(
                         '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)}'),

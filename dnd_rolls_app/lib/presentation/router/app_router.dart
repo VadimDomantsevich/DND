@@ -1,3 +1,5 @@
+import 'package:dnd_rolls_app/character/choose_character_screen.dart';
+import 'package:dnd_rolls_app/enemy/choose_enemy_screen.dart';
 import 'package:dnd_rolls_app/enemy/enemy_screen.dart';
 import 'package:dnd_rolls_app/macros/macros_screen.dart';
 import 'package:dnd_rolls_app/weapon/weapon_screen.dart';
@@ -10,7 +12,7 @@ class AppRouter {
     switch (routeSettings.name) {
       case '/':
         return MaterialPageRoute(
-          builder: (_) => const MacrosScreen(),
+          builder: (_) => const ChooseEnemyScreen(),
         );
       case '/characters':
         return MaterialPageRoute(

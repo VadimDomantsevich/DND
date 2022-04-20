@@ -37,68 +37,77 @@ class EnemyScreen extends StatelessWidget {
             }
           },
           builder: ((context, state) {
-            if (state is EnemyLoadedState) {
-              return ListView(
-                children: [
-                  ...state.enemies.map(
-                    (enemy) => Column(
-                      children: [
-                        Slidable(
-                          key: const ValueKey(1),
-                          startActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: ((newContext) async => {
-                                      BlocProvider.of<EnemyBloc>(context)
-                                          .add(RemoveEnemyEvent(enemy.name))
-                                    }),
-                                backgroundColor: const Color(0xFFFE4A49),
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                                label: 'Удалить',
-                              ),
-                              SlidableAction(
-                                onPressed: (((newContext) async =>
-                                    {update(context, enemy)})),
-                                backgroundColor: Colors.blue.shade200,
-                                foregroundColor: Colors.white,
-                                icon: Icons.create,
-                                label: 'Исправить',
-                              ),
-                            ],
-                          ),
-                          child: ListTile(
-                            title: Text(
-                                '${enemy.name} ${enemy.health} ${enemy.armorClass}'),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  ListTile(
-                    title: const Text('Создать нового противника'),
-                    trailing: const Icon(Icons.add_box_outlined),
-                    onTap: () async {
-                      List<dynamic> result = await showDialog(
-                          context: context,
-                          builder: (context) => const Dialog(
-                                child: UpdateEnemy(),
-                              ));
-                      if (result.isNotEmpty) {
-                        BlocProvider.of<EnemyBloc>(context).add(
-                            AddEnemyEvent(result[0], result[1], result[2]));
-                      }
-                    },
-                  )
-                ],
-              );
-            }
-            return Container();
+            return buildListView(context, state);
           }),
         ),
       ),
     );
+  }
+
+  Widget buildListView(BuildContext context, EnemyState state) {
+    if (state is EnemyLoadedState) {
+      List<Enemy> selectedEnemies = [];
+      List<int> selectedEnemiesCount = [];
+      return Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: ListView(
+          children: [
+            ...state.enemies.map(
+              (enemy) => Column(
+                children: [
+                  Slidable(
+                    key: const ValueKey(1),
+                    startActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: ((newContext) async => {
+                                BlocProvider.of<EnemyBloc>(context)
+                                    .add(RemoveEnemyEvent(enemy.name))
+                              }),
+                          backgroundColor: const Color(0xFFFE4A49),
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: 'Удалить',
+                        ),
+                        SlidableAction(
+                          onPressed: (((newContext) async =>
+                              {update(context, enemy)})),
+                          backgroundColor: Colors.blue.shade200,
+                          foregroundColor: Colors.white,
+                          icon: Icons.create,
+                          label: 'Исправить',
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      title: Text(
+                          '${enemy.name} ${enemy.health} ${enemy.armorClass}'),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            ListTile(
+              title: const Text('Создать нового противника'),
+              trailing: const Icon(Icons.add_box_outlined),
+              onTap: () async {
+                List<dynamic> result = await showDialog(
+                    context: context,
+                    builder: (context) => const Dialog(
+                          child: UpdateEnemy(),
+                        ));
+                if (result.isNotEmpty) {
+                  BlocProvider.of<EnemyBloc>(context)
+                      .add(AddEnemyEvent(result[0], result[1], result[2]));
+                }
+              },
+            )
+          ],
+        ),
+      );
+    }
+    return Container();
   }
 
   Future<void> update(BuildContext context, Enemy enemy) async {

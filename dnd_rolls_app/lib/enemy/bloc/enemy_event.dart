@@ -42,6 +42,36 @@ class RemoveEnemyEvent extends EnemyEvent {
   List<Object> get props => [name];
 }
 
+class SelectEnemyEvent extends EnemyEvent {
+  final Enemy enemy;
+  final List<Enemy> selectedEnemies;
+  final List<int> selectedEnemiesCount;
+  const SelectEnemyEvent(
+      this.enemy, this.selectedEnemies, this.selectedEnemiesCount);
+  @override
+  List<Object> get props => [enemy, selectedEnemies, selectedEnemiesCount];
+}
+
+class UpdateSelectedEnemyCount extends EnemyEvent {
+  final List<Enemy> selectedEnemies;
+  final List<int> selectedEnemiesCount;
+
+  const UpdateSelectedEnemyCount(
+      this.selectedEnemies, this.selectedEnemiesCount);
+  @override
+  List<Object> get props => [selectedEnemies, selectedEnemiesCount];
+}
+
+class UnselectEnemyEvent extends EnemyEvent {
+  final Enemy enemy;
+  final List<Enemy> selectedEnemies;
+  final List<int> selectedEnemiesCount;
+  const UnselectEnemyEvent(
+      this.enemy, this.selectedEnemies, this.selectedEnemiesCount);
+  @override
+  List<Object> get props => [enemy, selectedEnemies, selectedEnemiesCount];
+}
+
 class RegisterServiceEvent extends EnemyEvent {
   @override
   List<Object> get props => [];
