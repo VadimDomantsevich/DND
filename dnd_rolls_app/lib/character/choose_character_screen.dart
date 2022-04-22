@@ -201,7 +201,6 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                                   character, selectedCharacters));
                         } else {
                           setState(() {
-                            selectedCharacters.add(character);
                           });
                           BlocProvider.of<CharacterBloc>(context).add(
                               SelectCharacterEvent(

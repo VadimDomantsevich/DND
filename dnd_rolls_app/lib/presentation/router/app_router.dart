@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/battle/battle_screen.dart';
 import 'package:dnd_rolls_app/character/choose_character_screen.dart';
 import 'package:dnd_rolls_app/enemy/choose_enemy_screen.dart';
 import 'package:dnd_rolls_app/enemy/enemy_screen.dart';
@@ -12,7 +13,7 @@ class AppRouter {
     switch (routeSettings.name) {
       case '/':
         return MaterialPageRoute(
-          builder: (_) => const ChooseEnemyScreen(),
+          builder: (_) => const BattleScreen(),
         );
       case '/characters':
         return MaterialPageRoute(

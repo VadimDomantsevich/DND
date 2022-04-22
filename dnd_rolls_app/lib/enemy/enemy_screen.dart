@@ -46,8 +46,6 @@ class EnemyScreen extends StatelessWidget {
 
   Widget buildListView(BuildContext context, EnemyState state) {
     if (state is EnemyLoadedState) {
-      List<Enemy> selectedEnemies = [];
-      List<int> selectedEnemiesCount = [];
       return Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: ListView(

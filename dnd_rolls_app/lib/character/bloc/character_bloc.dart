@@ -72,13 +72,20 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
           break;
       }
     });
-    on<GetCharactersNamesEvent>((event, emit) async {
+    on<GetAllCharactersNamesEvent>((event, emit) async {
       if (!Hive.isAdapterRegistered(1)) {
         await _characterService.init();
       }
 
       final names =
           _characterService.getCharacters().map((e) => e.name).toList();
+      emit(CharactersNamesLoadedState(names));
+    });
+    on<GetCharactersNamesEvent>((event, emit) async {
+      if (!Hive.isAdapterRegistered(1)) {
+        await _characterService.init();
+      }
+      final names = event.characters.map((e) => e.name).toList();
       emit(CharactersNamesLoadedState(names));
     });
     on<GetCharacterEvent>((event, emit) {

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/random_generator.dart';
+import 'package:dnd_rolls_app/model/battle_log.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
@@ -9,6 +10,8 @@ import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class StrikeService {
+  List<String> logs = [];
+
   Future<void> init() async {
     if (!Hive.isAdapterRegistered(6)) {
       Hive.registerAdapter(StrikeAdapter());
@@ -37,10 +40,11 @@ class StrikeService {
     ];
   }
 
-  int attack(Strike strike, Enemy enemy) {
+  BattleLog attack(Strike strike, Enemy enemy) {
     int firstRoll = RandomGenerator().rollD20();
     int secondRoll;
     int roll = firstRoll;
+    logs.clear();
     if (strike.isAdvantage) {
       secondRoll = RandomGenerator().rollD20();
       roll = max(firstRoll, secondRoll);
@@ -49,20 +53,22 @@ class StrikeService {
       roll = min(firstRoll, secondRoll);
     }
     if (roll == 20) {
-      print('${strike.character.name} выбрасывает 20 - критический удар!');
-      return getCriticalDamage(strike, enemy);
+      logs.add('${strike.character.name} выбрасывает 20 - критический удар!');
+      final damage = getCriticalDamage(strike, enemy);
+      return BattleLog(logs, damage: damage);
     } else {
       int characteristicBonus = getCharacteristicBonus(strike);
       roll += strike.character.skillBonus;
       roll += characteristicBonus;
-      print(
+      logs.add(
           '${strike.character.name} выбрасывает $roll + $characteristicBonus + ${strike.character.skillBonus}');
-      print('на попадание по ${enemy.name}');
+      logs.add('на попадание по ${enemy.name}');
       if (roll >= enemy.armorClass) {
-        return getDamage(strike, enemy);
+        int damage = getDamage(strike, enemy);
+        return BattleLog(logs, damage: damage);
       } else {
-        print('и промахивается');
-        return 0;
+        logs.add('и промахивается');
+        return BattleLog(logs);
       }
     }
   }
@@ -103,7 +109,7 @@ class StrikeService {
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d12);
         break;
     }
-    print('и наносит $weaponDamage урона');
+    logs.add('и наносит $weaponDamage урона');
     return weaponDamage;
   }
 
@@ -131,7 +137,7 @@ class StrikeService {
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d12);
         break;
     }
-    print('и наносит $weaponDamage урона');
+    logs.add('и наносит $weaponDamage урона');
     return weaponDamage;
   }
 }

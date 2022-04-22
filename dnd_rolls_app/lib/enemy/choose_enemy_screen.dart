@@ -1,4 +1,3 @@
-import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/enemy/bloc/enemy_bloc.dart';
 import 'package:dnd_rolls_app/enemy/widgets/update_enemy.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
@@ -20,7 +19,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          Strings.enemyScreenTitle,
+          'Выбор противников',
           style: Theme.of(context).textTheme.headline4,
         ),
       ),
@@ -86,7 +85,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                       ],
                     ),
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.75,
+                      width: MediaQuery.of(context).size.width * 0.6,
                       child: ListTile(
                         trailing: const Icon(
                           Icons.check_circle_outline,
@@ -161,7 +160,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.75,
+                          width: MediaQuery.of(context).size.width * 0.6,
                           child: ListTile(
                             trailing: selectedEnemies
                                     .map((e) => e.name)
@@ -183,16 +182,17 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                                   selectedEnemiesCount.removeAt(index);
                                 });
                                 BlocProvider.of<EnemyBloc>(context).add(
-                                    UnselectEnemyEvent(enemy, selectedEnemies,
-                                        selectedEnemiesCount));
+                                    UnselectEnemyEvent(
+                                        enemy,
+                                        state.selectedEnemies,
+                                        state.selectedEnemiesCount));
                               } else {
-                                setState(() {
-                                  selectedEnemies.add(enemy);
-                                  selectedEnemiesCount.add(1);
-                                });
+                                setState(() {});
                                 BlocProvider.of<EnemyBloc>(context).add(
-                                    SelectEnemyEvent(enemy, selectedEnemies,
-                                        selectedEnemiesCount));
+                                    SelectEnemyEvent(
+                                        enemy,
+                                        state.selectedEnemies,
+                                        state.selectedEnemiesCount));
                               }
                             },
                             title: Text(
@@ -223,10 +223,15 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  final result = [
-                    state.selectedEnemies,
-                    state.selectedEnemiesCount
-                  ];
+                  List<Enemy> result = [];
+                  for (var enemy in state.selectedEnemies) {
+                    int i = 0;
+                    int index = state.selectedEnemies.indexOf(enemy);
+                    while (i < state.selectedEnemiesCount[index]) {
+                      result.add(enemy);
+                      i++;
+                    }
+                  }
                   Navigator.of(context).pop(result);
                 },
                 child: const Text('Выбрать'))

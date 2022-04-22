@@ -14,9 +14,17 @@ class LoadCharacterEvent extends CharacterEvent {
   List<Object> get props => [];
 }
 
-class GetCharactersNamesEvent extends CharacterEvent {
+class GetAllCharactersNamesEvent extends CharacterEvent {
   @override
   List<Object> get props => [];
+}
+
+class GetCharactersNamesEvent extends CharacterEvent {
+  final List<Character> characters;
+
+  const GetCharactersNamesEvent(this.characters);
+  @override
+  List<Object> get props => [characters];
 }
 
 class GetCharacterEvent extends CharacterEvent {
