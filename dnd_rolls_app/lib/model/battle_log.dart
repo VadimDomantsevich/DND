@@ -1,5 +1,5 @@
 class BattleLog {
-  final List<String> logs;
+  final String logs;
   final int? damage;
 
   BattleLog(this.logs, {this.damage});

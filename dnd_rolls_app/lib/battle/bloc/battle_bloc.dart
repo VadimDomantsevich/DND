@@ -33,23 +33,24 @@ class BattleBloc extends Bloc<BattleEvent, BattleState> {
       }
     });
     on<StartBattleEvent>((event, emit) {
-      _battleService.updateBattleLogs(BattleLog(['Начало 1 хода']));
+      _battleService.updateBattleLogs(BattleLog('Начало 1 хода'));
       emit(BattleIsOnState(_battleService.battle));
     });
     on<SelectMacrosEvent>((event, emit) {
       if (event.selectedEnemy != null) {
-        emit(SelectedBothState(
-            _battleService.battle, event.selectedMacros, event.selectedEnemy!));
+        emit(SelectedBothState(_battleService.battle, event.selectedMacros,
+            event.selectedEnemy!, event.selectedIndex!));
       } else {
         emit(SelectedMacrosState(_battleService.battle, event.selectedMacros));
       }
     });
     on<SelectEnemyEvent>((event, emit) {
       if (event.selectedMacros != null) {
-        emit(SelectedBothState(
-            _battleService.battle, event.selectedMacros!, event.selectedEnemy));
+        emit(SelectedBothState(_battleService.battle, event.selectedMacros!,
+            event.selectedEnemy, event.selectedIndex));
       } else {
-        emit(SelectedEnemyState(_battleService.battle, event.selectedEnemy));
+        emit(SelectedEnemyState(
+            _battleService.battle, event.selectedEnemy, event.selectedIndex));
       }
     });
     on<AttackEvent>((event, emit) {

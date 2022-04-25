@@ -34,7 +34,10 @@ Widget buildCharactersLoaded(
                     Expanded(
                         child: ListView(
                       children: [
-                        CharactersMacrosScreen(characters: state.characters),
+                        CharactersMacrosScreen(
+                          characters: state.characters,
+                          isSelectable: false,
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Center(

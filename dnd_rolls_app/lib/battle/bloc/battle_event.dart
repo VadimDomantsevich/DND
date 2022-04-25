@@ -30,36 +30,35 @@ class StartBattleEvent extends BattleEvent {
 }
 
 class SelectMacrosEvent extends BattleEvent {
-  final Battle battle;
   final Macros selectedMacros;
   final Enemy? selectedEnemy;
-
-  const SelectMacrosEvent(this.battle, this.selectedMacros,
-      {this.selectedEnemy});
+  final int? selectedIndex;
+  const SelectMacrosEvent(this.selectedMacros,
+      {this.selectedEnemy, this.selectedIndex});
   @override
-  List<Object?> get props => [battle, selectedMacros, selectedEnemy];
+  List<Object?> get props => [selectedMacros, selectedEnemy, selectedIndex];
 }
 
 class SelectEnemyEvent extends BattleEvent {
-  final Battle battle;
   final Enemy selectedEnemy;
+  final int selectedIndex;
   final Macros? selectedMacros;
 
-  const SelectEnemyEvent(this.battle, this.selectedEnemy,
+  const SelectEnemyEvent(this.selectedEnemy, this.selectedIndex,
       {this.selectedMacros});
   @override
-  List<Object?> get props => [battle, selectedEnemy, selectedMacros];
+  List<Object?> get props => [selectedEnemy, selectedIndex, selectedMacros];
 }
 
 class AttackEvent extends BattleEvent {
-  final Battle battle;
   final Macros selectedMacros;
   final Enemy selectedEnemy;
+  final int selectedIndex;
 
   const AttackEvent(
-      this.battle, this.selectedMacros, this.selectedEnemy);
+      this.selectedMacros, this.selectedEnemy, this.selectedIndex);
   @override
-  List<Object?> get props => [battle, selectedMacros, selectedEnemy];
+  List<Object?> get props => [selectedMacros, selectedEnemy, selectedIndex];
 }
 
 class NextTurnEvent extends BattleEvent {

@@ -53,20 +53,23 @@ class SelectedMacrosState extends BattleState {
 class SelectedEnemyState extends BattleState {
   final Battle battle;
   final Enemy selectedEnemy;
-
-  const SelectedEnemyState(this.battle, this.selectedEnemy);
+  final int selectedIndex;
+  const SelectedEnemyState(this.battle, this.selectedEnemy, this.selectedIndex);
   @override
-  List<Object> get props => [battle, selectedEnemy];
+  List<Object> get props => [battle, selectedEnemy, selectedIndex];
 }
 
 class SelectedBothState extends BattleState {
   final Battle battle;
   final Macros selectedMacros;
   final Enemy selectedEnemy;
+  final int selectedIndex;
 
-  const SelectedBothState(this.battle, this.selectedMacros, this.selectedEnemy);
+  const SelectedBothState(
+      this.battle, this.selectedMacros, this.selectedEnemy, this.selectedIndex);
   @override
-  List<Object> get props => [battle, selectedMacros, selectedEnemy];
+  List<Object> get props =>
+      [battle, selectedMacros, selectedEnemy, selectedIndex];
 }
 
 class EveryoneAttackedState extends BattleState {

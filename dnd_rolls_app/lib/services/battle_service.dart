@@ -22,7 +22,7 @@ class BattleService {
   void startTurn() {
     battle.turn++;
     battle.whoAttacked.clear();
-    BattleLog battleLog = BattleLog(['Начало ${battle.turn} хода']);
+    BattleLog battleLog = BattleLog('Начало ${battle.turn} хода');
     updateBattleLogs(battleLog);
   }
 

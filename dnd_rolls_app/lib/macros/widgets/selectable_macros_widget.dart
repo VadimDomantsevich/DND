@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
 import 'package:dnd_rolls_app/macros/bloc/macros_bloc.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
@@ -7,7 +8,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'update_macros.dart';
 
-Widget buildMacrosForCharacter(BuildContext context, String characterName) {
+Widget buildSelectableMacrosForCharacter(
+    BuildContext context, String characterName) {
   return BlocProvider<MacrosBloc>(
     create: ((macrosContext) =>
         MacrosBloc(RepositoryProvider.of<MacrosService>(macrosContext))
@@ -60,8 +62,58 @@ Widget buildMacrosForCharacter(BuildContext context, String characterName) {
                             ),
                           ],
                         ),
-                        child: ListTile(
-                          title: Text(macros.name),
+                        child: BlocBuilder<BattleBloc, BattleState>(
+                          builder: (context, state) {
+                            if (state is SelectedMacrosState) {
+                              return ListTile(
+                                trailing: state.selectedMacros == macros
+                                    ? const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      )
+                                    : null,
+                                onTap: () {
+                                  BlocProvider.of<BattleBloc>(context)
+                                      .add(SelectMacrosEvent(macros));
+                                },
+                                title: Text(macros.name),
+                              );
+                            } else if (state is SelectedEnemyState) {
+                              return ListTile(
+                                onTap: () {
+                                  BlocProvider.of<BattleBloc>(context).add(
+                                      SelectMacrosEvent(macros,
+                                          selectedEnemy: state.selectedEnemy,
+                                          selectedIndex: state.selectedIndex));
+                                },
+                                title: Text(macros.name),
+                              );
+                            } else if (state is SelectedBothState) {
+                              return ListTile(
+                                trailing: state.selectedMacros == macros
+                                    ? const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      )
+                                    : null,
+                                onTap: () {
+                                  BlocProvider.of<BattleBloc>(context).add(
+                                      SelectMacrosEvent(macros,
+                                          selectedEnemy: state.selectedEnemy,
+                                          selectedIndex: state.selectedIndex));
+                                },
+                                title: Text(macros.name),
+                              );
+                            } else {
+                              return ListTile(
+                                onTap: () {
+                                  BlocProvider.of<BattleBloc>(context)
+                                      .add(SelectMacrosEvent(macros));
+                                },
+                                title: Text(macros.name),
+                              );
+                            }
+                          },
                         ),
                       ),
                     ),
