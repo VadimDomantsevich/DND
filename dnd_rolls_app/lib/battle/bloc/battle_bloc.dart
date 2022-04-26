@@ -15,7 +15,9 @@ class BattleBloc extends Bloc<BattleEvent, BattleState> {
   final BattleService _battleService;
   BattleBloc(this._battleService) : super(BattleInitial()) {
     on<LoadCharactersEvent>((event, emit) {
+      _battleService.battle.characters.clear();
       _battleService.updateCharacters(event.characters);
+      _battleService.battle.whoAttacked.clear();
       if (_battleService.battle.enemies.isNotEmpty) {
         emit(BothLoadedState(
             _battleService.battle.characters, _battleService.battle.enemies));
@@ -58,18 +60,46 @@ class BattleBloc extends Bloc<BattleEvent, BattleState> {
       BattleLog battleLog;
       for (var strike in event.selectedMacros.strikes!) {
         battleLog = _strikeService.attack(strike, event.selectedEnemy);
+        if (battleLog.damage != null) {
+          _battleService.battle.currentHealth[event.selectedIndex] -=
+              battleLog.damage!;
+        }
         _battleService.updateBattleLogs(battleLog);
       }
-      _battleService.characterAttacked(_battleService.battle.characters
-          .firstWhere(
-              (element) => element.name == event.selectedMacros.characterName));
-      _battleService.isEveryoneAttacked()
-          ? emit(EveryoneAttackedState(_battleService.battle))
-          : emit(BattleIsOnState(_battleService.battle));
+      if (_battleService.battle.currentHealth[event.selectedIndex] <= 0) {
+        _battleService.battle.currentHealth.removeAt(event.selectedIndex);
+
+        _battleService.battle.defeatedEnemies.add(event.selectedEnemy);
+        _battleService.battle.enemies.removeAt(event.selectedIndex);
+        if (_battleService.battle.enemies.isEmpty) {
+          emit(BattleIsOverState(_battleService.battle));
+        } else {
+          _battleService.characterAttacked(_battleService.battle.characters
+              .firstWhere((element) =>
+                  element.name == event.selectedMacros.characterName));
+          _battleService.isEveryoneAttacked()
+              ? emit(EveryoneAttackedState(_battleService.battle))
+              : emit(BattleIsOnState(_battleService.battle));
+        }
+      } else {
+        _battleService.characterAttacked(_battleService.battle.characters
+            .firstWhere((element) =>
+                element.name == event.selectedMacros.characterName));
+        _battleService.isEveryoneAttacked()
+            ? emit(EveryoneAttackedState(_battleService.battle))
+            : emit(BattleIsOnState(_battleService.battle));
+      }
     });
     on<NextTurnEvent>((event, emit) {
       _battleService.startTurn();
       emit(BattleIsOnState(_battleService.battle));
+    });
+    on<EndBattleEvent>((event, emit) {
+      _battleService.battle.battleLogs.clear();
+      _battleService.battle.defeatedEnemies.clear();
+      _battleService.battle.whoAttacked.clear();
+      _battleService.battle.turn = 1;
+      emit(BattleInitial());
     });
   }
 }

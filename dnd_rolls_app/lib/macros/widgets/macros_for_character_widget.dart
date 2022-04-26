@@ -77,8 +77,11 @@ Widget buildMacrosForCharacter(BuildContext context, String characterName) {
                     context: context,
                     builder: (context) {
                       return Dialog(
-                        child: UpdateMacros(
-                          characterName: characterName,
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          child: UpdateMacros(
+                            characterName: characterName,
+                          ),
                         ),
                       );
                     });
@@ -101,9 +104,12 @@ Future<void> update(BuildContext context, Macros macros) async {
   List<dynamic> result = await showDialog(
       context: context,
       builder: (context) => Dialog(
-            child: UpdateMacros(
-              macros: macros,
-              characterName: macros.characterName,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.3,
+              child: UpdateMacros(
+                macros: macros,
+                characterName: macros.characterName,
+              ),
             ),
           ));
   if (result.isNotEmpty) {

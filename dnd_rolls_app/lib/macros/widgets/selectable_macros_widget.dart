@@ -1,6 +1,8 @@
+import 'package:dnd_rolls_app/battle/battle_screen.dart';
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
 import 'package:dnd_rolls_app/macros/bloc/macros_bloc.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
+import 'package:dnd_rolls_app/services/battle_service.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,6 +66,15 @@ Widget buildSelectableMacrosForCharacter(
                         ),
                         child: BlocBuilder<BattleBloc, BattleState>(
                           builder: (context, state) {
+                            if (RepositoryProvider.of<BattleService>(context)
+                                .battle
+                                .whoAttacked
+                                .map((e) => e.name)
+                                .contains(characterName)) {
+                              return ListTile(
+                                title: Text(macros.name),
+                              );
+                            }
                             if (state is SelectedMacrosState) {
                               return ListTile(
                                 trailing: state.selectedMacros == macros
@@ -129,8 +140,11 @@ Widget buildSelectableMacrosForCharacter(
                     context: context,
                     builder: (context) {
                       return Dialog(
-                        child: UpdateMacros(
-                          characterName: characterName,
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          child: UpdateMacros(
+                            characterName: characterName,
+                          ),
                         ),
                       );
                     });
@@ -153,9 +167,12 @@ Future<void> update(BuildContext context, Macros macros) async {
   List<dynamic> result = await showDialog(
       context: context,
       builder: (context) => Dialog(
-            child: UpdateMacros(
-              macros: macros,
-              characterName: macros.characterName,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.3,
+              child: UpdateMacros(
+                macros: macros,
+                characterName: macros.characterName,
+              ),
             ),
           ));
   if (result.isNotEmpty) {

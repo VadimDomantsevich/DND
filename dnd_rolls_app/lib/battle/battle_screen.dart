@@ -1,5 +1,6 @@
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
 import 'package:dnd_rolls_app/battle/widgets/battle_is_on_widget.dart';
+import 'package:dnd_rolls_app/battle/widgets/battle_is_over_widget.dart';
 import 'package:dnd_rolls_app/battle/widgets/both_loaded_widget.dart';
 import 'package:dnd_rolls_app/battle/widgets/build_battle_initial.dart';
 import 'package:dnd_rolls_app/battle/widgets/characters_loaded_widget.dart';
@@ -21,12 +22,31 @@ class BattleScreen extends StatefulWidget {
 
 class _BattleScreenState extends State<BattleScreen> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
         create: (context) =>
             BattleBloc(RepositoryProvider.of<BattleService>(context)),
-        child: BlocBuilder<BattleBloc, BattleState>(builder: ((context, state) {
+        child:
+            BlocConsumer<BattleBloc, BattleState>(listener: (context, state) {
+          if (state is BattleIsOnState) {
+            if (state.battle.enemies.isEmpty) {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        content: Text(
+                          'Бой завершён',
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      ));
+            }
+          }
+        }, builder: ((context, state) {
           if (state is BattleInitial) {
             return buildBattleInitial(context, state);
           } else if (state is EnemiesLoadedState) {
@@ -45,8 +65,9 @@ class _BattleScreenState extends State<BattleScreen> {
             return buildSelectedBoth(context, state);
           } else if (state is EveryoneAttackedState) {
             return buildEveryoneAttacked(context, state);
+          } else if (state is BattleIsOverState) {
+            return buildBattleIsOver(context, state);
           }
-          print(state);
           return Container();
         })),
       ),

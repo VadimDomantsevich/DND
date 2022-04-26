@@ -1,7 +1,6 @@
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
 import 'package:dnd_rolls_app/character/choose_character_screen.dart';
 import 'package:dnd_rolls_app/enemy/choose_enemy_screen.dart';
-import 'package:dnd_rolls_app/macros/characters_macros_screen.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +33,20 @@ Widget buildBothLoaded(BuildContext context, BothLoadedState state) {
                       children: [
                         Expanded(
                             child: ListView(
+                          primary: false,
                           children: [
-                            CharactersMacrosScreen(
-                                characters: state.characters,
-                                isSelectable: false,),
+                            ListView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              itemCount: state.characters.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Center(
+                                      child:
+                                          Text(state.characters[index].name)),
+                                );
+                              },
+                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
@@ -72,15 +81,21 @@ Widget buildBothLoaded(BuildContext context, BothLoadedState state) {
                           child: ListView(
                             children: [
                               ListView.builder(
+                                  primary: false,
                                   shrinkWrap: true,
                                   itemCount: state.enemies.length,
                                   itemBuilder: (context, index) {
-                                    return ListTile(
-                                      title: Text(state.enemies[index].name),
+                                    return Center(
+                                      child: ListTile(
+                                        title: Center(
+                                            child: Text(
+                                                state.enemies[index].name)),
+                                      ),
                                     );
                                   }),
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 8),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
                                 child: Center(
                                   child: ElevatedButton(
                                       onPressed: () async {

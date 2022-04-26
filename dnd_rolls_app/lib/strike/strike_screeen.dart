@@ -85,11 +85,14 @@ class _StrikeScreenState extends State<StrikeScreen> {
                     })
                   ],
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(state.strike);
-                    },
-                    child: const Text('Выбрать'))
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(state.strike);
+                      },
+                      child: const Text('Выбрать')),
+                )
               ],
             );
           } else {

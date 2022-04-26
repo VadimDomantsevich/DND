@@ -1,10 +1,16 @@
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
 import 'package:dnd_rolls_app/macros/characters_macros_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget buildEveryoneAttacked(
     BuildContext context, EveryoneAttackedState state) {
+  final ScrollController _controller = ScrollController();
+
+  SchedulerBinding.instance?.addPostFrameCallback((_) {
+    _controller.jumpTo(_controller.position.maxScrollExtent);
+  });
   return SafeArea(
     child: Column(
       children: [
@@ -83,20 +89,15 @@ Widget buildEveryoneAttacked(
             padding: const EdgeInsets.all(8.0),
             child: DecoratedBox(
               decoration: BoxDecoration(border: Border.all(width: 1)),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                        primary: false,
-                        itemCount: state.battle.battleLogs.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(state.battle.battleLogs[index].logs),
-                          );
-                        }),
-                  ),
-                ],
-              ),
+              child: ListView.builder(
+                  controller: _controller,
+                  primary: false,
+                  itemCount: state.battle.battleLogs.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(state.battle.battleLogs[index].logs),
+                    );
+                  }),
             ),
           ),
         )

@@ -150,8 +150,12 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                       Strike strike = await showDialog(
                           context: context,
                           builder: (context) => Dialog(
-                                child: WeaponScreen(
-                                  character: state.character,
+                                child: SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.4,
+                                  child: WeaponScreen(
+                                    character: state.character,
+                                  ),
                                 ),
                               ));
                       setState(() {
@@ -182,8 +186,11 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                   Strike strike = await showDialog(
                       context: context,
                       builder: (context) => Dialog(
-                            child: WeaponScreen(
-                              character: state.character,
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.4,
+                              child: WeaponScreen(
+                                character: state.character,
+                              ),
                             ),
                           ));
                   setState(() {

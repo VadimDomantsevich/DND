@@ -92,8 +92,10 @@ class EnemyScreen extends StatelessWidget {
               onTap: () async {
                 List<dynamic> result = await showDialog(
                     context: context,
-                    builder: (context) => const Dialog(
-                          child: UpdateEnemy(),
+                    builder: (context) => Dialog(
+                          child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.4,
+                              child: const UpdateEnemy()),
                         ));
                 if (result.isNotEmpty) {
                   BlocProvider.of<EnemyBloc>(context)
@@ -112,7 +114,9 @@ class EnemyScreen extends StatelessWidget {
     List<dynamic> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
-              child: UpdateEnemy(enemy: enemy),
+              child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: UpdateEnemy(enemy: enemy)),
             ));
     if (result.isNotEmpty) {
       BlocProvider.of<EnemyBloc>(context)

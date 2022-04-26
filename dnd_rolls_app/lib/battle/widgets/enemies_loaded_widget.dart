@@ -54,11 +54,13 @@ Widget buildEnemiesLoaded(BuildContext context, EnemiesLoadedState state) {
                       child: ListView(
                         children: [
                           ListView.builder(
+                              primary: false,
                               shrinkWrap: true,
                               itemCount: state.enemies.length,
                               itemBuilder: (context, index) {
                                 return ListTile(
-                                  title: Text(state.enemies[index].name),
+                                  title: Center(
+                                      child: Text(state.enemies[index].name)),
                                 );
                               }),
                           Padding(

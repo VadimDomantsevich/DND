@@ -68,3 +68,9 @@ class NextTurnEvent extends BattleEvent {
   @override
   List<Object?> get props => [battle];
 }
+
+class EndBattleEvent extends BattleEvent {
+  const EndBattleEvent();
+  @override
+  List<Object?> get props => [];
+}

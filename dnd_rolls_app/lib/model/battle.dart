@@ -6,9 +6,11 @@ class Battle {
   int turn;
   List<Character> characters;
   List<Enemy> enemies;
+  List<int> currentHealth;
   List<BattleLog> battleLogs;
   List<Character> whoAttacked;
+  List<Enemy> defeatedEnemies;
 
-  Battle(this.turn, this.characters, this.enemies, this.battleLogs,
-      this.whoAttacked);
+  Battle(this.turn, this.characters, this.enemies, this.currentHealth,
+      this.battleLogs, this.whoAttacked, this.defeatedEnemies);
 }

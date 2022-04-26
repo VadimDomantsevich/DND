@@ -79,3 +79,11 @@ class EveryoneAttackedState extends BattleState {
   @override
   List<Object> get props => [battle];
 }
+
+class BattleIsOverState extends BattleState {
+  final Battle battle;
+
+  const BattleIsOverState(this.battle);
+  @override
+  List<Object> get props => [battle];
+}

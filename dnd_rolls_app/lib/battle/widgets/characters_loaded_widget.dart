@@ -1,7 +1,6 @@
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
 import 'package:dnd_rolls_app/character/choose_character_screen.dart';
 import 'package:dnd_rolls_app/enemy/choose_enemy_screen.dart';
-import 'package:dnd_rolls_app/macros/characters_macros_screen.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +33,16 @@ Widget buildCharactersLoaded(
                     Expanded(
                         child: ListView(
                       children: [
-                        CharactersMacrosScreen(
-                          characters: state.characters,
-                          isSelectable: false,
+                        ListView.builder(
+                          primary: false,
+                          shrinkWrap: true,
+                          itemCount: state.characters.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Center(
+                                  child: Text(state.characters[index].name)),
+                            );
+                          },
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),

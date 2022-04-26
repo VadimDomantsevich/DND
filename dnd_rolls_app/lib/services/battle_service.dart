@@ -5,14 +5,21 @@ import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
 
 class BattleService {
-  Battle battle = Battle(1, [], [], [], []);
+  Battle battle = Battle(1, [], [], [], [], [], []);
 
   void updateCharacters(List<Character> characters) {
+    battle.characters.clear();
     battle.characters = characters;
   }
 
   void updateEnemies(List<Enemy> enemies) {
+    battle.enemies.clear();
     battle.enemies = enemies;
+    battle.currentHealth.clear();
+    battle.defeatedEnemies.clear();
+    for (var enemy in battle.enemies) {
+      battle.currentHealth.add(enemy.health);
+    }
   }
 
   void updateBattleLogs(BattleLog battleLog) {

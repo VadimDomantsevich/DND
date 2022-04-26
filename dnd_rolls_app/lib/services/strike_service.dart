@@ -54,7 +54,11 @@ class StrikeService {
     }
     if (roll == 20) {
       logs += ('${strike.character.name} выбрасывает 20 - критический удар!');
-      final damage = getCriticalDamage(strike, enemy);
+      int damage = getCriticalDamage(strike, enemy);
+      int characteristicBonus = getCharacteristicBonus(strike);
+      logs += (' + модификатор: $characteristicBonus');
+      damage += characteristicBonus;
+      logs += (' нанося $damage урона');
       return BattleLog(logs, damage: damage);
     } else {
       int characteristicBonus = getCharacteristicBonus(strike);
@@ -67,6 +71,9 @@ class StrikeService {
       logs += (' на попадание по ${enemy.name}');
       if (roll >= enemy.armorClass) {
         int damage = getDamage(strike, enemy);
+        logs += (' + модификатор: $characteristicBonus');
+        damage += characteristicBonus;
+        logs += (' нанося $damage урона');
         return BattleLog(logs, damage: damage);
       } else {
         logs += (' и промахивается');
@@ -94,52 +101,70 @@ class StrikeService {
 
   int getDamage(Strike strike, Enemy enemy) {
     int weaponDamage = 0;
+    logs += (' и выбрасывает на костях урона');
     switch (strike.weapon.damage) {
       case DamageCube.d4:
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d4);
+        logs += (' $weaponDamage(d4)');
         break;
       case DamageCube.d6:
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d6);
+        logs += (' $weaponDamage(d6)');
         break;
       case DamageCube.d8:
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d8);
+        logs += (' $weaponDamage(d8)');
         break;
       case DamageCube.d10:
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d10);
+        logs += (' $weaponDamage(d10)');
         break;
       case DamageCube.d12:
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d12);
+        logs += (' $weaponDamage(d12)');
         break;
     }
-    logs += (' и наносит $weaponDamage урона');
+
     return weaponDamage;
   }
 
   int getCriticalDamage(Strike strike, Enemy enemy) {
     int weaponDamage = 0;
+    int secondCube = 0;
+    logs += (' и выбрасывает на костях урона ');
     switch (strike.weapon.damage) {
       case DamageCube.d4:
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d4);
-        weaponDamage += RandomGenerator().rollDamage(DamageCube.d4);
+        logs += (' $weaponDamage(d4) и');
+        secondCube += RandomGenerator().rollDamage(DamageCube.d4);
+        logs += (' $secondCube(d4)');
         break;
       case DamageCube.d6:
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d6);
-        weaponDamage += RandomGenerator().rollDamage(DamageCube.d6);
+        logs += (' $weaponDamage(d6) и');
+        secondCube += RandomGenerator().rollDamage(DamageCube.d6);
+        logs += (' $secondCube(d6)');
         break;
       case DamageCube.d8:
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d8);
-        weaponDamage += RandomGenerator().rollDamage(DamageCube.d8);
+        logs += (' $weaponDamage(d8) и');
+        secondCube += RandomGenerator().rollDamage(DamageCube.d8);
+        logs += (' $secondCube(d8)');
         break;
       case DamageCube.d10:
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d10);
-        weaponDamage += RandomGenerator().rollDamage(DamageCube.d10);
+        logs += (' $weaponDamage(d10) и');
+        secondCube += RandomGenerator().rollDamage(DamageCube.d10);
+        logs += (' $secondCube(d10)');
         break;
       case DamageCube.d12:
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d12);
-        weaponDamage += RandomGenerator().rollDamage(DamageCube.d12);
+        logs += (' $weaponDamage(d12) и');
+        secondCube += RandomGenerator().rollDamage(DamageCube.d12);
+        logs += (' $secondCube(d12)');
         break;
     }
-    logs += (' и наносит $weaponDamage урона');
+    weaponDamage += secondCube;
     return weaponDamage;
   }
 }
