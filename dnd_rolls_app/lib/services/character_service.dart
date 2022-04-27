@@ -11,9 +11,10 @@ class CharacterService {
     }
     _characters = await Hive.openBox('charactersBox');
 
-    await _characters.clear();
-    await _characters.add(Character('Рагнар', 3, 13, 17, 15, 11, 16, 12));
-    await _characters.add(Character('Хироки', 3, 14, 11, 15, 18, 12, 18));
+    if (_characters.isEmpty) {
+      await _characters.add(Character('Рагнар', 3, 13, 17, 15, 11, 16, 12));
+      await _characters.add(Character('Хироки', 3, 14, 11, 15, 18, 12, 18));
+    }
   }
 
   List<Character> getCharacters() {

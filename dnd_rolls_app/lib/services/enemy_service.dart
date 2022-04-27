@@ -11,9 +11,10 @@ class EnemyService {
     }
     _enemies = await Hive.openBox('enemyBox');
 
-    await _enemies.clear();
-    await _enemies.add(Enemy('Манекен', 30, 10));
-    await _enemies.add(Enemy('Манекен бронированный', 30, 15));
+    if (_enemies.isEmpty) {
+      await _enemies.add(Enemy('Манекен', 30, 10));
+      await _enemies.add(Enemy('Манекен бронированный', 30, 15));
+    }
   }
 
   List<Enemy> getEnemies() {

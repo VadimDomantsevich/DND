@@ -99,10 +99,8 @@ class WeaponScreen extends StatelessWidget {
             onTap: () async {
               List<dynamic> result = await showDialog(
                   context: context,
-                  builder: (context) => Dialog(
-                        child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            child: const UpdateWeapon()),
+                  builder: (context) => const Dialog(
+                        child: UpdateWeapon(),
                       ));
               if (result.isNotEmpty) {
                 BlocProvider.of<WeaponBloc>(context).add(AddWeaponEvent(
@@ -170,10 +168,8 @@ class WeaponScreen extends StatelessWidget {
             onTap: () async {
               List<dynamic> result = await showDialog(
                   context: context,
-                  builder: (context) => Dialog(
-                        child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            child: const UpdateWeapon()),
+                  builder: (context) => const Dialog(
+                        child: UpdateWeapon(),
                       ));
               if (result.isNotEmpty) {
                 BlocProvider.of<WeaponBloc>(context).add(AddWeaponEvent(
@@ -189,11 +185,8 @@ class WeaponScreen extends StatelessWidget {
                 Strike strike = await showDialog(
                     context: context,
                     builder: (context) => Dialog(
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            child: StrikeScreen(
-                                character: character!, weapon: state.weapon),
-                          ),
+                          child: StrikeScreen(
+                              character: character!, weapon: state.weapon),
                         ));
                 Navigator.of(context).pop(strike);
               },
@@ -240,9 +233,7 @@ class WeaponScreen extends StatelessWidget {
     List<dynamic> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
-              child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child: UpdateWeapon(weapon: weapon)),
+              child: UpdateWeapon(weapon: weapon),
             ));
     if (result.isNotEmpty) {
       BlocProvider.of<WeaponBloc>(context).add(UpdateWeaponEvent(

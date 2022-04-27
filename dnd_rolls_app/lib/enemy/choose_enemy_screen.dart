@@ -110,10 +110,8 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
               onTap: () async {
                 List<dynamic> result = await showDialog(
                     context: context,
-                    builder: (context) => Dialog(
-                          child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.4,
-                              child: const UpdateEnemy()),
+                    builder: (context) => const Dialog(
+                          child: UpdateEnemy(),
                         ));
                 if (result.isNotEmpty) {
                   BlocProvider.of<EnemyBloc>(context)
@@ -214,10 +212,8 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
               onTap: () async {
                 List<dynamic> result = await showDialog(
                     context: context,
-                    builder: (context) => Dialog(
-                          child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.4,
-                              child: const UpdateEnemy()),
+                    builder: (context) => const Dialog(
+                          child: UpdateEnemy(),
                         ));
                 if (result.isNotEmpty) {
                   BlocProvider.of<EnemyBloc>(context)
@@ -301,9 +297,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
     List<dynamic> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
-              child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  child: UpdateEnemy(enemy: enemy)),
+              child: UpdateEnemy(enemy: enemy),
             ));
     if (result.isNotEmpty) {
       BlocProvider.of<EnemyBloc>(context)

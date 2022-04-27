@@ -1,4 +1,3 @@
-import 'package:dnd_rolls_app/battle/battle_screen.dart';
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
 import 'package:dnd_rolls_app/macros/bloc/macros_bloc.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
@@ -140,11 +139,8 @@ Widget buildSelectableMacrosForCharacter(
                     context: context,
                     builder: (context) {
                       return Dialog(
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          child: UpdateMacros(
-                            characterName: characterName,
-                          ),
+                        child: UpdateMacros(
+                          characterName: characterName,
                         ),
                       );
                     });
@@ -167,12 +163,9 @@ Future<void> update(BuildContext context, Macros macros) async {
   List<dynamic> result = await showDialog(
       context: context,
       builder: (context) => Dialog(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.3,
-              child: UpdateMacros(
-                macros: macros,
-                characterName: macros.characterName,
-              ),
+            child: UpdateMacros(
+              macros: macros,
+              characterName: macros.characterName,
             ),
           ));
   if (result.isNotEmpty) {

@@ -17,11 +17,12 @@ class WeaponService {
     }
     _weapons = await Hive.openBox('weaponsBox');
 
-    await _weapons.clear();
-    await _weapons
-        .add(Weapon('Гром', DamageCube.d8, CharacteristicsEnum.strength));
-    await _weapons
-        .add(Weapon('Молния', DamageCube.d8, CharacteristicsEnum.dexterity));
+    if (_weapons.isEmpty) {
+      await _weapons
+          .add(Weapon('Гром', DamageCube.d8, CharacteristicsEnum.strength));
+      await _weapons
+          .add(Weapon('Молния', DamageCube.d8, CharacteristicsEnum.dexterity));
+    }
   }
 
   List<Weapon> getWeapons() {

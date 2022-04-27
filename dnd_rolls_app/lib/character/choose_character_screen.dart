@@ -53,9 +53,7 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
     List<dynamic> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
-              child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  child: UpdateCharacter(character: character)),
+              child: UpdateCharacter(character: character),
             ));
     if (result.isNotEmpty) {
       BlocProvider.of<CharacterBloc>(context).add(UpdateCharacterEvent(
@@ -129,10 +127,8 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
             onTap: () async {
               List<dynamic> result = await showDialog(
                   context: context,
-                  builder: (context) => Dialog(
-                        child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.7,
-                            child: const UpdateCharacter()),
+                  builder: (context) => const Dialog(
+                        child: UpdateCharacter(),
                       ));
               if (result.isNotEmpty) {
                 BlocProvider.of<CharacterBloc>(context).add(AddCharacterEvent(
@@ -224,10 +220,8 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
             onTap: () async {
               List<dynamic> result = await showDialog(
                   context: context,
-                  builder: (context) => Dialog(
-                        child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.7,
-                            child: const UpdateCharacter()),
+                  builder: (context) => const Dialog(
+                        child: UpdateCharacter(),
                       ));
               if (result.isNotEmpty) {
                 BlocProvider.of<CharacterBloc>(context).add(AddCharacterEvent(
