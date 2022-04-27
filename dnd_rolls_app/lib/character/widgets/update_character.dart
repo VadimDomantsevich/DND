@@ -1,5 +1,6 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
+import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:flutter/material.dart';
 
@@ -107,18 +108,16 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
+                elevatedButtonWrap(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
                     child: const Text('Отменить'),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
+                elevatedButtonWrap(
+                  ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           if (widget.character != null) {

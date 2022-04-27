@@ -1,5 +1,6 @@
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
 import 'package:dnd_rolls_app/character/choose_character_screen.dart';
+import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/enemy/choose_enemy_screen.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
@@ -31,7 +32,8 @@ Widget buildBattleInitial(BuildContext context, BattleInitial state) {
                   children: [
                     Expanded(
                       child: Center(
-                        child: ElevatedButton(
+                          child: elevatedButtonWrap(
+                        ElevatedButton(
                             onPressed: () async {
                               List<Character> characters = await showDialog(
                                   context: context,
@@ -44,7 +46,7 @@ Widget buildBattleInitial(BuildContext context, BattleInitial state) {
                               }
                             },
                             child: const Text('Выбрать персонажей')),
-                      ),
+                      )),
                     ),
                     Container(
                       decoration: BoxDecoration(border: Border.all(width: 1)),
@@ -52,7 +54,8 @@ Widget buildBattleInitial(BuildContext context, BattleInitial state) {
                     ),
                     Expanded(
                       child: Center(
-                        child: ElevatedButton(
+                          child: elevatedButtonWrap(
+                        ElevatedButton(
                             onPressed: () async {
                               List<Enemy> enemies = await showDialog(
                                   context: context,
@@ -65,7 +68,7 @@ Widget buildBattleInitial(BuildContext context, BattleInitial state) {
                               }
                             },
                             child: const Text('Выбрать врагов')),
-                      ),
+                      )),
                     ),
                   ],
                 ),

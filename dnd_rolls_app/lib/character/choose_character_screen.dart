@@ -1,6 +1,7 @@
 import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
 import 'package:dnd_rolls_app/character/widgets/update_character.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
+import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:flutter/material.dart';
@@ -236,12 +237,14 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
               }
             },
           ),
-          ElevatedButton(
-              onPressed: () {
-                final result = state.selectedCharacters;
-                Navigator.of(context).pop(result);
-              },
-              child: const Text('Выбрать'))
+          elevatedButtonWrap(
+            ElevatedButton(
+                onPressed: () {
+                  final result = state.selectedCharacters;
+                  Navigator.of(context).pop(result);
+                },
+                child: const Text('Выбрать')),
+          )
         ],
       );
     }

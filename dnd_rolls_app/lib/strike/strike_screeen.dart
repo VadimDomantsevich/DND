@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:dnd_rolls_app/services/strike_service.dart';
@@ -82,17 +83,16 @@ class _StrikeScreenState extends State<StrikeScreen> {
                         selected: strike.name == state.strike.name,
                         title: Text(strike.name),
                       );
-                    })
+                    }),
+                    elevatedButtonWrap(
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(state.strike);
+                          },
+                          child: const Text('Выбрать')),
+                    )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(state.strike);
-                      },
-                      child: const Text('Выбрать')),
-                )
               ],
             );
           } else {

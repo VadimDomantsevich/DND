@@ -1,4 +1,5 @@
 import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
+import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
@@ -64,17 +65,15 @@ class _UpdateMacrosState extends State<UpdateMacros> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
+              elevatedButtonWrap(
+                ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
                     child: const Text('Отменить')),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
+              elevatedButtonWrap(
+                ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         if (widget.macros != null) {

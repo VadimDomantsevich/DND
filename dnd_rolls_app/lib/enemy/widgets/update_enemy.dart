@@ -1,4 +1,5 @@
 import 'package:dnd_rolls_app/core/icons/dnd_icons.dart';
+import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
 import 'package:flutter/material.dart';
 
@@ -139,18 +140,16 @@ class _UpdateEnemyState extends State<UpdateEnemy> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
+              elevatedButtonWrap(
+                ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
                   child: const Text('Отменить'),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
+              elevatedButtonWrap(
+                ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         if (widget.enemy == null) {

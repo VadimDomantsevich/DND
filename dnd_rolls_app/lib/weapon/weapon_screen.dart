@@ -1,5 +1,6 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
+import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
@@ -180,17 +181,19 @@ class WeaponScreen extends StatelessWidget {
               }
             },
           ),
-          ElevatedButton(
-              onPressed: () async {
-                Strike strike = await showDialog(
-                    context: context,
-                    builder: (context) => Dialog(
-                          child: StrikeScreen(
-                              character: character!, weapon: state.weapon),
-                        ));
-                Navigator.of(context).pop(strike);
-              },
-              child: const Text('Выбрать'))
+          elevatedButtonWrap(
+            ElevatedButton(
+                onPressed: () async {
+                  Strike strike = await showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                            child: StrikeScreen(
+                                character: character!, weapon: state.weapon),
+                          ));
+                  Navigator.of(context).pop(strike);
+                },
+                child: const Text('Выбрать')),
+          )
         ],
       );
     }

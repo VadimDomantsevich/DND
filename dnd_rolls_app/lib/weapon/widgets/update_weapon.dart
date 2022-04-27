@@ -1,6 +1,7 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/icons/dnd_icons.dart';
+import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
   final _nameController = TextEditingController();
   DamageCube _damage = DamageCube.d6;
   CharacteristicsEnum _characteristic = CharacteristicsEnum.strength;
-  
+
   @override
   void initState() {
     super.initState();
@@ -108,18 +109,16 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
+                elevatedButtonWrap(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
                     child: const Text('Отменить'),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
+                elevatedButtonWrap(
+                  ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           if (widget.weapon == null) {

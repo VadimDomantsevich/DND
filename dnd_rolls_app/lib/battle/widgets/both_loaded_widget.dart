@@ -1,5 +1,6 @@
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
 import 'package:dnd_rolls_app/character/choose_character_screen.dart';
+import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/enemy/choose_enemy_screen.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
@@ -47,29 +48,24 @@ Widget buildBothLoaded(BuildContext context, BothLoadedState state) {
                                 );
                               },
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Center(
-                                child: ElevatedButton(
-                                    onPressed: () async {
-                                      List<Character> characters =
-                                          await showDialog(
-                                              context: context,
-                                              builder: (context) =>
-                                                  const Dialog(
-                                                    child:
-                                                        ChooseCharacterScreen(),
-                                                  ));
-                                      if (characters.isNotEmpty) {
-                                        BlocProvider.of<BattleBloc>(context)
-                                            .add(LoadCharactersEvent(
-                                                characters));
-                                      }
-                                    },
-                                    child: const Text('Выбрать персонажей')),
-                              ),
-                            ),
+                            Center(
+                                child: elevatedButtonWrap(
+                              ElevatedButton(
+                                  onPressed: () async {
+                                    List<Character> characters =
+                                        await showDialog(
+                                            context: context,
+                                            builder: (context) => const Dialog(
+                                                  child:
+                                                      ChooseCharacterScreen(),
+                                                ));
+                                    if (characters.isNotEmpty) {
+                                      BlocProvider.of<BattleBloc>(context)
+                                          .add(LoadCharactersEvent(characters));
+                                    }
+                                  },
+                                  child: const Text('Выбрать персонажей')),
+                            )),
                           ],
                         )),
                         Container(
@@ -93,25 +89,22 @@ Widget buildBothLoaded(BuildContext context, BothLoadedState state) {
                                       ),
                                     );
                                   }),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                                child: Center(
-                                  child: ElevatedButton(
-                                      onPressed: () async {
-                                        List<Enemy> enemies = await showDialog(
-                                            context: context,
-                                            builder: (context) => const Dialog(
-                                                  child: ChooseEnemyScreen(),
-                                                ));
-                                        if (enemies.isNotEmpty) {
-                                          BlocProvider.of<BattleBloc>(context)
-                                              .add(LoadEnemiesEvent(enemies));
-                                        }
-                                      },
-                                      child: const Text('Выбрать врагов')),
-                                ),
-                              ),
+                              Center(
+                                  child: elevatedButtonWrap(
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      List<Enemy> enemies = await showDialog(
+                                          context: context,
+                                          builder: (context) => const Dialog(
+                                                child: ChooseEnemyScreen(),
+                                              ));
+                                      if (enemies.isNotEmpty) {
+                                        BlocProvider.of<BattleBloc>(context)
+                                            .add(LoadEnemiesEvent(enemies));
+                                      }
+                                    },
+                                    child: const Text('Выбрать врагов')),
+                              )),
                             ],
                           ),
                         ),
@@ -123,9 +116,8 @@ Widget buildBothLoaded(BuildContext context, BothLoadedState state) {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(
+        elevatedButtonWrap(
+          ElevatedButton(
               onPressed: () {
                 BlocProvider.of<BattleBloc>(context)
                     .add(const StartBattleEvent());

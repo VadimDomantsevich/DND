@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/enemy/bloc/enemy_bloc.dart';
 import 'package:dnd_rolls_app/enemy/widgets/update_enemy.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
@@ -221,20 +222,22 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                 }
               },
             ),
-            ElevatedButton(
-                onPressed: () {
-                  List<Enemy> result = [];
-                  for (var enemy in state.selectedEnemies) {
-                    int i = 0;
-                    int index = state.selectedEnemies.indexOf(enemy);
-                    while (i < state.selectedEnemiesCount[index]) {
-                      result.add(enemy);
-                      i++;
+            elevatedButtonWrap(
+              ElevatedButton(
+                  onPressed: () {
+                    List<Enemy> result = [];
+                    for (var enemy in state.selectedEnemies) {
+                      int i = 0;
+                      int index = state.selectedEnemies.indexOf(enemy);
+                      while (i < state.selectedEnemiesCount[index]) {
+                        result.add(enemy);
+                        i++;
+                      }
                     }
-                  }
-                  Navigator.of(context).pop(result);
-                },
-                child: const Text('Выбрать'))
+                    Navigator.of(context).pop(result);
+                  },
+                  child: const Text('Выбрать')),
+            ),
           ],
         ),
       );
