@@ -1,4 +1,6 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
+import 'package:dnd_rolls_app/model/macros.dart';
+import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -14,6 +16,12 @@ class WeaponService {
     }
     if (!Hive.isAdapterRegistered(4)) {
       Hive.registerAdapter(DamageCubeAdapter());
+    }
+    if (!Hive.isAdapterRegistered(6)) {
+      Hive.registerAdapter(StrikeAdapter());
+    }
+    if (!Hive.isAdapterRegistered(7)) {
+      Hive.registerAdapter(MacrosAdapter());
     }
     _weapons = await Hive.openBox('weaponsBox');
 
@@ -65,11 +73,33 @@ class WeaponService {
       return CreationResult.alreadyExists;
     }
     try {
+      //---
+      final updatedWeapon = Weapon(newName, damage, characteristic);
+      updateStrikes(weaponToUpdate, updatedWeapon);
+      //---
       final index = weaponToUpdate.key as int;
-      await _weapons.put(index, Weapon(newName, damage, characteristic));
+      await _weapons.put(index, updatedWeapon);
       return CreationResult.success;
     } catch (e) {
       return CreationResult.failure;
+    }
+  }
+
+  void updateStrikes(Weapon oldWeapon, Weapon updatedWeapon) async {
+    Box<Strike> _strikes = await Hive.openBox('strikeBox');
+    Box<Macros> _macros = await Hive.openBox('macrosBox');
+
+    final strikesToUpdate =
+        _strikes.values.where((element) => element.weapon.name == oldWeapon.name);
+
+    for (var strike in strikesToUpdate) {
+      for (var macros in _macros.values) {
+        if (macros.strikes.contains(strike)) {
+          macros.strikes.remove(strike);
+          macros.save();
+        }
+      }
+      strike.delete(); 
     }
   }
 }

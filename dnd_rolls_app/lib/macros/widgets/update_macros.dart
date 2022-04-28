@@ -3,6 +3,7 @@ import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
+import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:dnd_rolls_app/weapon/weapon_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +23,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
   final _formKey = GlobalKey<FormState>();
   String _dialogHeader = '';
   final _nameController = TextEditingController();
-  List<Strike>? strikes = [];
+  List<Strike> strikes = [];
 
   @override
   void initState() {
@@ -30,7 +31,9 @@ class _UpdateMacrosState extends State<UpdateMacros> {
     if (widget.macros != null) {
       _dialogHeader = 'Редактирование макроса ${widget.macros!.name}';
       _nameController.text = widget.macros!.name;
-      strikes = widget.macros!.strikes;
+      strikes = RepositoryProvider.of<MacrosService>(context)
+          .getMacros(widget.macros!.name)
+          .strikes;
     } else if (widget.characterName != null) {
       _dialogHeader = 'Создание макроса';
     }
@@ -81,7 +84,9 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                             widget.macros!.name,
                             _nameController.text,
                             widget.macros!.characterName,
-                            strikes
+                            RepositoryProvider.of<MacrosService>(context)
+                                .getMacros(widget.macros!.name)
+                                .strikes
                           ];
                           Navigator.of(context).pop(result);
                         } else {
@@ -104,7 +109,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
   }
 
   Widget buildStrikes() {
-    if (strikes != null && strikes!.isNotEmpty) {
+    if (strikes.isNotEmpty) {
       return BlocProvider(
         create: (context) =>
             CharacterBloc(RepositoryProvider.of<CharacterService>(context))
@@ -115,7 +120,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
               return ListView(
                 shrinkWrap: true,
                 children: [
-                  ...strikes!.map((strike) {
+                  ...strikes.map((strike) {
                     return Column(
                       children: [
                         Slidable(
@@ -126,7 +131,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                                 SlidableAction(
                                   onPressed: ((_) => {
                                         setState((() {
-                                          strikes!.remove(strike);
+                                          strikes.remove(strike);
                                         }))
                                       }),
                                   backgroundColor: const Color(0xFFFE4A49),
@@ -146,16 +151,30 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                     title: const Text('Добавить удар'),
                     trailing: const Icon(Icons.add_box_outlined),
                     onTap: () async {
-                      Strike strike = await showDialog(
+                      Strike? strike = await showDialog(
                           context: context,
                           builder: (context) => Dialog(
                                 child: WeaponScreen(
                                   character: state.character,
                                 ),
                               ));
-                      setState(() {
-                        strikes!.add(strike);
-                      });
+                      if (widget.macros != null) {
+                        setState(() {
+                          strikes =
+                              RepositoryProvider.of<MacrosService>(context)
+                                  .getMacros(widget.macros!.name)
+                                  .strikes;
+                          if (strike != null) {
+                            strikes.add(strike);
+                          }
+                        });
+                      } else {
+                        if (strike != null) {
+                          setState(() {
+                            strikes.add(strike);
+                          });
+                        }
+                      }
                     },
                   )
                 ],
@@ -186,7 +205,16 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                             ),
                           ));
                   setState(() {
-                    strikes = <Strike>[strike];
+                    RepositoryProvider.of<MacrosService>(context)
+                        .getMacros(widget.macros!.name)
+                        .strikes
+                        .add(strike);
+                    RepositoryProvider.of<MacrosService>(context)
+                        .getMacros(widget.macros!.name)
+                        .save();
+                    strikes = RepositoryProvider.of<MacrosService>(context)
+                        .getMacros(widget.macros!.name)
+                        .strikes;
                   });
                 },
               );
