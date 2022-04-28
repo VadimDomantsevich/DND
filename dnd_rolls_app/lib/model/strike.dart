@@ -1,6 +1,6 @@
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 part 'strike.g.dart';
 

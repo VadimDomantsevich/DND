@@ -19,7 +19,7 @@ class MacrosAdapter extends TypeAdapter<Macros> {
     return Macros(
       fields[0] as String,
       fields[1] as String,
-      (fields[2] as List?)?.cast<Strike>(),
+      (fields[2] as List).cast<Strike>(),
     );
   }
 

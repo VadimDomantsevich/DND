@@ -12,10 +12,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 class StrikeService {
   String logs = '';
 
+  late Box<Strike> _strikes;
   Future<void> init() async {
     if (!Hive.isAdapterRegistered(6)) {
-      Hive.registerAdapter(StrikeAdapter());
+      Hive.registerAdapter<Strike>(StrikeAdapter());
     }
+
+    _strikes = await Hive.openBox('strikeBox');
   }
 
   String getName(String characterName, String weaponName, bool isAdvantage,
@@ -29,8 +32,12 @@ class StrikeService {
     return result;
   }
 
+  Strike getStrikeByName(String name) {
+    return _strikes.values.firstWhere((element) => element.name == name);
+  }
+
   List<Strike> getStrikes(Character character, Weapon weapon) {
-    return <Strike>[
+    final strikes = <Strike>[
       Strike(character, weapon, false, false,
           getName(character.name, weapon.name, false, false)),
       Strike(character, weapon, true, false,
@@ -38,6 +45,13 @@ class StrikeService {
       Strike(character, weapon, false, true,
           getName(character.name, weapon.name, false, true))
     ];
+
+    for (var strike in strikes) {
+      if (!_strikes.values.any((element) => element.name == strike.name)) {
+        _strikes.add(strike);
+      }
+    }
+    return strikes;
   }
 
   BattleLog attack(Strike strike, Enemy enemy) {
@@ -66,12 +80,12 @@ class StrikeService {
       roll += strike.character.skillBonus;
       roll += characteristicBonus;
       logs +=
-          (' + бонусы характеристики: $characteristicBonus и мастерства: ${strike.character.skillBonus}');
+          (' + бонусы характеристики: $characteristicBonus и мастерства: ${strike.character.skillBonus},');
       logs += (' итого: $roll');
       logs += (' на попадание по ${enemy.name}');
       if (roll >= enemy.armorClass) {
         int damage = getDamage(strike, enemy);
-        logs += (' + модификатор: $characteristicBonus');
+        logs += (' + модификатор: $characteristicBonus,');
         damage += characteristicBonus;
         logs += (' нанося $damage урона');
         return BattleLog(logs, damage: damage);

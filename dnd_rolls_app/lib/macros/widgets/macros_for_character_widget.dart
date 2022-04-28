@@ -30,43 +30,47 @@ Widget buildMacrosForCharacter(BuildContext context, String characterName) {
           return ListView(shrinkWrap: true, children: [
             ...state.macros.map(
               (macros) {
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 2.0),
-                      child: Slidable(
-                        key: const ValueKey(0),
-                        startActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: ((newContext) async => {
-                                    BlocProvider.of<MacrosBloc>(context).add(
-                                        RemoveMacrosEvent(
-                                            macros.name, macros.characterName))
-                                  }),
-                              backgroundColor: const Color(0xFFFE4A49),
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: 'Удалить',
-                            ),
-                            SlidableAction(
-                              onPressed: (((newContext) async =>
-                                  {update(context, macros)})),
-                              backgroundColor: Colors.blue.shade200,
-                              foregroundColor: Colors.white,
-                              icon: Icons.create,
-                              label: 'Исправить',
-                            ),
-                          ],
-                        ),
-                        child: ListTile(
-                          title: Text(macros.name),
+                if (state.macros.isNotEmpty) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 2.0),
+                        child: Slidable(
+                          key: const ValueKey(0),
+                          startActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: ((newContext) async => {
+                                      BlocProvider.of<MacrosBloc>(context).add(
+                                          RemoveMacrosEvent(macros.name,
+                                              macros.characterName))
+                                    }),
+                                backgroundColor: const Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Удалить',
+                              ),
+                              SlidableAction(
+                                onPressed: (((newContext) async =>
+                                    {update(context, macros)})),
+                                backgroundColor: Colors.blue.shade200,
+                                foregroundColor: Colors.white,
+                                icon: Icons.create,
+                                label: 'Исправить',
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                            title: Text(macros.name),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                );
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
               },
             ),
             ListTile(

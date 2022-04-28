@@ -10,7 +10,7 @@ class Macros extends HiveObject {
   @HiveField(1)
   final String characterName;
   @HiveField(2)
-  final List<Strike>? strikes;
+  final List<Strike> strikes;
 
   Macros(this.name, this.characterName, this.strikes);
 }

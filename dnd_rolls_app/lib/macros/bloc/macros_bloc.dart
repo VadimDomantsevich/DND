@@ -43,6 +43,7 @@ class MacrosBloc extends Bloc<MacrosEvent, MacrosState> {
       }
     });
     on<UpdateMacrosEvent>((event, emit) async {
+      await _macrosService.init();
       final result = await _macrosService.updateMacros(
           event.name, event.newName, event.characterName, event.strikes);
       switch (result) {

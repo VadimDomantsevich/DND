@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(create: ((context) => CharacterService())),
         RepositoryProvider(create: ((context) => WeaponService())),
         RepositoryProvider(create: ((context) => EnemyService())),
-        RepositoryProvider(create: ((context) => MacrosService())),
         RepositoryProvider(create: ((context) => StrikeService())),
+        RepositoryProvider(create: ((context) => MacrosService())),
         RepositoryProvider(create: ((context) => BattleService()))
       ],
       child: MaterialApp(

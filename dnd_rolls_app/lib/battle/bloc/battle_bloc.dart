@@ -58,7 +58,7 @@ class BattleBloc extends Bloc<BattleEvent, BattleState> {
     on<AttackEvent>((event, emit) {
       final StrikeService _strikeService = StrikeService();
       BattleLog battleLog;
-      for (var strike in event.selectedMacros.strikes!) {
+      for (var strike in event.selectedMacros.strikes) {
         battleLog = _strikeService.attack(strike, event.selectedEnemy);
         if (battleLog.damage != null) {
           _battleService.battle.currentHealth[event.selectedIndex] -=

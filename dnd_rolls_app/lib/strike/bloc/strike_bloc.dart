@@ -21,7 +21,8 @@ class StrikeBloc extends Bloc<StrikeEvent, StrikeState> {
     });
     on<SelectStrikeEvent>((event, emit) {
       final strikes = _strikeService.getStrikes(event.character, event.weapon);
-      emit(SelectedStrikeState(strikes, event.strike));
+      emit(SelectedStrikeState(
+          strikes, _strikeService.getStrikeByName(event.strike.name)));
     });
   }
 }

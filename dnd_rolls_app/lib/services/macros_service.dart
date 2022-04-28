@@ -1,6 +1,7 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
+import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class MacrosService {
@@ -8,6 +9,18 @@ class MacrosService {
   Future<void> init() async {
     if (!Hive.isAdapterRegistered(7)) {
       Hive.registerAdapter(MacrosAdapter());
+    }
+    if (!Hive.isAdapterRegistered(6)) {
+      Hive.registerAdapter(StrikeAdapter());
+    }
+    if (!Hive.isAdapterRegistered(2)) {
+      Hive.registerAdapter(WeaponAdapter());
+    }
+    if (!Hive.isAdapterRegistered(3)) {
+      Hive.registerAdapter(CharacteristicsEnumAdapter());
+    }
+    if (!Hive.isAdapterRegistered(4)) {
+      Hive.registerAdapter(DamageCubeAdapter());
     }
     _macros = await Hive.openBox('macrosBox');
   }
@@ -27,7 +40,7 @@ class MacrosService {
   }
 
   CreationResult addMacros(final String name, final String characterName,
-      final List<Strike>? strikes) {
+      final List<Strike> strikes) {
     final alreadyExists = _macros.values.any((element) =>
         element.name.toLowerCase() == name.toLowerCase() &&
         element.characterName == characterName);
@@ -44,14 +57,14 @@ class MacrosService {
 
   Future<void> removeMacros(
       final String name, final String characterName) async {
-    await _macros.values
-        .firstWhere((element) =>
-            element.name == name && element.characterName == characterName)
-        .delete();
+    final macros = _macros.values.firstWhere((element) =>
+        element.name == name && element.characterName == characterName);
+
+    await macros.delete();
   }
 
   Future<CreationResult> updateMacros(final String name, final String newName,
-      final String characterName, final List<Strike>? strikes) async {
+      final String characterName, final List<Strike> strikes) async {
     final macrosToUpdate =
         _macros.values.firstWhere((element) => element.name == name);
     final alreadyExists = _macros.values.any((element) =>
