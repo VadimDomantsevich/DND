@@ -19,6 +19,8 @@ class RandomGenerator {
         return Random().nextInt(10) + 1;
       case DamageCube.d12:
         return Random().nextInt(12) + 1;
+      case DamageCube.d6x2:
+        return Random().nextInt(6) + 1 + Random().nextInt(6) + 1;
     }
   }
 }

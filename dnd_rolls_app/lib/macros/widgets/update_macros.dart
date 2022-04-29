@@ -4,6 +4,7 @@ import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
+import 'package:dnd_rolls_app/services/strike_service.dart';
 import 'package:dnd_rolls_app/weapon/weapon_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +33,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
       _dialogHeader = 'Редактирование макроса ${widget.macros!.name}';
       _nameController.text = widget.macros!.name;
       strikes = RepositoryProvider.of<MacrosService>(context)
-          .getMacros(widget.macros!.name)
+          .getMacros(widget.macros!.name, widget.macros!.characterName)
           .strikes;
     } else if (widget.characterName != null) {
       _dialogHeader = 'Создание макроса';
@@ -56,6 +57,18 @@ class _UpdateMacrosState extends State<UpdateMacros> {
               labelText: 'Название макроса',
             ),
             validator: (value) {
+              if (value != null &&
+                  RepositoryProvider.of<MacrosService>(context)
+                      .getCharacterMacros(widget.characterName!)
+                      .any((element) =>
+                          element.name.toLowerCase() == value.toLowerCase())) {
+                if (widget.macros != null &&
+                    widget.macros!.name.toLowerCase() == value.toLowerCase()) {
+                  return null;
+                } else {
+                  return 'Макрос уже существует';
+                }
+              }
               return (value == null || value.isEmpty)
                   ? 'Поле не должно быть пустым'
                   : null;
@@ -85,7 +98,8 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                             _nameController.text,
                             widget.macros!.characterName,
                             RepositoryProvider.of<MacrosService>(context)
-                                .getMacros(widget.macros!.name)
+                                .getMacros(widget.macros!.name,
+                                    widget.macros!.characterName)
                                 .strikes
                           ];
                           Navigator.of(context).pop(result);
@@ -162,7 +176,8 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                         setState(() {
                           strikes =
                               RepositoryProvider.of<MacrosService>(context)
-                                  .getMacros(widget.macros!.name)
+                                  .getMacros(widget.macros!.name,
+                                      widget.macros!.characterName)
                                   .strikes;
                           if (strike != null) {
                             strikes.add(strike);
@@ -172,6 +187,14 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                         if (strike != null) {
                           setState(() {
                             strikes.add(strike);
+                          });
+                        }
+                      }
+                      for (var item in strikes) {
+                        if (!RepositoryProvider.of<StrikeService>(context)
+                            .isStrikeExist(item.name)) {
+                          setState(() {
+                            strikes.remove(item);
                           });
                         }
                       }
@@ -197,25 +220,36 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                 title: const Text('Добавить удар'),
                 trailing: const Icon(Icons.add_box_outlined),
                 onTap: () async {
-                  Strike strike = await showDialog(
+                  Strike? strike = await showDialog(
                       context: context,
                       builder: (context) => Dialog(
                             child: WeaponScreen(
                               character: state.character,
                             ),
                           ));
-                  setState(() {
-                    RepositoryProvider.of<MacrosService>(context)
-                        .getMacros(widget.macros!.name)
-                        .strikes
-                        .add(strike);
-                    RepositoryProvider.of<MacrosService>(context)
-                        .getMacros(widget.macros!.name)
-                        .save();
-                    strikes = RepositoryProvider.of<MacrosService>(context)
-                        .getMacros(widget.macros!.name)
-                        .strikes;
-                  });
+                  if (widget.macros != null) {
+                    setState(() {
+                      if (strike != null) {
+                        RepositoryProvider.of<MacrosService>(context)
+                            .getMacros(widget.macros!.name,
+                                widget.macros!.characterName)
+                            .strikes
+                            .add(strike);
+                        RepositoryProvider.of<MacrosService>(context)
+                            .getMacros(widget.macros!.name,
+                                widget.macros!.characterName)
+                            .save();
+                      }
+                      strikes = RepositoryProvider.of<MacrosService>(context)
+                          .getMacros(
+                              widget.macros!.name, widget.macros!.characterName)
+                          .strikes;
+                    });
+                  } else if (strike != null) {
+                    setState(() {
+                      strikes.add(strike);
+                    });
+                  }
                 },
               );
             } else {

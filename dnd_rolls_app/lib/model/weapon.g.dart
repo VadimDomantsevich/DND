@@ -20,19 +20,22 @@ class WeaponAdapter extends TypeAdapter<Weapon> {
       fields[0] as String,
       fields[1] as DamageCube,
       fields[2] as CharacteristicsEnum,
+      fields[3] as PhysicalTypeOfDamage,
     );
   }
 
   @override
   void write(BinaryWriter writer, Weapon obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
       ..write(obj.damage)
       ..writeByte(2)
-      ..write(obj.mainCharacteristic);
+      ..write(obj.mainCharacteristic)
+      ..writeByte(3)
+      ..write(obj.typeOfDamage);
   }
 
   @override

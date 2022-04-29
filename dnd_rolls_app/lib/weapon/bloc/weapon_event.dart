@@ -17,10 +17,12 @@ class AddWeaponEvent extends WeaponEvent {
   final String name;
   final DamageCube damage;
   final CharacteristicsEnum characteristic;
+  final PhysicalTypeOfDamage typeOfDamage;
 
-  const AddWeaponEvent(this.name, this.damage, this.characteristic);
+  const AddWeaponEvent(
+      this.name, this.damage, this.characteristic, this.typeOfDamage);
   @override
-  List<Object> get props => [name, damage, characteristic];
+  List<Object> get props => [name, damage, characteristic, typeOfDamage];
 }
 
 class UpdateWeaponEvent extends WeaponEvent {
@@ -28,11 +30,13 @@ class UpdateWeaponEvent extends WeaponEvent {
   final String newName;
   final DamageCube damage;
   final CharacteristicsEnum characteristic;
+  final PhysicalTypeOfDamage typeOfDamage;
 
-  const UpdateWeaponEvent(
-      this.name, this.newName, this.damage, this.characteristic);
+  const UpdateWeaponEvent(this.name, this.newName, this.damage,
+      this.characteristic, this.typeOfDamage);
   @override
-  List<Object> get props => [name, newName, damage, characteristic];
+  List<Object> get props =>
+      [name, newName, damage, characteristic, typeOfDamage];
 }
 
 class RemoveWeaponEvent extends WeaponEvent {

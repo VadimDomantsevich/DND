@@ -3,7 +3,9 @@ import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/icons/dnd_icons.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
+import 'package:dnd_rolls_app/services/weapon_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpdateWeapon extends StatefulWidget {
   final Weapon? weapon;
@@ -19,6 +21,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
   final _nameController = TextEditingController();
   DamageCube _damage = DamageCube.d6;
   CharacteristicsEnum _characteristic = CharacteristicsEnum.strength;
+  PhysicalTypeOfDamage _typeOfDamage = PhysicalTypeOfDamage.crushing;
 
   @override
   void initState() {
@@ -28,6 +31,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
       _nameController.text = widget.weapon!.name;
       _damage = widget.weapon!.damage;
       _characteristic = widget.weapon!.mainCharacteristic;
+      _typeOfDamage = widget.weapon!.typeOfDamage;
     } else {
       _dialogHeader = 'Создание оружия';
     }
@@ -48,61 +52,115 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(
-                  width: 220,
-                  child: TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(DnDApp.broadsword),
-                      labelText: 'Название оружия',
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.55,
+                    child: TextFormField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(DnDApp.broadsword),
+                        labelText: 'Название оружия',
+                      ),
+                      validator: (value) {
+                        if (value != null &&
+                            RepositoryProvider.of<WeaponService>(context)
+                                .getWeapons()
+                                .any((element) =>
+                                    element.name.toLowerCase() ==
+                                    value.toLowerCase())) {
+                          if (widget.weapon != null &&
+                              widget.weapon!.name.toLowerCase() ==
+                                  value.toLowerCase()) {
+                            return null;
+                          } else {
+                            return 'Оружие уже существует';
+                          }
+                        }
+                        return (value == null || value.isEmpty)
+                            ? 'Поле не должно быть пустым'
+                            : null;
+                      },
                     ),
-                    validator: (value) {
-                      return (value == null || value.isEmpty)
-                          ? 'Поле не должно быть пустым'
-                          : null;
-                    },
                   ),
                 ),
-                FloatingActionButton(
-                  onPressed: () {
-                    decrementCharacteristic(_characteristic);
-                  },
-                  mini: true,
-                  child: const Icon(Icons.arrow_back),
-                ),
-                buildCharacteristicWidget(_characteristic),
-                FloatingActionButton(
-                  onPressed: () {
-                    incrementCharacteristic(_characteristic);
-                  },
-                  mini: true,
-                  child: const Icon(Icons.arrow_forward),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FloatingActionButton(
+                        onPressed: () {
+                          decrementDamage(_damage);
+                        },
+                        mini: true,
+                        child: const Icon(Icons.arrow_back),
+                      ),
+                      buildDamageWidget(_damage),
+                      FloatingActionButton(
+                        onPressed: () {
+                          incrementDamage(_damage);
+                        },
+                        mini: true,
+                        child: const Icon(Icons.arrow_forward),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 84),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    decrementDamage(_damage);
-                  },
-                  mini: true,
-                  child: const Icon(Icons.arrow_back),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FloatingActionButton(
+                        onPressed: () {
+                          decrementCharacteristic(_characteristic);
+                        },
+                        mini: true,
+                        child: const Icon(Icons.arrow_back),
+                      ),
+                      buildCharacteristicWidget(_characteristic),
+                      FloatingActionButton(
+                        onPressed: () {
+                          incrementCharacteristic(_characteristic);
+                        },
+                        mini: true,
+                        child: const Icon(Icons.arrow_forward),
+                      ),
+                    ],
+                  ),
                 ),
-                buildDamageWidget(_damage),
-                FloatingActionButton(
-                  onPressed: () {
-                    incrementDamage(_damage);
-                  },
-                  mini: true,
-                  child: const Icon(Icons.arrow_forward),
+              ),
+              Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FloatingActionButton(
+                      onPressed: (() {
+                        decrementTypeOfDamage(_typeOfDamage);
+                      }),
+                      mini: true,
+                      child: const Icon(Icons.arrow_back),
+                    ),
+                    buildTypeOfDamageWidget(_typeOfDamage),
+                    FloatingActionButton(
+                        onPressed: (() {
+                          incrementTypeOfDamage(_typeOfDamage);
+                        }),
+                        mini: true,
+                        child: const Icon(Icons.arrow_forward)),
+                  ],
                 ),
-              ],
-            ),
+              ))
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -126,6 +184,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
                               _nameController.text,
                               _damage,
                               _characteristic,
+                              _typeOfDamage
                             ];
                             Navigator.of(context).pop(result);
                           } else {
@@ -134,6 +193,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
                               _nameController.text,
                               _damage,
                               _characteristic,
+                              _typeOfDamage
                             ];
                             Navigator.of(context).pop(result);
                           }
@@ -147,6 +207,58 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
         ],
       ),
     );
+  }
+
+  Widget buildTypeOfDamageWidget(PhysicalTypeOfDamage typeOfDamage) {
+    Icon typeOfDamageIcon;
+    String typeOfDamageText;
+
+    switch (typeOfDamage) {
+      case PhysicalTypeOfDamage.crushing:
+        typeOfDamageText = Strings.crushing;
+        typeOfDamageIcon = const Icon(DnDApp.battered_axe);
+        break;
+      case PhysicalTypeOfDamage.piercing:
+        typeOfDamageText = Strings.piercing;
+        typeOfDamageIcon = const Icon(DnDApp.knife_fork);
+        break;
+      case PhysicalTypeOfDamage.slashing:
+        typeOfDamageText = Strings.slashing;
+        typeOfDamageIcon = const Icon(DnDApp.broadsword);
+        break;
+    }
+    return Column(
+      children: [
+        typeOfDamageIcon,
+        Text(typeOfDamageText),
+      ],
+    );
+  }
+
+  void incrementTypeOfDamage(PhysicalTypeOfDamage typeOfDamage) {
+    setState(() {
+      int index = PhysicalTypeOfDamage.values
+          .firstWhere((element) => element.name == typeOfDamage.name)
+          .index;
+      if (index == PhysicalTypeOfDamage.values.length - 1) {
+        _typeOfDamage = PhysicalTypeOfDamage.values.first;
+      } else {
+        _typeOfDamage = PhysicalTypeOfDamage.values.elementAt(index + 1);
+      }
+    });
+  }
+
+  void decrementTypeOfDamage(PhysicalTypeOfDamage typeOfDamage) {
+    setState(() {
+      int index = PhysicalTypeOfDamage.values
+          .firstWhere((element) => element.name == typeOfDamage.name)
+          .index;
+      if (index == 0) {
+        _typeOfDamage = PhysicalTypeOfDamage.values.last;
+      } else {
+        _typeOfDamage = PhysicalTypeOfDamage.values.elementAt(index - 1);
+      }
+    });
   }
 
   Widget buildCharacteristicWidget(CharacteristicsEnum characteristic) {
@@ -235,6 +347,10 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
       case DamageCube.d12:
         damageIcon = const Icon(DnDApp.dice_three);
         damageText = '1d12';
+        break;
+      case DamageCube.d6x2:
+        damageIcon = const Icon(DnDApp.dice_six);
+        damageText = '2d6';
         break;
     }
     return Column(

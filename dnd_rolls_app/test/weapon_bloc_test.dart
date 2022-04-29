@@ -47,25 +47,25 @@ void main() {
       blocTest<WeaponBloc, WeaponState>(
         'emits [WeaponLoadedState[_weapons]] when AddWeaponEvent is return CreationResult.success.',
         setUp: () {
-          when((() => weaponService.addWeapon(any(), any(), any())))
+          when((() => weaponService.addWeapon(any(), any(), any(), any())))
               .thenAnswer((invocation) => CreationResult.success);
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
         build: () => WeaponBloc(weaponService),
-        act: (bloc) => bloc.add(const AddWeaponEvent(
-            'name', DamageCube.d6, CharacteristicsEnum.strength)),
+        act: (bloc) => bloc.add(const AddWeaponEvent('name', DamageCube.d6,
+            CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing)),
         expect: () => <WeaponState>[WeaponLoadedState(_weapons)],
       );
       blocTest<WeaponBloc, WeaponState>(
         'emits [WeaponLoadedState[_weapons, error: Не удалось создать]] when AddWeaponEvent is return CreationResult.failure.',
         setUp: () {
-          when((() => weaponService.addWeapon(any(), any(), any())))
+          when((() => weaponService.addWeapon(any(), any(), any(), any())))
               .thenAnswer((invocation) => CreationResult.failure);
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
         build: () => WeaponBloc(weaponService),
-        act: (bloc) => bloc.add(const AddWeaponEvent(
-            'name', DamageCube.d6, CharacteristicsEnum.strength)),
+        act: (bloc) => bloc.add(const AddWeaponEvent('name', DamageCube.d6,
+            CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing)),
         expect: () => <WeaponState>[
           WeaponLoadedState(_weapons, error: 'Не удалось создать')
         ],
@@ -73,13 +73,13 @@ void main() {
       blocTest<WeaponBloc, WeaponState>(
         'emits [WeaponLoadedState[_weapons, error: Оружие с таким именем уже существует]] when AddWeaponEvent is return CreationResult.alreadyExists.',
         setUp: () {
-          when((() => weaponService.addWeapon(any(), any(), any())))
+          when((() => weaponService.addWeapon(any(), any(), any(), any())))
               .thenAnswer((invocation) => CreationResult.alreadyExists);
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
         build: () => WeaponBloc(weaponService),
-        act: (bloc) => bloc.add(const AddWeaponEvent(
-            'name', DamageCube.d6, CharacteristicsEnum.strength)),
+        act: (bloc) => bloc.add(const AddWeaponEvent('name', DamageCube.d6,
+            CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing)),
         expect: () => <WeaponState>[
           WeaponLoadedState(_weapons,
               error: 'Оружие с таким именем уже существует')
@@ -91,25 +91,35 @@ void main() {
       blocTest<WeaponBloc, WeaponState>(
         'emits [WeaponLoadedState[_weapons]] when UpdateWeaponEvent is return CreationResult.success.',
         setUp: () {
-          when((() => weaponService.updateWeapon(any(), any(), any(), any())))
+          when((() => weaponService.updateWeapon(
+                  any(), any(), any(), any(), any())))
               .thenAnswer((invocation) => Future.value(CreationResult.success));
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
         build: () => WeaponBloc(weaponService),
         act: (bloc) => bloc.add(const UpdateWeaponEvent(
-            'name', 'name', DamageCube.d6, CharacteristicsEnum.strength)),
+            'name',
+            'name',
+            DamageCube.d6,
+            CharacteristicsEnum.strength,
+            PhysicalTypeOfDamage.slashing)),
         expect: () => <WeaponState>[WeaponLoadedState(_weapons)],
       );
       blocTest<WeaponBloc, WeaponState>(
         'emits [WeaponLoadedState[_weapons, error: Не удалось отредактировать]] when UpdateWeaponEvent is return CreationResult.failure.',
         setUp: () {
-          when((() => weaponService.updateWeapon(any(), any(), any(), any())))
+          when((() => weaponService.updateWeapon(
+                  any(), any(), any(), any(), any())))
               .thenAnswer((invocation) => Future.value(CreationResult.failure));
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
         build: () => WeaponBloc(weaponService),
         act: (bloc) => bloc.add(const UpdateWeaponEvent(
-            'name', 'name', DamageCube.d6, CharacteristicsEnum.strength)),
+            'name',
+            'name',
+            DamageCube.d6,
+            CharacteristicsEnum.strength,
+            PhysicalTypeOfDamage.slashing)),
         expect: () => <WeaponState>[
           WeaponLoadedState(_weapons, error: 'Не удалось отредактировать')
         ],
@@ -117,14 +127,19 @@ void main() {
       blocTest<WeaponBloc, WeaponState>(
         'emits [WeaponLoadedState[_weapons, error: Оружие с таким именем уже существует]] when UpdateWeaponEvent is return CreationResult.alreadyExists.',
         setUp: () {
-          when((() => weaponService.updateWeapon(any(), any(), any(), any())))
+          when((() => weaponService.updateWeapon(
+                  any(), any(), any(), any(), any())))
               .thenAnswer(
                   (invocation) => Future.value(CreationResult.alreadyExists));
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
         build: () => WeaponBloc(weaponService),
         act: (bloc) => bloc.add(const UpdateWeaponEvent(
-            'name', 'name', DamageCube.d6, CharacteristicsEnum.strength)),
+            'name',
+            'name',
+            DamageCube.d6,
+            CharacteristicsEnum.strength,
+            PhysicalTypeOfDamage.slashing)),
         expect: () => <WeaponState>[
           WeaponLoadedState(_weapons,
               error: 'Оружие с таким именем уже существует')

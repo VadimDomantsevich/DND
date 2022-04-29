@@ -11,6 +11,8 @@ class Weapon extends HiveObject {
   final DamageCube damage;
   @HiveField(2)
   final CharacteristicsEnum mainCharacteristic;
+  @HiveField(3)
+  final PhysicalTypeOfDamage typeOfDamage;
 
-  Weapon(this.name, this.damage, this.mainCharacteristic);
+  Weapon(this.name, this.damage, this.mainCharacteristic, this.typeOfDamage);
 }

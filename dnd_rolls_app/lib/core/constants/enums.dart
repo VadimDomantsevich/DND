@@ -28,7 +28,18 @@ enum DamageCube {
   @HiveField(3)
   d10,
   @HiveField(4)
-  d12
+  d12,
+  @HiveField(5)
+  d6x2
+}
+@HiveType(typeId: 8)
+enum PhysicalTypeOfDamage{
+  @HiveField(0)
+  crushing,
+  @HiveField(1)
+  piercing,
+  @HiveField(2)
+  slashing,
 }
 
 enum CreationResult { success, failure, alreadyExists }

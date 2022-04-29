@@ -1,4 +1,5 @@
 class Strings {
+  //CharacteristicsEnum
   static const strengthText = 'Сила';
   static const dexterityText = 'Ловкость';
   static const constitutionText = 'Телосложение';
@@ -16,6 +17,16 @@ class Strings {
   static const weaponDamageD8 = '1d8';
   static const weaponDamageD10 = '1d10';
   static const weaponDamageD12 = '1d12';
+  static const weaponDamage2D6 = '2d6';
+
+  //PhysicalTypeOfDamageEnum
+  static const crushing = 'Дробящий';
+  static const piercing = 'Колющий';
+  static const slashing = 'Рубящий';
+
+  static const crushingDamage = 'Дробящего';
+  static const piercingDamage = 'Колющего';
+  static const slashingDamage = 'Рубящего';
 
   //EnemyScreen
   static const enemyScreenTitle = 'Противник';

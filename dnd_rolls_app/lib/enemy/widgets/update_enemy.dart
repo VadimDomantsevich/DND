@@ -1,7 +1,9 @@
 import 'package:dnd_rolls_app/core/icons/dnd_icons.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
+import 'package:dnd_rolls_app/services/enemy_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpdateEnemy extends StatefulWidget {
   final Enemy? enemy;
@@ -51,6 +53,17 @@ class _UpdateEnemyState extends State<UpdateEnemy> {
               labelText: 'Имя противника',
             ),
             validator: (value) {
+              if (value != null &&
+                  RepositoryProvider.of<EnemyService>(context).getEnemies().any(
+                      (element) =>
+                          element.name.toLowerCase() == value.toLowerCase())) {
+                if (widget.enemy != null &&
+                    widget.enemy!.name.toLowerCase() == value.toLowerCase()) {
+                  return null;
+                } else {
+                  return 'Противник уже существует';
+                }
+              }
               return (value == null || value.isEmpty)
                   ? 'Поле не должно быть пустым'
                   : null;

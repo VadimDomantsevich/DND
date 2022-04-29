@@ -7,6 +7,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 class MacrosService {
   late Box<Macros> _macros;
   Future<void> init() async {
+    if (!Hive.isAdapterRegistered(8)) {
+      Hive.registerAdapter(PhysicalTypeOfDamageAdapter());
+    }
     if (!Hive.isAdapterRegistered(7)) {
       Hive.registerAdapter(MacrosAdapter());
     }
@@ -31,8 +34,9 @@ class MacrosService {
         .toList();
   }
 
-  Macros getMacros(String name) {
-    return _macros.values.firstWhere((element) => element.name == name);
+  Macros getMacros(String name, String characterName) {
+    return _macros.values.firstWhere((element) =>
+        element.name == name && element.characterName == characterName);
   }
 
   List<Macros> getAllMacros() {
@@ -65,8 +69,8 @@ class MacrosService {
 
   Future<CreationResult> updateMacros(final String name, final String newName,
       final String characterName, final List<Strike> strikes) async {
-    final macrosToUpdate =
-        _macros.values.firstWhere((element) => element.name == name);
+    final macrosToUpdate = _macros.values.firstWhere((element) =>
+        element.name == name && element.characterName == characterName);
     final alreadyExists = _macros.values.any((element) =>
         element.name.toLowerCase() == newName.toLowerCase() &&
         element.characterName == characterName &&

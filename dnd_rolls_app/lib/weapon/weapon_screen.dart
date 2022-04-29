@@ -88,7 +88,7 @@ class WeaponScreen extends StatelessWidget {
                           .add(SelectWeaponEvent(weapon));
                     },
                     title: Text(
-                        '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)}'),
+                        '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)} ${getTypeOfDamageName(weapon.typeOfDamage)}'),
                   ),
                 ),
               ],
@@ -104,11 +104,8 @@ class WeaponScreen extends StatelessWidget {
                         child: UpdateWeapon(),
                       ));
               if (result.isNotEmpty) {
-                BlocProvider.of<WeaponBloc>(context).add(AddWeaponEvent(
-                  result[0],
-                  result[1],
-                  result[2],
-                ));
+                BlocProvider.of<WeaponBloc>(context).add(
+                    AddWeaponEvent(result[0], result[1], result[2], result[3]));
               }
             },
           ),
@@ -157,7 +154,7 @@ class WeaponScreen extends StatelessWidget {
                       }
                     },
                     title: Text(
-                        '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)}'),
+                        '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)} ${getTypeOfDamageName(weapon.typeOfDamage)}'),
                   ),
                 ),
               ],
@@ -173,11 +170,8 @@ class WeaponScreen extends StatelessWidget {
                         child: UpdateWeapon(),
                       ));
               if (result.isNotEmpty) {
-                BlocProvider.of<WeaponBloc>(context).add(AddWeaponEvent(
-                  result[0],
-                  result[1],
-                  result[2],
-                ));
+                BlocProvider.of<WeaponBloc>(context).add(
+                    AddWeaponEvent(result[0], result[1], result[2], result[3]));
               }
             },
           ),
@@ -229,6 +223,19 @@ class WeaponScreen extends StatelessWidget {
         return Strings.weaponDamageD10;
       case DamageCube.d12:
         return Strings.weaponDamageD12;
+      case DamageCube.d6x2:
+        return Strings.weaponDamage2D6;
+    }
+  }
+
+  String getTypeOfDamageName(PhysicalTypeOfDamage typeOfDamage) {
+    switch (typeOfDamage) {
+      case PhysicalTypeOfDamage.crushing:
+        return Strings.crushing;
+      case PhysicalTypeOfDamage.piercing:
+        return Strings.piercing;
+      case PhysicalTypeOfDamage.slashing:
+        return Strings.slashing;
     }
   }
 
@@ -240,11 +247,7 @@ class WeaponScreen extends StatelessWidget {
             ));
     if (result.isNotEmpty) {
       BlocProvider.of<WeaponBloc>(context).add(UpdateWeaponEvent(
-        result[0],
-        result[1],
-        result[2],
-        result[3],
-      ));
+          result[0], result[1], result[2], result[3], result[4]));
     }
   }
 }

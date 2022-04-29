@@ -2,7 +2,9 @@ import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/character.dart';
+import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpdateCharacter extends StatefulWidget {
   final Character? character;
@@ -67,6 +69,20 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
                         labelText: 'Имя персонажа',
                       ),
                       validator: (value) {
+                        if (value != null &&
+                            RepositoryProvider.of<CharacterService>(context)
+                                .getCharacters()
+                                .any((element) =>
+                                    element.name.toLowerCase() ==
+                                    value.toLowerCase())) {
+                          if (widget.character != null &&
+                              widget.character!.name.toLowerCase() ==
+                                  value.toLowerCase()) {
+                            return null;
+                          } else {
+                            return 'Персонаж уже существует';
+                          }
+                        }
                         return (value == null || value.isEmpty)
                             ? 'Поле не должно быть пустым'
                             : null;

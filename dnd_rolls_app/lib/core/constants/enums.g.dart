@@ -82,6 +82,8 @@ class DamageCubeAdapter extends TypeAdapter<DamageCube> {
         return DamageCube.d10;
       case 4:
         return DamageCube.d12;
+      case 5:
+        return DamageCube.d6x2;
       default:
         return DamageCube.d4;
     }
@@ -105,6 +107,9 @@ class DamageCubeAdapter extends TypeAdapter<DamageCube> {
       case DamageCube.d12:
         writer.writeByte(4);
         break;
+      case DamageCube.d6x2:
+        writer.writeByte(5);
+        break;
     }
   }
 
@@ -115,6 +120,50 @@ class DamageCubeAdapter extends TypeAdapter<DamageCube> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is DamageCubeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class PhysicalTypeOfDamageAdapter extends TypeAdapter<PhysicalTypeOfDamage> {
+  @override
+  final int typeId = 8;
+
+  @override
+  PhysicalTypeOfDamage read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return PhysicalTypeOfDamage.crushing;
+      case 1:
+        return PhysicalTypeOfDamage.piercing;
+      case 2:
+        return PhysicalTypeOfDamage.slashing;
+      default:
+        return PhysicalTypeOfDamage.crushing;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, PhysicalTypeOfDamage obj) {
+    switch (obj) {
+      case PhysicalTypeOfDamage.crushing:
+        writer.writeByte(0);
+        break;
+      case PhysicalTypeOfDamage.piercing:
+        writer.writeByte(1);
+        break;
+      case PhysicalTypeOfDamage.slashing:
+        writer.writeByte(2);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PhysicalTypeOfDamageAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

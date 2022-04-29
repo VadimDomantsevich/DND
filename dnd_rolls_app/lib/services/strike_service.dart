@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dnd_rolls_app/core/constants/enums.dart';
+import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/random_generator.dart';
 import 'package:dnd_rolls_app/model/battle_log.dart';
 import 'package:dnd_rolls_app/model/character.dart';
@@ -30,6 +31,10 @@ class StrikeService {
       result += ' с помехой';
     }
     return result;
+  }
+
+  bool isStrikeExist(String name) {
+    return _strikes.values.any((element) => element.name == name);
   }
 
   Strike getStrikeByName(String name) {
@@ -87,12 +92,24 @@ class StrikeService {
         int damage = getDamage(strike, enemy);
         logs += (' + модификатор: $characteristicBonus,');
         damage += characteristicBonus;
-        logs += (' нанося $damage урона');
+        logs +=
+            (' нанося $damage ${getTypeOfDamageName(strike.weapon.typeOfDamage)} урона');
         return BattleLog(logs, damage: damage);
       } else {
         logs += (' и промахивается');
         return BattleLog(logs);
       }
+    }
+  }
+
+  String getTypeOfDamageName(PhysicalTypeOfDamage typeOfDamage) {
+    switch (typeOfDamage) {
+      case PhysicalTypeOfDamage.crushing:
+        return Strings.crushingDamage;
+      case PhysicalTypeOfDamage.piercing:
+        return Strings.piercingDamage;
+      case PhysicalTypeOfDamage.slashing:
+        return Strings.slashingDamage;
     }
   }
 
@@ -137,6 +154,13 @@ class StrikeService {
         weaponDamage += RandomGenerator().rollDamage(DamageCube.d12);
         logs += (' $weaponDamage(d12)');
         break;
+      case DamageCube.d6x2:
+        weaponDamage += RandomGenerator().rollDamage(DamageCube.d6);
+        logs += (' $weaponDamage(d6) и');
+        final secondCube = RandomGenerator().rollDamage(DamageCube.d6);
+        logs += (' $secondCube(d6)');
+        weaponDamage += secondCube;
+        break;
     }
 
     return weaponDamage;
@@ -177,6 +201,19 @@ class StrikeService {
         secondCube += RandomGenerator().rollDamage(DamageCube.d12);
         logs += (' $secondCube(d12)');
         break;
+      case DamageCube.d6x2:
+        weaponDamage += RandomGenerator().rollDamage(DamageCube.d6);
+        logs += (' $weaponDamage(d6) и');
+        secondCube += RandomGenerator().rollDamage(DamageCube.d6);
+        logs += (' $secondCube(d6) и');
+        weaponDamage += secondCube;
+        secondCube = RandomGenerator().rollDamage(DamageCube.d6);
+        logs += (' $secondCube(d6) и');
+        weaponDamage += secondCube;
+        secondCube = RandomGenerator().rollDamage(DamageCube.d6);
+        logs += (' $secondCube(d6)');
+        weaponDamage += secondCube;
+        return weaponDamage;
     }
     weaponDamage += secondCube;
     return weaponDamage;

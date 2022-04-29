@@ -20,7 +20,7 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
     });
     on<AddWeaponEvent>((event, emit) {
       final result = _weaponService.addWeapon(
-          event.name, event.damage, event.characteristic);
+          event.name, event.damage, event.characteristic, event.typeOfDamage);
       switch (result) {
         case CreationResult.success:
           add(const LoadWeaponEvent());
@@ -38,7 +38,11 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
     });
     on<UpdateWeaponEvent>((event, emit) async {
       final result = await _weaponService.updateWeapon(
-          event.name, event.newName, event.damage, event.characteristic);
+          event.name,
+          event.newName,
+          event.damage,
+          event.characteristic,
+          event.typeOfDamage);
       switch (result) {
         case CreationResult.success:
           add(const LoadWeaponEvent());

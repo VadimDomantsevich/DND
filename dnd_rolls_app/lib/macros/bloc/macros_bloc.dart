@@ -51,11 +51,11 @@ class MacrosBloc extends Bloc<MacrosEvent, MacrosState> {
           add(LoadCharacterMacrosEvent(event.characterName));
           break;
         case CreationResult.failure:
-          final macros = _macrosService.getAllMacros();
+          final macros = _macrosService.getCharacterMacros(event.characterName);
           emit(MacrosLoadedState(macros, error: 'Не удалось отредактировать'));
           break;
         case CreationResult.alreadyExists:
-          final macros = _macrosService.getAllMacros();
+          final macros = _macrosService.getCharacterMacros(event.characterName);
           emit(MacrosLoadedState(macros,
               error: 'Макрос с таким именем уже существует'));
           break;
