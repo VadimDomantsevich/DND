@@ -4,6 +4,7 @@ import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
+import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -26,9 +27,10 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
         ),
       ),
       body: BlocProvider(
-        create: (context) =>
-            CharacterBloc(RepositoryProvider.of<CharacterService>(context))
-              ..add(RegisterServiceEvent()),
+        create: (context) => CharacterBloc(
+            RepositoryProvider.of<CharacterService>(context),
+            RepositoryProvider.of<MacrosService>(context))
+          ..add(RegisterServiceEvent()),
         child: BlocConsumer<CharacterBloc, CharacterState>(
           listener: (context, state) {
             if (state is CharacterLoadedState) {
@@ -243,7 +245,7 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                   final result = state.selectedCharacters;
                   Navigator.of(context).pop(result);
                 },
-                child: const Text('Выбрать')),
+                child: const Text(Strings.choose)),
           )
         ],
       );

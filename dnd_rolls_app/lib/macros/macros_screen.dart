@@ -5,6 +5,7 @@ import 'package:dnd_rolls_app/macros/bloc/macros_bloc.dart';
 import 'package:dnd_rolls_app/macros/widgets/update_macros.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
+import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +24,8 @@ class MacrosScreen extends StatelessWidget {
       ),
       body: BlocProvider<character_bloc.CharacterBloc>(
         create: (characterContext) => character_bloc.CharacterBloc(
-            RepositoryProvider.of<CharacterService>(characterContext))
+            RepositoryProvider.of<CharacterService>(characterContext),
+            RepositoryProvider.of<MacrosService>(context))
           ..add(character_bloc.GetAllCharactersNamesEvent()),
         child: BlocBuilder<character_bloc.CharacterBloc,
             character_bloc.CharacterState>(

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
+import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -11,9 +12,12 @@ part 'character_state.dart';
 
 class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
   final CharacterService _characterService;
-  CharacterBloc(this._characterService) : super(RegisteringServiceState()) {
+  final MacrosService _macrosService;
+  CharacterBloc(this._characterService, this._macrosService)
+      : super(RegisteringServiceState()) {
     on<RegisterServiceEvent>((event, emit) async {
       await _characterService.init();
+      await _macrosService.init();
       add(const LoadCharacterEvent());
     });
     on<LoadCharacterEvent>((event, emit) {
@@ -58,6 +62,13 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
           event.charisma);
       switch (result) {
         case CreationResult.success:
+          if (event.name != event.newName) {
+            final oldMacros = _macrosService.getCharacterMacros(event.name);
+            for (var macros in oldMacros) {
+              _macrosService.updateMacrosCharacterName(
+                  macros.name, macros.characterName, event.newName);
+            }
+          }
           add(const LoadCharacterEvent());
           break;
         case CreationResult.failure:

@@ -65,7 +65,6 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
                       controller: _nameController,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.person),
-                        hintText: 'Как вас будут называть',
                         labelText: 'Имя персонажа',
                       ),
                       validator: (value) {
@@ -129,7 +128,7 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
-                    child: const Text('Отменить'),
+                    child: const Text(Strings.cancel),
                   ),
                 ),
                 elevatedButtonWrap(
@@ -164,7 +163,7 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
                           }
                         }
                       },
-                      child: const Text('Сохранить')),
+                      child: const Text(Strings.save)),
                 ),
               ],
             ),

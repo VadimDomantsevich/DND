@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
@@ -89,7 +90,7 @@ class _StrikeScreenState extends State<StrikeScreen> {
                           onPressed: () {
                             Navigator.of(context).pop(state.strike);
                           },
-                          child: const Text('Выбрать')),
+                          child: const Text(Strings.choose)),
                     )
                   ],
                 ),

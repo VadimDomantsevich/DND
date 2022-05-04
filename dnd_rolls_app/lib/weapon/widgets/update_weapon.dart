@@ -172,7 +172,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
-                    child: const Text('Отменить'),
+                    child: const Text(Strings.cancel),
                   ),
                 ),
                 elevatedButtonWrap(
@@ -199,7 +199,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
                           }
                         }
                       },
-                      child: const Text('Сохранить')),
+                      child: const Text(Strings.save)),
                 ),
               ],
             ),

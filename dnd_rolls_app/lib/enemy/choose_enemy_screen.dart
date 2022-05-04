@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/enemy/bloc/enemy_bloc.dart';
 import 'package:dnd_rolls_app/enemy/widgets/update_enemy.dart';
@@ -236,7 +237,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                     }
                     Navigator.of(context).pop(result);
                   },
-                  child: const Text('Выбрать')),
+                  child: const Text(Strings.choose)),
             ),
           ],
         ),

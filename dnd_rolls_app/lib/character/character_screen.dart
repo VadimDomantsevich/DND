@@ -3,6 +3,7 @@ import 'package:dnd_rolls_app/character/widgets/update_character.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
+import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -20,9 +21,10 @@ class CharactersScreen extends StatelessWidget {
         ),
       ),
       body: BlocProvider(
-        create: (context) =>
-            CharacterBloc(RepositoryProvider.of<CharacterService>(context))
-              ..add(RegisterServiceEvent()),
+        create: (context) => CharacterBloc(
+            RepositoryProvider.of<CharacterService>(context),
+            RepositoryProvider.of<MacrosService>(context))
+          ..add(RegisterServiceEvent()),
         child: BlocConsumer<CharacterBloc, CharacterState>(
           listener: (context, state) {
             if (state is CharacterLoadedState) {

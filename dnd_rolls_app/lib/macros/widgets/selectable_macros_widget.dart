@@ -52,7 +52,6 @@ Widget buildSelectableMacrosForCharacter(
                                 backgroundColor: const Color(0xFFFE4A49),
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
-                                label: 'Удалить',
                               ),
                               SlidableAction(
                                 onPressed: (((newContext) async =>
@@ -60,7 +59,6 @@ Widget buildSelectableMacrosForCharacter(
                                 backgroundColor: Colors.blue.shade200,
                                 foregroundColor: Colors.white,
                                 icon: Icons.create,
-                                label: 'Исправить',
                               ),
                             ],
                           ),

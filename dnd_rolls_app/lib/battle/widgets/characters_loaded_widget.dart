@@ -1,5 +1,6 @@
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
 import 'package:dnd_rolls_app/character/choose_character_screen.dart';
+import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/enemy/choose_enemy_screen.dart';
 import 'package:dnd_rolls_app/model/character.dart';
@@ -59,7 +60,7 @@ Widget buildCharactersLoaded(
                                       .add(LoadCharactersEvent(characters));
                                 }
                               },
-                              child: const Text('Выбрать персонажей')),
+                              child: const Text(Strings.chooseCharacters)),
                         )),
                       ],
                     )),
@@ -82,7 +83,7 @@ Widget buildCharactersLoaded(
                                     .add(LoadEnemiesEvent(enemies));
                               }
                             },
-                            child: const Text('Выбрать врагов')),
+                            child: const Text(Strings.chooseEnemies)),
                       )),
                     ),
                   ],

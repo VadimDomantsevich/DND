@@ -86,4 +86,13 @@ class MacrosService {
       return CreationResult.failure;
     }
   }
+
+  void updateMacrosCharacterName(final String name, final String characterName,
+      final String newCharacterName) async {
+    final macrosToUpdate = _macros.values.firstWhere((element) =>
+        element.name == name && element.characterName == characterName);
+    final index = macrosToUpdate.key as int;
+    await _macros.put(index,
+        Macros(macrosToUpdate.name, newCharacterName, macrosToUpdate.strikes));
+  }
 }

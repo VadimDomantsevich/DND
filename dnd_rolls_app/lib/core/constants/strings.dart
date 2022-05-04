@@ -1,4 +1,10 @@
 class Strings {
+  static const cancel = 'Отменить';
+  static const save = 'Сохранить';
+  static const chooseCharacters = 'Выбрать персонажей';
+  static const chooseEnemies = 'Выбрать врагов';
+  static const choose = 'Выбрать';
+
   //CharacteristicsEnum
   static const strengthText = 'Сила';
   static const dexterityText = 'Ловкость';

@@ -1,6 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
+import 'package:dnd_rolls_app/services/macros_service.dart';
+import 'package:dnd_rolls_app/services/strike_service.dart';
 import 'package:dnd_rolls_app/services/weapon_service.dart';
 import 'package:dnd_rolls_app/weapon/bloc/weapon_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,18 +10,28 @@ import 'package:mocktail/mocktail.dart';
 
 class MockWeaponService extends Mock implements WeaponService {}
 
+class MockStrikeService extends Mock implements StrikeService {}
+
+class MockMacrosService extends Mock implements MacrosService {}
+
 void main() {
   List<Weapon> _weapons = [];
   late WeaponService weaponService;
+  late StrikeService strikeService;
+  late MacrosService macrosService;
 
   setUp(() {
     weaponService = MockWeaponService();
+    strikeService = MockStrikeService();
+    macrosService = MockMacrosService();
     registerFallbackValue(DamageCube.d6);
     registerFallbackValue(CharacteristicsEnum.strength);
+    registerFallbackValue(PhysicalTypeOfDamage.slashing);
   });
   group('WeaponBloc', () {
     test('initial state is RegisteringServiceState', () {
-      final weaponBloc = WeaponBloc(weaponService);
+      final weaponBloc =
+          WeaponBloc(weaponService, strikeService, macrosService);
       expect(weaponBloc.state, RegisteringServiceState());
       weaponBloc.close();
     });
@@ -28,7 +40,7 @@ void main() {
       setUp: (() {
         when(weaponService.getWeapons).thenAnswer((_) => _weapons);
       }),
-      build: () => WeaponBloc(weaponService),
+      build: () => WeaponBloc(weaponService, strikeService, macrosService),
       act: (bloc) => bloc.add(const LoadWeaponEvent()),
       expect: () => <WeaponState>[WeaponLoadedState(_weapons)],
     );
@@ -39,7 +51,7 @@ void main() {
             .thenAnswer((_) => Future.value());
         when(weaponService.getWeapons).thenAnswer((_) => _weapons);
       }),
-      build: () => WeaponBloc(weaponService),
+      build: () => WeaponBloc(weaponService, strikeService, macrosService),
       act: (bloc) => bloc.add(const RemoveWeaponEvent('name')),
       expect: () => <WeaponState>[WeaponLoadedState(_weapons)],
     );
@@ -51,7 +63,7 @@ void main() {
               .thenAnswer((invocation) => CreationResult.success);
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
-        build: () => WeaponBloc(weaponService),
+        build: () => WeaponBloc(weaponService, strikeService, macrosService),
         act: (bloc) => bloc.add(const AddWeaponEvent('name', DamageCube.d6,
             CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing)),
         expect: () => <WeaponState>[WeaponLoadedState(_weapons)],
@@ -63,7 +75,7 @@ void main() {
               .thenAnswer((invocation) => CreationResult.failure);
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
-        build: () => WeaponBloc(weaponService),
+        build: () => WeaponBloc(weaponService, strikeService, macrosService),
         act: (bloc) => bloc.add(const AddWeaponEvent('name', DamageCube.d6,
             CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing)),
         expect: () => <WeaponState>[
@@ -77,7 +89,7 @@ void main() {
               .thenAnswer((invocation) => CreationResult.alreadyExists);
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
-        build: () => WeaponBloc(weaponService),
+        build: () => WeaponBloc(weaponService, strikeService, macrosService),
         act: (bloc) => bloc.add(const AddWeaponEvent('name', DamageCube.d6,
             CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing)),
         expect: () => <WeaponState>[
@@ -96,7 +108,7 @@ void main() {
               .thenAnswer((invocation) => Future.value(CreationResult.success));
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
-        build: () => WeaponBloc(weaponService),
+        build: () => WeaponBloc(weaponService, strikeService, macrosService),
         act: (bloc) => bloc.add(const UpdateWeaponEvent(
             'name',
             'name',
@@ -113,7 +125,7 @@ void main() {
               .thenAnswer((invocation) => Future.value(CreationResult.failure));
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
-        build: () => WeaponBloc(weaponService),
+        build: () => WeaponBloc(weaponService, strikeService, macrosService),
         act: (bloc) => bloc.add(const UpdateWeaponEvent(
             'name',
             'name',
@@ -133,7 +145,7 @@ void main() {
                   (invocation) => Future.value(CreationResult.alreadyExists));
           when(weaponService.getWeapons).thenAnswer((_) => _weapons);
         },
-        build: () => WeaponBloc(weaponService),
+        build: () => WeaponBloc(weaponService, strikeService, macrosService),
         act: (bloc) => bloc.add(const UpdateWeaponEvent(
             'name',
             'name',

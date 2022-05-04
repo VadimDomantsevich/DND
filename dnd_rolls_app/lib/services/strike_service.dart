@@ -6,6 +6,7 @@ import 'package:dnd_rolls_app/core/random_generator.dart';
 import 'package:dnd_rolls_app/model/battle_log.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
+import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -57,6 +58,41 @@ class StrikeService {
       }
     }
     return strikes;
+  }
+
+  List<Strike> createNewWeaponMacrosStrikes(
+      Macros macros, Weapon oldWeapon, Weapon newWeapon) {
+    List<Strike> newStrikes = [];
+    Strike newStrike;
+    for (var strike in macros.strikes) {
+      if (strike.weapon.name == oldWeapon.name) {
+        newStrike = Strike(
+            strike.character,
+            newWeapon,
+            strike.isAdvantage,
+            strike.isHindrance,
+            getName(strike.character.name, newWeapon.name, strike.isAdvantage,
+                strike.isHindrance));
+        newStrikes.add(newStrike);
+      } else {
+        newStrikes.add(strike);
+      }
+    }
+    final strikesToUpdate = _strikes.values
+        .where((element) => element.weapon.name == oldWeapon.name);
+    for (var strike in strikesToUpdate) {
+      int index = strike.key as int;
+      _strikes.put(
+          index,
+          Strike(
+              strike.character,
+              newWeapon,
+              strike.isAdvantage,
+              strike.isHindrance,
+              getName(strike.character.name, newWeapon.name, strike.isAdvantage,
+                  strike.isHindrance)));
+    }
+    return newStrikes;
   }
 
   BattleLog attack(Strike strike, Enemy enemy) {

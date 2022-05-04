@@ -4,6 +4,8 @@ import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
+import 'package:dnd_rolls_app/services/macros_service.dart';
+import 'package:dnd_rolls_app/services/strike_service.dart';
 import 'package:dnd_rolls_app/services/weapon_service.dart';
 import 'package:dnd_rolls_app/strike/strike_screeen.dart';
 import 'package:dnd_rolls_app/weapon/bloc/weapon_bloc.dart';
@@ -26,9 +28,11 @@ class WeaponScreen extends StatelessWidget {
         ),
       ),
       body: BlocProvider(
-        create: (context) =>
-            WeaponBloc(RepositoryProvider.of<WeaponService>(context))
-              ..add(RegisterServiceEvent()),
+        create: (context) => WeaponBloc(
+            RepositoryProvider.of<WeaponService>(context),
+            RepositoryProvider.of<StrikeService>(context),
+            RepositoryProvider.of<MacrosService>(context))
+          ..add(RegisterServiceEvent()),
         child: BlocConsumer<WeaponBloc, WeaponState>(
           listener: (context, state) {
             if (state is WeaponLoadedState) {
@@ -186,7 +190,7 @@ class WeaponScreen extends StatelessWidget {
                           ));
                   Navigator.of(context).pop(strike);
                 },
-                child: const Text('Выбрать')),
+                child: const Text(Strings.choose)),
           )
         ],
       );

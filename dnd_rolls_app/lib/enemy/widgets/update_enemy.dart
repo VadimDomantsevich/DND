@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/icons/dnd_icons.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
@@ -158,7 +159,7 @@ class _UpdateEnemyState extends State<UpdateEnemy> {
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
-                  child: const Text('Отменить'),
+                  child: const Text(Strings.cancel),
                 ),
               ),
               elevatedButtonWrap(
@@ -183,7 +184,7 @@ class _UpdateEnemyState extends State<UpdateEnemy> {
                         }
                       }
                     },
-                    child: const Text('Сохранить')),
+                    child: const Text(Strings.save)),
               ),
             ],
           ),

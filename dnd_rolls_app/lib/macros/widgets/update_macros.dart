@@ -1,4 +1,5 @@
 import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
+import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
@@ -86,7 +87,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
-                    child: const Text('Отменить')),
+                    child: const Text(Strings.cancel)),
               ),
               elevatedButtonWrap(
                 ElevatedButton(
@@ -113,7 +114,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                         }
                       }
                     },
-                    child: const Text('Сохранить')),
+                    child: const Text(Strings.save)),
               ),
             ],
           ),
@@ -125,9 +126,10 @@ class _UpdateMacrosState extends State<UpdateMacros> {
   Widget buildStrikes() {
     if (strikes.isNotEmpty) {
       return BlocProvider(
-        create: (context) =>
-            CharacterBloc(RepositoryProvider.of<CharacterService>(context))
-              ..add(GetCharacterEvent(widget.macros!.characterName)),
+        create: (context) => CharacterBloc(
+            RepositoryProvider.of<CharacterService>(context),
+            RepositoryProvider.of<MacrosService>(context))
+          ..add(GetCharacterEvent(widget.macros!.characterName)),
         child: BlocBuilder<CharacterBloc, CharacterState>(
           builder: (context, state) {
             if (state is GetCharacterState) {
@@ -174,11 +176,18 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                               ));
                       if (widget.macros != null) {
                         setState(() {
+                          for (var item in strikes) {
+                            print(item.name);
+                          }
                           strikes =
                               RepositoryProvider.of<MacrosService>(context)
                                   .getMacros(widget.macros!.name,
                                       widget.macros!.characterName)
                                   .strikes;
+                          print('После');
+                          for (var item in strikes) {
+                            print(item.name);
+                          }
                           if (strike != null) {
                             strikes.add(strike);
                           }
@@ -190,14 +199,14 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                           });
                         }
                       }
-                      for (var item in strikes) {
+                      /* for (var item in strikes) {
                         if (!RepositoryProvider.of<StrikeService>(context)
                             .isStrikeExist(item.name)) {
                           setState(() {
                             strikes.remove(item);
                           });
                         }
-                      }
+                      } */
                     },
                   )
                 ],
@@ -210,9 +219,10 @@ class _UpdateMacrosState extends State<UpdateMacros> {
       );
     } else {
       return BlocProvider(
-        create: (context) =>
-            CharacterBloc(RepositoryProvider.of<CharacterService>(context))
-              ..add(GetCharacterEvent(widget.characterName!)),
+        create: (context) => CharacterBloc(
+            RepositoryProvider.of<CharacterService>(context),
+            RepositoryProvider.of<MacrosService>(context))
+          ..add(GetCharacterEvent(widget.characterName!)),
         child: BlocBuilder<CharacterBloc, CharacterState>(
           builder: (context, state) {
             if (state is GetCharacterState) {

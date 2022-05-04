@@ -91,7 +91,7 @@ class WeaponService {
     try {
       final updatedWeapon =
           Weapon(newName, damage, characteristic, typeOfDamage);
-      updateStrikes(weaponToUpdate, updatedWeapon);
+      //updateStrikes(weaponToUpdate, updatedWeapon);
 
       final index = weaponToUpdate.key as int;
       await _weapons.put(index, updatedWeapon);
