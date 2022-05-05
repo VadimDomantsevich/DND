@@ -176,18 +176,12 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                               ));
                       if (widget.macros != null) {
                         setState(() {
-                          for (var item in strikes) {
-                            print(item.name);
-                          }
                           strikes =
                               RepositoryProvider.of<MacrosService>(context)
                                   .getMacros(widget.macros!.name,
                                       widget.macros!.characterName)
                                   .strikes;
-                          print('После');
-                          for (var item in strikes) {
-                            print(item.name);
-                          }
+
                           if (strike != null) {
                             strikes.add(strike);
                           }
@@ -199,14 +193,6 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                           });
                         }
                       }
-                      /* for (var item in strikes) {
-                        if (!RepositoryProvider.of<StrikeService>(context)
-                            .isStrikeExist(item.name)) {
-                          setState(() {
-                            strikes.remove(item);
-                          });
-                        }
-                      } */
                     },
                   )
                 ],

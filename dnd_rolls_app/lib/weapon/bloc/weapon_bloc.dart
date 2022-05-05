@@ -60,20 +60,10 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
                     .any((element) => element.weapon.name == event.name),
               );
           for (var macros in macrosToUpdate) {
-            print('В макросе изначально');
-            for (var item in macros.strikes) {
-              print(item.name);
-            }
-            List<Strike> strikes = _strikeService.createNewWeaponMacrosStrikes(
+            List<Strike> strikes = await _strikeService.newWeaponMacrosStrikes(
                 macros, oldWeapon, _weaponService.getWeapon(event.newName));
             _macrosService.updateMacros(
                 macros.name, macros.name, macros.characterName, strikes);
-            print('В макросе после изменения');
-            for (var item in _macrosService
-                .getMacros(macros.name, macros.characterName)
-                .strikes) {
-              print(item.name);
-            }
           }
           add(const LoadWeaponEvent());
           break;
@@ -93,6 +83,17 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
       emit(SelectedWeaponState(weapons, event.weapon));
     });
     on<RemoveWeaponEvent>((event, emit) async {
+      final macrosToUpdate = _macrosService.getAllMacros().where(
+            (element) => element.strikes
+                .any((element) => element.weapon.name == event.name),
+          );
+      for (var macros in macrosToUpdate) {
+        List<Strike> strikes = await _strikeService.deleteWeaponMacrosStrikes(
+            macros, _weaponService.getWeapon(event.name));
+        _macrosService.updateMacros(
+            macros.name, macros.name, macros.characterName, strikes);
+      }
+
       await _weaponService.removeWeapon(event.name);
       add(const LoadWeaponEvent());
     });

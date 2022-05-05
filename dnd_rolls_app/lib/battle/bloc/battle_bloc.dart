@@ -5,6 +5,7 @@ import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/services/battle_service.dart';
+import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:dnd_rolls_app/services/strike_service.dart';
 import 'package:equatable/equatable.dart';
 
@@ -13,7 +14,9 @@ part 'battle_state.dart';
 
 class BattleBloc extends Bloc<BattleEvent, BattleState> {
   final BattleService _battleService;
-  BattleBloc(this._battleService) : super(BattleInitial()) {
+  final MacrosService _macrosService;
+  BattleBloc(this._battleService, this._macrosService)
+      : super(BattleInitial()) {
     on<LoadCharactersEvent>((event, emit) {
       _battleService.battle.characters.clear();
       _battleService.updateCharacters(event.characters);
@@ -58,7 +61,11 @@ class BattleBloc extends Bloc<BattleEvent, BattleState> {
     on<AttackEvent>((event, emit) {
       final StrikeService _strikeService = StrikeService();
       BattleLog battleLog;
-      for (var strike in event.selectedMacros.strikes) {
+      final selectedMacrosStrikes = _macrosService
+          .getMacros(
+              event.selectedMacros.name, event.selectedMacros.characterName)
+          .strikes;
+      for (var strike in selectedMacrosStrikes) {
         battleLog = _strikeService.attack(strike, event.selectedEnemy);
         if (battleLog.damage != null) {
           _battleService.battle.currentHealth[event.selectedIndex] -=

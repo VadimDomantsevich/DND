@@ -10,6 +10,7 @@ import 'package:dnd_rolls_app/battle/widgets/selected_both_widget.dart';
 import 'package:dnd_rolls_app/battle/widgets/selected_enemy_widget.dart';
 import 'package:dnd_rolls_app/battle/widgets/selected_macros_widget.dart';
 import 'package:dnd_rolls_app/services/battle_service.dart';
+import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,8 +31,9 @@ class _BattleScreenState extends State<BattleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) =>
-            BattleBloc(RepositoryProvider.of<BattleService>(context)),
+        create: (context) => BattleBloc(
+            RepositoryProvider.of<BattleService>(context),
+            RepositoryProvider.of<MacrosService>(context)),
         child:
             BlocConsumer<BattleBloc, BattleState>(listener: (context, state) {
           if (state is BattleIsOnState) {

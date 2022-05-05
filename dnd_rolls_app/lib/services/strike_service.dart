@@ -60,8 +60,8 @@ class StrikeService {
     return strikes;
   }
 
-  List<Strike> createNewWeaponMacrosStrikes(
-      Macros macros, Weapon oldWeapon, Weapon newWeapon) {
+  Future<List<Strike>> newWeaponMacrosStrikes(
+      Macros macros, Weapon oldWeapon, Weapon newWeapon) async {
     List<Strike> newStrikes = [];
     Strike newStrike;
     for (var strike in macros.strikes) {
@@ -82,7 +82,7 @@ class StrikeService {
         .where((element) => element.weapon.name == oldWeapon.name);
     for (var strike in strikesToUpdate) {
       int index = strike.key as int;
-      _strikes.put(
+      await _strikes.put(
           index,
           Strike(
               strike.character,
@@ -91,6 +91,23 @@ class StrikeService {
               strike.isHindrance,
               getName(strike.character.name, newWeapon.name, strike.isAdvantage,
                   strike.isHindrance)));
+    }
+    return newStrikes;
+  }
+
+  Future<List<Strike>> deleteWeaponMacrosStrikes(
+      Macros macros, Weapon weapon) async {
+    List<Strike> newStrikes = [];
+    for (var strike in macros.strikes) {
+      if (strike.weapon.name != weapon.name) {
+        newStrikes.add(strike);
+      }
+    }
+    final strikesToDelete =
+        _strikes.values.where((element) => element.weapon.name == weapon.name);
+    for (var strike in strikesToDelete) {
+      int index = strike.key as int;
+      _strikes.delete(index);
     }
     return newStrikes;
   }
