@@ -44,40 +44,35 @@ class CharactersScreen extends StatelessWidget {
                 children: [
                   ...state.characters.map(
                     (character) {
-                      return Column(
-                        children: [
-                          Slidable(
-                            key: const ValueKey(0),
-                            startActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: ((newContext) async => {
-                                        BlocProvider.of<CharacterBloc>(context)
-                                            .add(RemoveCharacterEvent(
-                                                character.name))
-                                      }),
-                                  backgroundColor: const Color(0xFFFE4A49),
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.delete,
-                                  label: 'Удалить',
-                                ),
-                                SlidableAction(
-                                  onPressed: (((newContext) async =>
-                                      {update(context, character)})),
-                                  backgroundColor: Colors.blue.shade200,
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.create,
-                                  label: 'Исправить',
-                                ),
-                              ],
+                      return Slidable(
+                        key: const ValueKey(0),
+                        startActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: ((newContext) async => {
+                                    BlocProvider.of<CharacterBloc>(context).add(
+                                        RemoveCharacterEvent(character.name))
+                                  }),
+                              backgroundColor: const Color(0xFFFE4A49),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Удалить',
                             ),
-                            child: ListTile(
-                              title: Text(
-                                  '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}'),
+                            SlidableAction(
+                              onPressed: (((newContext) async =>
+                                  {update(context, character)})),
+                              backgroundColor: Colors.blue.shade200,
+                              foregroundColor: Colors.white,
+                              icon: Icons.create,
+                              label: 'Исправить',
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: ListTile(
+                          title: Text(
+                              '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}'),
+                        ),
                       );
                     },
                   ),

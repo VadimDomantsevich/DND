@@ -25,6 +25,13 @@ class Strings {
   static const weaponDamageD12 = '1d12';
   static const weaponDamage2D6 = '2d6';
 
+  //UpdateWeapon
+  static const chooseStandartWeapon ='Выбрать стандартное оружие';
+  static const simpleMelee = 'Простое рукопашное';
+  static const simpleRanged = 'Простое дальнобойное';
+  static const militaryMelee = 'Воинское рукопашное';
+  static const militaryRanged = 'Воинское дальнобойное';
+
   //PhysicalTypeOfDamageEnum
   static const crushing = 'Дробящий';
   static const piercing = 'Колющий';

@@ -37,9 +37,10 @@ class WeaponService {
           CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.slashing));
     }
 
-    if (_seedWeapons.isEmpty) {
+    _seedWeapons.clear();
+    /* if (_seedWeapons.isEmpty) {
       fillSeedWeapons();
-    }
+    } */
   }
 
   List<Weapon> getWeapons() {
@@ -91,7 +92,6 @@ class WeaponService {
     try {
       final updatedWeapon =
           Weapon(newName, damage, characteristic, typeOfDamage);
-      //updateStrikes(weaponToUpdate, updatedWeapon);
 
       final index = weaponToUpdate.key as int;
       await _weapons.put(index, updatedWeapon);
@@ -101,22 +101,8 @@ class WeaponService {
     }
   }
 
-  void updateStrikes(Weapon oldWeapon, Weapon updatedWeapon) async {
-    Box<Strike> _strikes = await Hive.openBox('strikeBox');
-    Box<Macros> _macros = await Hive.openBox('macrosBox');
-
-    final strikesToUpdate = _strikes.values
-        .where((element) => element.weapon.name == oldWeapon.name);
-
-    for (var strike in strikesToUpdate) {
-      for (var macros in _macros.values) {
-        if (macros.strikes.contains(strike)) {
-          macros.strikes.remove(strike);
-          macros.save();
-        }
-      }
-      strike.delete();
-    }
+  List<Weapon> getSeedWeapons() {
+    return _seedWeapons.values.toList();
   }
 
   void fillSeedWeapons() async {
@@ -126,85 +112,89 @@ class WeaponService {
     fillMilitaryRangedWeapons();
   }
 
-  void fillSimpleMeleeWeapons() async {
-    await _seedWeapons.add(Weapon('Боевой посох', DamageCube.d6,
+  void fillSimpleMeleeWeapons() {
+    _seedWeapons.clear();
+    _seedWeapons.add(Weapon('Боевой посох', DamageCube.d6,
         CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
-    await _seedWeapons.add(Weapon('Булава', DamageCube.d6,
+    _seedWeapons.add(Weapon('Булава', DamageCube.d6,
         CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
-    await _seedWeapons.add(Weapon('Дубинка', DamageCube.d4,
+    _seedWeapons.add(Weapon('Дубинка', DamageCube.d4,
         CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
-    await _seedWeapons.add(Weapon('Кинжал', DamageCube.d4,
+    _seedWeapons.add(Weapon('Кинжал', DamageCube.d4,
         CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Копьё', DamageCube.d6,
+    _seedWeapons.add(Weapon('Копьё', DamageCube.d6,
         CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Лёгкий молот', DamageCube.d4,
+    _seedWeapons.add(Weapon('Лёгкий молот', DamageCube.d4,
         CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
-    await _seedWeapons.add(Weapon('Метательное копьё', DamageCube.d6,
+    _seedWeapons.add(Weapon('Метательное копьё', DamageCube.d6,
         CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Палица', DamageCube.d8,
+    _seedWeapons.add(Weapon('Палица', DamageCube.d8,
         CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
-    await _seedWeapons.add(Weapon('Ручной топор', DamageCube.d6,
+    _seedWeapons.add(Weapon('Ручной топор', DamageCube.d6,
         CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
-    await _seedWeapons.add(Weapon('Серп', DamageCube.d4,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
+    _seedWeapons.add(Weapon('Серп', DamageCube.d4, CharacteristicsEnum.strength,
+        PhysicalTypeOfDamage.slashing));
   }
 
-  void fillSimpleRangedWeapons() async {
-    await _seedWeapons.add(Weapon('Арбалет, лёгкий', DamageCube.d8,
+  void fillSimpleRangedWeapons() {
+    _seedWeapons.clear();
+    _seedWeapons.add(Weapon('Арбалет, лёгкий', DamageCube.d8,
         CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Дротик', DamageCube.d4,
+    _seedWeapons.add(Weapon('Дротик', DamageCube.d4,
         CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Короткий лук', DamageCube.d6,
+    _seedWeapons.add(Weapon('Короткий лук', DamageCube.d6,
         CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Праща', DamageCube.d4,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
-  }
-
-  void fillMilitaryMeleeWeapons() async {
-    await _seedWeapons.add(Weapon('Алебарда', DamageCube.d10,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
-    await _seedWeapons.add(Weapon('Боевая кирка', DamageCube.d8,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Боевой молот', DamageCube.d8,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
-    await _seedWeapons.add(Weapon('Боевой топор', DamageCube.d8,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
-    await _seedWeapons.add(Weapon('Глефа', DamageCube.d10,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
-    await _seedWeapons.add(Weapon('Двуручный меч', DamageCube.d6x2,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
-    await _seedWeapons.add(Weapon('Длинное копьё', DamageCube.d12,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Длинный меч', DamageCube.d8,
-        CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.slashing));
-    await _seedWeapons.add(Weapon('Кнут', DamageCube.d4,
-        CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.slashing));
-    await _seedWeapons.add(Weapon('Короткий меч', DamageCube.d6,
-        CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Молот', DamageCube.d6x2,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
-    await _seedWeapons.add(Weapon('Моргенштерн', DamageCube.d8,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
-    await _seedWeapons.add(Weapon('Пика', DamageCube.d10,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Рапира', DamageCube.d8,
-        CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Секира', DamageCube.d12,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
-    await _seedWeapons.add(Weapon('Скимитар', DamageCube.d6,
-        CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.slashing));
-    await _seedWeapons.add(Weapon('Трезубец', DamageCube.d6,
-        CharacteristicsEnum.strength, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Цеп', DamageCube.d8,
+    _seedWeapons.add(Weapon('Праща', DamageCube.d4,
         CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
   }
 
-  void fillMilitaryRangedWeapons() async {
-    await _seedWeapons.add(Weapon('Арбалет, ручной', DamageCube.d6,
+  void fillMilitaryMeleeWeapons() {
+    _seedWeapons.clear();
+    _seedWeapons.add(Weapon('Алебарда', DamageCube.d10,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
+    _seedWeapons.add(Weapon('Боевая кирка', DamageCube.d8,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.piercing));
+    _seedWeapons.add(Weapon('Боевой молот', DamageCube.d8,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
+    _seedWeapons.add(Weapon('Боевой топор', DamageCube.d8,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
+    _seedWeapons.add(Weapon('Глефа', DamageCube.d10,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
+    _seedWeapons.add(Weapon('Двуручный меч', DamageCube.d6x2,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
+    _seedWeapons.add(Weapon('Длинное копьё', DamageCube.d12,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.piercing));
+    _seedWeapons.add(Weapon('Длинный меч', DamageCube.d8,
+        CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.slashing));
+    _seedWeapons.add(Weapon('Кнут', DamageCube.d4,
+        CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.slashing));
+    _seedWeapons.add(Weapon('Короткий меч', DamageCube.d6,
         CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Арбалет, тяжёлый', DamageCube.d10,
+    _seedWeapons.add(Weapon('Молот', DamageCube.d6x2,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
+    _seedWeapons.add(Weapon('Моргенштерн', DamageCube.d8,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.crushing));
+    _seedWeapons.add(Weapon('Пика', DamageCube.d10,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.piercing));
+    _seedWeapons.add(Weapon('Рапира', DamageCube.d8,
         CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
-    await _seedWeapons.add(Weapon('Длинный лук', DamageCube.d8,
+    _seedWeapons.add(Weapon('Секира', DamageCube.d12,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
+    _seedWeapons.add(Weapon('Скимитар', DamageCube.d6,
+        CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.slashing));
+    _seedWeapons.add(Weapon('Трезубец', DamageCube.d6,
+        CharacteristicsEnum.strength, PhysicalTypeOfDamage.piercing));
+    _seedWeapons.add(Weapon('Цеп', DamageCube.d8, CharacteristicsEnum.strength,
+        PhysicalTypeOfDamage.crushing));
+  }
+
+  void fillMilitaryRangedWeapons() {
+    _seedWeapons.clear();
+    _seedWeapons.add(Weapon('Арбалет, ручной', DamageCube.d6,
+        CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
+    _seedWeapons.add(Weapon('Арбалет, тяжёлый', DamageCube.d10,
+        CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
+    _seedWeapons.add(Weapon('Длинный лук', DamageCube.d8,
         CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.piercing));
   }
 }

@@ -137,30 +137,25 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                 shrinkWrap: true,
                 children: [
                   ...strikes.map((strike) {
-                    return Column(
-                      children: [
-                        Slidable(
-                          key: const ValueKey(0),
-                          startActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: ((_) => {
-                                        setState((() {
-                                          strikes.remove(strike);
-                                        }))
-                                      }),
-                                  backgroundColor: const Color(0xFFFE4A49),
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.delete,
-                                  label: 'Удалить',
-                                ),
-                              ]),
-                          child: ListTile(
-                            title: Text(strike.name),
-                          ),
-                        )
-                      ],
+                    return Slidable(
+                      key: const ValueKey(0),
+                      startActionPane:
+                          ActionPane(motion: const ScrollMotion(), children: [
+                        SlidableAction(
+                          onPressed: ((_) => {
+                                setState((() {
+                                  strikes.remove(strike);
+                                }))
+                              }),
+                          backgroundColor: const Color(0xFFFE4A49),
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: 'Удалить',
+                        ),
+                      ]),
+                      child: ListTile(
+                        title: Text(strike.name),
+                      ),
                     );
                   }),
                   ListTile(

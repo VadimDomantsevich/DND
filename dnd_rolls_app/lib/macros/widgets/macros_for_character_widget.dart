@@ -31,40 +31,36 @@ Widget buildMacrosForCharacter(BuildContext context, String characterName) {
             ...state.macros.map(
               (macros) {
                 if (state.macros.isNotEmpty) {
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2.0),
-                        child: Slidable(
-                          key: const ValueKey(0),
-                          startActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: ((newContext) async => {
-                                      BlocProvider.of<MacrosBloc>(context).add(
-                                          RemoveMacrosEvent(macros.name,
-                                              macros.characterName))
-                                    }),
-                                backgroundColor: const Color(0xFFFE4A49),
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                              ),
-                              SlidableAction(
-                                onPressed: (((newContext) async =>
-                                    {update(context, macros)})),
-                                backgroundColor: Colors.blue.shade200,
-                                foregroundColor: Colors.white,
-                                icon: Icons.create,
-                              ),
-                            ],
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 2.0),
+                    child: Slidable(
+                      key: const ValueKey(0),
+                      startActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: ((newContext) async => {
+                                  BlocProvider.of<MacrosBloc>(context).add(
+                                      RemoveMacrosEvent(macros.name,
+                                          macros.characterName))
+                                }),
+                            backgroundColor: const Color(0xFFFE4A49),
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
                           ),
-                          child: ListTile(
-                            title: Text(macros.name),
+                          SlidableAction(
+                            onPressed: (((newContext) async =>
+                                {update(context, macros)})),
+                            backgroundColor: Colors.blue.shade200,
+                            foregroundColor: Colors.white,
+                            icon: Icons.create,
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                      child: ListTile(
+                        title: Text(macros.name),
+                      ),
+                    ),
                   );
                 } else {
                   return Container();

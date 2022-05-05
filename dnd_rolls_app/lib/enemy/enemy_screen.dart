@@ -51,39 +51,35 @@ class EnemyScreen extends StatelessWidget {
         child: ListView(
           children: [
             ...state.enemies.map(
-              (enemy) => Column(
-                children: [
-                  Slidable(
-                    key: const ValueKey(1),
-                    startActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          onPressed: ((newContext) async => {
-                                BlocProvider.of<EnemyBloc>(context)
-                                    .add(RemoveEnemyEvent(enemy.name))
-                              }),
-                          backgroundColor: const Color(0xFFFE4A49),
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          label: 'Удалить',
-                        ),
-                        SlidableAction(
-                          onPressed: (((newContext) async =>
-                              {update(context, enemy)})),
-                          backgroundColor: Colors.blue.shade200,
-                          foregroundColor: Colors.white,
-                          icon: Icons.create,
-                          label: 'Исправить',
-                        ),
-                      ],
+              (enemy) => Slidable(
+                key: const ValueKey(1),
+                startActionPane: ActionPane(
+                  motion: const ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: ((newContext) async => {
+                            BlocProvider.of<EnemyBloc>(context)
+                                .add(RemoveEnemyEvent(enemy.name))
+                          }),
+                      backgroundColor: const Color(0xFFFE4A49),
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Удалить',
                     ),
-                    child: ListTile(
-                      title: Text(
-                          '${enemy.name} ${enemy.health} ${enemy.armorClass}'),
+                    SlidableAction(
+                      onPressed: (((newContext) async =>
+                          {update(context, enemy)})),
+                      backgroundColor: Colors.blue.shade200,
+                      foregroundColor: Colors.white,
+                      icon: Icons.create,
+                      label: 'Исправить',
                     ),
-                  )
-                ],
+                  ],
+                ),
+                child: ListTile(
+                  title:
+                      Text('${enemy.name} ${enemy.health} ${enemy.armorClass}'),
+                ),
               ),
             ),
             ListTile(

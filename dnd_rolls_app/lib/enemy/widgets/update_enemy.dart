@@ -5,6 +5,7 @@ import 'package:dnd_rolls_app/model/enemy.dart';
 import 'package:dnd_rolls_app/services/enemy_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class UpdateEnemy extends StatefulWidget {
   final Enemy? enemy;
@@ -50,7 +51,7 @@ class _UpdateEnemyState extends State<UpdateEnemy> {
           child: TextFormField(
             controller: _nameController,
             decoration: const InputDecoration(
-              prefixIcon: Icon(DnDApp.monster_skull),
+              prefixIcon: Icon(FontAwesomeIcons.spaghettiMonsterFlying),
               labelText: 'Имя противника',
             ),
             validator: (value) {
@@ -88,7 +89,7 @@ class _UpdateEnemyState extends State<UpdateEnemy> {
                       decimal: false, signed: true),
                   controller: _armorClassController,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(DnDApp.shield),
+                    prefixIcon: Icon(FontAwesomeIcons.shieldHalved),
                     labelText: 'Класс доспеха',
                   ),
                   validator: (value) {
@@ -127,7 +128,9 @@ class _UpdateEnemyState extends State<UpdateEnemy> {
                       decimal: false, signed: true),
                   controller: _healthController,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(DnDApp.health),
+                    prefixIcon: Icon(
+                      FontAwesomeIcons.heart,
+                    ),
                     labelText: 'Здоровье',
                   ),
                   validator: (value) {

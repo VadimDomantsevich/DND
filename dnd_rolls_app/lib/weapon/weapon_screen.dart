@@ -119,49 +119,45 @@ class WeaponScreen extends StatelessWidget {
       return ListView(
         children: [
           ...state.weapons.map(
-            (weapon) => Column(
-              children: [
-                Slidable(
-                  key: const ValueKey(1),
-                  startActionPane: ActionPane(
-                    motion: const ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: ((newContext) async => {
-                              BlocProvider.of<WeaponBloc>(context)
-                                  .add(RemoveWeaponEvent(weapon.name))
-                            }),
-                        backgroundColor: const Color(0xFFFE4A49),
-                        foregroundColor: Colors.white,
-                        icon: Icons.delete,
-                        label: 'Удалить',
-                      ),
-                      SlidableAction(
-                        onPressed: (((newContext) async =>
-                            {update(context, weapon)})),
-                        backgroundColor: Colors.blue.shade200,
-                        foregroundColor: Colors.white,
-                        icon: Icons.create,
-                        label: 'Исправить',
-                      ),
-                    ],
+            (weapon) => Slidable(
+              key: const ValueKey(1),
+              startActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                children: [
+                  SlidableAction(
+                    onPressed: ((newContext) async => {
+                          BlocProvider.of<WeaponBloc>(context)
+                              .add(RemoveWeaponEvent(weapon.name))
+                        }),
+                    backgroundColor: const Color(0xFFFE4A49),
+                    foregroundColor: Colors.white,
+                    icon: Icons.delete,
+                    label: 'Удалить',
                   ),
-                  child: ListTile(
-                    selected: state.weapon == weapon,
-                    onTap: () {
-                      if (state.weapon != weapon) {
-                        BlocProvider.of<WeaponBloc>(context)
-                            .add(SelectWeaponEvent(weapon));
-                      } else {
-                        BlocProvider.of<WeaponBloc>(context)
-                            .add(const LoadWeaponEvent());
-                      }
-                    },
-                    title: Text(
-                        '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)} ${getTypeOfDamageName(weapon.typeOfDamage)}'),
+                  SlidableAction(
+                    onPressed: (((newContext) async =>
+                        {update(context, weapon)})),
+                    backgroundColor: Colors.blue.shade200,
+                    foregroundColor: Colors.white,
+                    icon: Icons.create,
+                    label: 'Исправить',
                   ),
-                ),
-              ],
+                ],
+              ),
+              child: ListTile(
+                selected: state.weapon == weapon,
+                onTap: () {
+                  if (state.weapon != weapon) {
+                    BlocProvider.of<WeaponBloc>(context)
+                        .add(SelectWeaponEvent(weapon));
+                  } else {
+                    BlocProvider.of<WeaponBloc>(context)
+                        .add(const LoadWeaponEvent());
+                  }
+                },
+                title: Text(
+                    '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)} ${getTypeOfDamageName(weapon.typeOfDamage)}'),
+              ),
             ),
           ),
           ListTile(
