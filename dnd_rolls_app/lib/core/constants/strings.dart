@@ -4,6 +4,7 @@ class Strings {
   static const chooseCharacters = 'Выбрать персонажей';
   static const chooseEnemies = 'Выбрать врагов';
   static const choose = 'Выбрать';
+  static const chooseEnchantment = 'Выбрать зачарование';
 
   //CharacteristicsEnum
   static const strengthText = 'Сила';
@@ -18,15 +19,15 @@ class Strings {
 
   //WeaponScreen
   static const weaponScreenTitle = 'Оружие';
-  static const weaponDamageD4 = '1d4';
-  static const weaponDamageD6 = '1d6';
-  static const weaponDamageD8 = '1d8';
-  static const weaponDamageD10 = '1d10';
-  static const weaponDamageD12 = '1d12';
-  static const weaponDamage2D6 = '2d6';
+  static const damageD4 = '1d4';
+  static const damageD6 = '1d6';
+  static const damageD8 = '1d8';
+  static const damageD10 = '1d10';
+  static const damageD12 = '1d12';
+  static const damage2D6 = '2d6';
 
   //UpdateWeapon
-  static const chooseStandartWeapon ='Выбрать стандартное оружие';
+  static const chooseStandartWeapon = 'Выбрать стандартное оружие';
   static const simpleMelee = 'Простое рукопашное';
   static const simpleRanged = 'Простое дальнобойное';
   static const militaryMelee = 'Воинское рукопашное';
@@ -40,6 +41,33 @@ class Strings {
   static const crushingDamage = 'Дробящего';
   static const piercingDamage = 'Колющего';
   static const slashingDamage = 'Рубящего';
+
+  //ElementalTypeOfDamageEnum
+  static const acid = 'Кислотный';
+  static const cold = 'Ледяной';
+  static const fire = 'Огненный';
+  static const force = 'Силовой';
+  static const lightning = 'Молнией';
+  static const necrotic = 'Некротический';
+  static const poison = 'Ядовитый';
+  static const psychic = 'Психический';
+  static const radiant = 'Сияющий';
+  static const thunder = 'Звуковой';
+
+  static const acidDamage = 'Кислотного урона';
+  static const coldDamage = 'урона Холодом';
+  static const fireDamage = 'Огненного урона';
+  static const forceDamage = 'Силового урона';
+  static const lightningDamage = 'урона Молнией';
+  static const necroticDamage = 'Некротического урона';
+  static const poisonDamage = 'Ядовитого урона';
+  static const psychicDamage = 'Психического урона';
+  static const radiantDamage = 'Сияющего урона';
+  static const thunderDamage = 'урона Звуком';
+
+  //EnchantWeapon
+  static const plusHitAndDamage = '+ к попаданию и урону';
+  static const plusDamageDice = '+ кость урона';
 
   //EnemyScreen
   static const enemyScreenTitle = 'Противник';

@@ -32,14 +32,47 @@ enum DamageCube {
   @HiveField(5)
   d6x2
 }
+
 @HiveType(typeId: 8)
-enum PhysicalTypeOfDamage{
+enum PhysicalTypeOfDamage {
   @HiveField(0)
   crushing,
   @HiveField(1)
   piercing,
   @HiveField(2)
   slashing,
+}
+
+@HiveType(typeId: 9)
+enum ElementalTypeOfDamage {
+  @HiveField(0)
+  acid,
+  @HiveField(1)
+  cold,
+  @HiveField(2)
+  fire,
+  @HiveField(3)
+  force,
+  @HiveField(4)
+  lightning,
+  @HiveField(5)
+  necrotic,
+  @HiveField(6)
+  poison,
+  @HiveField(7)
+  psychic,
+  @HiveField(8)
+  radiant,
+  @HiveField(9)
+  thunder
+}
+
+@HiveType(typeId: 11)
+enum TypeOfEnchantment {
+  @HiveField(0)
+  plusHitAndDamage,
+  @HiveField(1)
+  extraDamageDie,
 }
 
 enum CreationResult { success, failure, alreadyExists }

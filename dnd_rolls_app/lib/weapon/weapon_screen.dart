@@ -2,17 +2,21 @@ import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/character.dart';
+import 'package:dnd_rolls_app/model/enchantment.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
+import 'package:dnd_rolls_app/services/enchantment_service.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:dnd_rolls_app/services/strike_service.dart';
 import 'package:dnd_rolls_app/services/weapon_service.dart';
 import 'package:dnd_rolls_app/strike/strike_screeen.dart';
 import 'package:dnd_rolls_app/weapon/bloc/weapon_bloc.dart';
+import 'package:dnd_rolls_app/weapon/widgets/enchant_weapon.dart';
 import 'package:dnd_rolls_app/weapon/widgets/update_weapon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WeaponScreen extends StatelessWidget {
   final Character? character;
@@ -31,7 +35,8 @@ class WeaponScreen extends StatelessWidget {
         create: (context) => WeaponBloc(
             RepositoryProvider.of<WeaponService>(context),
             RepositoryProvider.of<StrikeService>(context),
-            RepositoryProvider.of<MacrosService>(context))
+            RepositoryProvider.of<MacrosService>(context),
+            RepositoryProvider.of<EnchantmentService>(context))
           ..add(RegisterServiceEvent()),
         child: BlocConsumer<WeaponBloc, WeaponState>(
           listener: (context, state) {
@@ -74,7 +79,7 @@ class WeaponScreen extends StatelessWidget {
                         backgroundColor: const Color(0xFFFE4A49),
                         foregroundColor: Colors.white,
                         icon: Icons.delete,
-                        label: 'Удалить',
+                        //label: 'Удалить',
                       ),
                       SlidableAction(
                         onPressed: (((newContext) async =>
@@ -82,7 +87,15 @@ class WeaponScreen extends StatelessWidget {
                         backgroundColor: Colors.blue.shade200,
                         foregroundColor: Colors.white,
                         icon: Icons.create,
-                        label: 'Исправить',
+                        //label: 'Исправить',
+                      ),
+                      SlidableAction(
+                        onPressed: (((newContext) async =>
+                            {enchant(context, weapon)})),
+                        backgroundColor: Colors.deepPurpleAccent,
+                        foregroundColor: Colors.white,
+                        icon: FontAwesomeIcons.wandMagicSparkles,
+                        //label: 'Зачаровать',
                       ),
                     ],
                   ),
@@ -214,17 +227,17 @@ class WeaponScreen extends StatelessWidget {
   String getDamageName(DamageCube damage) {
     switch (damage) {
       case DamageCube.d4:
-        return Strings.weaponDamageD4;
+        return Strings.damageD4;
       case DamageCube.d6:
-        return Strings.weaponDamageD6;
+        return Strings.damageD6;
       case DamageCube.d8:
-        return Strings.weaponDamageD8;
+        return Strings.damageD8;
       case DamageCube.d10:
-        return Strings.weaponDamageD10;
+        return Strings.damageD10;
       case DamageCube.d12:
-        return Strings.weaponDamageD12;
+        return Strings.damageD12;
       case DamageCube.d6x2:
-        return Strings.weaponDamage2D6;
+        return Strings.damage2D6;
     }
   }
 
@@ -247,7 +260,19 @@ class WeaponScreen extends StatelessWidget {
             ));
     if (result.isNotEmpty) {
       BlocProvider.of<WeaponBloc>(context).add(UpdateWeaponEvent(
-          result[0], result[1], result[2], result[3], result[4]));
+          result[0], result[1], result[2], result[3], result[4], result[5]));
+    }
+  }
+
+  Future<void> enchant(BuildContext context, Weapon weapon) async {
+    List<Enchantment> result = await showDialog(
+        context: context,
+        builder: (context) => Dialog(
+              child: EnchantWeapon(weapon: weapon),
+            ));
+    if (result.isNotEmpty) {
+      BlocProvider.of<WeaponBloc>(context)
+          .add(EnchantWeaponEvent(weapon, result));
     }
   }
 }

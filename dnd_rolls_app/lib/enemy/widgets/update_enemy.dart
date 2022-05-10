@@ -74,82 +74,88 @@ class _UpdateEnemyState extends State<UpdateEnemy> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 84),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FloatingActionButton(
-                onPressed: decrementArmor,
-                mini: true,
-                child: const Icon(Icons.remove),
-              ),
-              SizedBox(
-                width: 150,
-                child: TextFormField(
-                  keyboardType: const TextInputType.numberWithOptions(
-                      decimal: false, signed: true),
-                  controller: _armorClassController,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(FontAwesomeIcons.shieldHalved),
-                    labelText: 'Класс доспеха',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Поле не должно быть пустым';
-                    } else if (int.parse(value) < 1 || int.parse(value) > 30) {
-                      return 'От 1 до 30';
-                    } else {
-                      return null;
-                    }
-                  },
+          child: SizedBox(
+            width: 250,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FloatingActionButton(
+                  onPressed: decrementArmor,
+                  mini: true,
+                  child: const Icon(Icons.remove),
                 ),
-              ),
-              FloatingActionButton(
-                onPressed: incrementArmor,
-                mini: true,
-                child: const Icon(Icons.add),
-              ),
-            ],
+                SizedBox(
+                  width: 150,
+                  child: TextFormField(
+                    keyboardType: const TextInputType.numberWithOptions(
+                        decimal: false, signed: true),
+                    controller: _armorClassController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(FontAwesomeIcons.shieldHalved),
+                      labelText: 'Класс доспеха',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Поле не должно быть пустым';
+                      } else if (int.parse(value) < 1 || int.parse(value) > 30) {
+                        return 'От 1 до 30';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
+                FloatingActionButton(
+                  onPressed: incrementArmor,
+                  mini: true,
+                  child: const Icon(Icons.add),
+                ),
+              ],
+            ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 84),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FloatingActionButton(
-                onPressed: decrementHealth,
-                mini: true,
-                child: const Icon(Icons.remove),
-              ),
-              SizedBox(
-                width: 150,
-                child: TextFormField(
-                  keyboardType: const TextInputType.numberWithOptions(
-                      decimal: false, signed: true),
-                  controller: _healthController,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(
-                      FontAwesomeIcons.heart,
-                    ),
-                    labelText: 'Здоровье',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Поле не должно быть пустым';
-                    } else if (int.parse(value) <= 0) {
-                      return 'Больше 0';
-                    } else {
-                      return null;
-                    }
-                  },
+          child: SizedBox(
+            width: 250,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FloatingActionButton(
+                  onPressed: decrementHealth,
+                  mini: true,
+                  child: const Icon(Icons.remove),
                 ),
-              ),
-              FloatingActionButton(
-                onPressed: incrementHealth,
-                mini: true,
-                child: const Icon(Icons.add),
-              ),
-            ],
+                SizedBox(
+                  width: 150,
+                  child: TextFormField(
+                    keyboardType: const TextInputType.numberWithOptions(
+                        decimal: false, signed: true),
+                    controller: _healthController,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(
+                        FontAwesomeIcons.heart,
+                      ),
+                      labelText: 'Здоровье',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Поле не должно быть пустым';
+                      } else if (int.parse(value) <= 0) {
+                        return 'Больше 0';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
+                FloatingActionButton(
+                  onPressed: incrementHealth,
+                  mini: true,
+                  child: const Icon(Icons.add),
+                ),
+              ],
+            ),
           ),
         ),
         Padding(

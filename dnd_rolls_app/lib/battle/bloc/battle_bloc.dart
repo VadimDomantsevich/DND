@@ -68,8 +68,10 @@ class BattleBloc extends Bloc<BattleEvent, BattleState> {
       for (var strike in selectedMacrosStrikes) {
         battleLog = _strikeService.attack(strike, event.selectedEnemy);
         if (battleLog.damage != null) {
-          _battleService.battle.currentHealth[event.selectedIndex] -=
-              battleLog.damage!;
+          for (var damage in battleLog.damage!) {
+            _battleService.battle.currentHealth[event.selectedIndex] -=
+                damage.value;
+          }
         }
         _battleService.updateBattleLogs(battleLog);
       }

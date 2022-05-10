@@ -21,13 +21,14 @@ class WeaponAdapter extends TypeAdapter<Weapon> {
       fields[1] as DamageCube,
       fields[2] as CharacteristicsEnum,
       fields[3] as PhysicalTypeOfDamage,
+      enchantments: (fields[4] as List?)?.cast<Enchantment>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Weapon obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class WeaponAdapter extends TypeAdapter<Weapon> {
       ..writeByte(2)
       ..write(obj.mainCharacteristic)
       ..writeByte(3)
-      ..write(obj.typeOfDamage);
+      ..write(obj.typeOfDamage)
+      ..writeByte(4)
+      ..write(obj.enchantments);
   }
 
   @override

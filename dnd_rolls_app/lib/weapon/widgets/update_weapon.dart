@@ -1,12 +1,12 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
-import 'package:dnd_rolls_app/core/icons/dnd_icons.dart';
 import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:dnd_rolls_app/services/weapon_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class UpdateWeapon extends StatefulWidget {
   final Weapon? weapon;
@@ -64,7 +64,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
                         child: TextFormField(
                           controller: _nameController,
                           decoration: const InputDecoration(
-                            prefixIcon: Icon(FontAwesomeIcons.gun),
+                            prefixIcon: Icon(MdiIcons.swordCross),
                             labelText: 'Название оружия',
                           ),
                           validator: (value) {
@@ -198,7 +198,8 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
                                   _nameController.text,
                                   _damage,
                                   _characteristic,
-                                  _typeOfDamage
+                                  _typeOfDamage,
+                                  widget.weapon!.enchantments
                                 ];
                                 Navigator.of(context).pop(result);
                               }
@@ -295,15 +296,24 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
     switch (typeOfDamage) {
       case PhysicalTypeOfDamage.crushing:
         typeOfDamageText = Strings.crushing;
-        typeOfDamageIcon = const Icon(FontAwesomeIcons.bone);
+        typeOfDamageIcon = const Icon(
+          MdiIcons.bone,
+          size: 30,
+        );
         break;
       case PhysicalTypeOfDamage.piercing:
         typeOfDamageText = Strings.piercing;
-        typeOfDamageIcon = const Icon(FontAwesomeIcons.syringe);
+        typeOfDamageIcon = const Icon(
+          MdiIcons.spear,
+          size: 30,
+        );
         break;
       case PhysicalTypeOfDamage.slashing:
         typeOfDamageText = Strings.slashing;
-        typeOfDamageIcon = const Icon(FontAwesomeIcons.slash);
+        typeOfDamageIcon = const Icon(
+          MdiIcons.sword,
+          size: 30,
+        );
         break;
     }
     return Column(
@@ -350,7 +360,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
         break;
       case CharacteristicsEnum.dexterity:
         characteristicText = Strings.dexterityText;
-        characteristicIcon = const Icon(FontAwesomeIcons.personSkating);
+        characteristicIcon = const Icon(MdiIcons.karate);
         break;
       case CharacteristicsEnum.constitution:
         characteristicText = Strings.constitutionText;
@@ -358,7 +368,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
         break;
       case CharacteristicsEnum.intelligence:
         characteristicText = Strings.intelligenceText;
-        characteristicIcon = const Icon(FontAwesomeIcons.wandMagicSparkles);
+        characteristicIcon = const Icon(MdiIcons.wizardHat);
         break;
       case CharacteristicsEnum.wisdom:
         characteristicText = Strings.wisdomText;
@@ -366,7 +376,7 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
         break;
       case CharacteristicsEnum.charisma:
         characteristicText = Strings.charismaText;
-        characteristicIcon = const Icon(FontAwesomeIcons.faceLaugh);
+        characteristicIcon = const Icon(MdiIcons.emoticonCoolOutline);
         break;
     }
     return Column(
@@ -408,27 +418,27 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
     String damageText;
     switch (damage) {
       case DamageCube.d4:
-        damageIcon = const Icon(FontAwesomeIcons.diceFour);
+        damageIcon = const Icon(MdiIcons.diceD4Outline);
         damageText = '1d4';
         break;
       case DamageCube.d6:
-        damageIcon = const Icon(FontAwesomeIcons.diceD6);
+        damageIcon = const Icon(MdiIcons.diceD6Outline);
         damageText = '1d6';
         break;
       case DamageCube.d8:
-        damageIcon = const Icon(FontAwesomeIcons.eight);
+        damageIcon = const Icon(MdiIcons.diceD8Outline);
         damageText = '1d8';
         break;
       case DamageCube.d10:
-        damageIcon = const Icon(FontAwesomeIcons.dice);
+        damageIcon = const Icon(MdiIcons.diceD10Outline);
         damageText = '1d10';
         break;
       case DamageCube.d12:
-        damageIcon = const Icon(FontAwesomeIcons.dice);
+        damageIcon = const Icon(MdiIcons.diceD12Outline);
         damageText = '1d12';
         break;
       case DamageCube.d6x2:
-        damageIcon = const Icon(FontAwesomeIcons.diceD6);
+        damageIcon = const Icon(MdiIcons.diceMultipleOutline);
         damageText = '2d6';
         break;
     }

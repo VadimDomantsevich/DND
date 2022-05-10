@@ -167,3 +167,121 @@ class PhysicalTypeOfDamageAdapter extends TypeAdapter<PhysicalTypeOfDamage> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+class ElementalTypeOfDamageAdapter extends TypeAdapter<ElementalTypeOfDamage> {
+  @override
+  final int typeId = 9;
+
+  @override
+  ElementalTypeOfDamage read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ElementalTypeOfDamage.acid;
+      case 1:
+        return ElementalTypeOfDamage.cold;
+      case 2:
+        return ElementalTypeOfDamage.fire;
+      case 3:
+        return ElementalTypeOfDamage.force;
+      case 4:
+        return ElementalTypeOfDamage.lightning;
+      case 5:
+        return ElementalTypeOfDamage.necrotic;
+      case 6:
+        return ElementalTypeOfDamage.poison;
+      case 7:
+        return ElementalTypeOfDamage.psychic;
+      case 8:
+        return ElementalTypeOfDamage.radiant;
+      case 9:
+        return ElementalTypeOfDamage.thunder;
+      default:
+        return ElementalTypeOfDamage.acid;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ElementalTypeOfDamage obj) {
+    switch (obj) {
+      case ElementalTypeOfDamage.acid:
+        writer.writeByte(0);
+        break;
+      case ElementalTypeOfDamage.cold:
+        writer.writeByte(1);
+        break;
+      case ElementalTypeOfDamage.fire:
+        writer.writeByte(2);
+        break;
+      case ElementalTypeOfDamage.force:
+        writer.writeByte(3);
+        break;
+      case ElementalTypeOfDamage.lightning:
+        writer.writeByte(4);
+        break;
+      case ElementalTypeOfDamage.necrotic:
+        writer.writeByte(5);
+        break;
+      case ElementalTypeOfDamage.poison:
+        writer.writeByte(6);
+        break;
+      case ElementalTypeOfDamage.psychic:
+        writer.writeByte(7);
+        break;
+      case ElementalTypeOfDamage.radiant:
+        writer.writeByte(8);
+        break;
+      case ElementalTypeOfDamage.thunder:
+        writer.writeByte(9);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ElementalTypeOfDamageAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class TypeOfEnchantmentAdapter extends TypeAdapter<TypeOfEnchantment> {
+  @override
+  final int typeId = 11;
+
+  @override
+  TypeOfEnchantment read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return TypeOfEnchantment.plusHitAndDamage;
+      case 1:
+        return TypeOfEnchantment.extraDamageDie;
+      default:
+        return TypeOfEnchantment.plusHitAndDamage;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, TypeOfEnchantment obj) {
+    switch (obj) {
+      case TypeOfEnchantment.plusHitAndDamage:
+        writer.writeByte(0);
+        break;
+      case TypeOfEnchantment.extraDamageDie:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TypeOfEnchantmentAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

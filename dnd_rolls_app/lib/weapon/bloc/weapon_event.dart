@@ -2,9 +2,6 @@ part of 'weapon_bloc.dart';
 
 abstract class WeaponEvent extends Equatable {
   const WeaponEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 class LoadWeaponEvent extends WeaponEvent {
@@ -31,12 +28,22 @@ class UpdateWeaponEvent extends WeaponEvent {
   final DamageCube damage;
   final CharacteristicsEnum characteristic;
   final PhysicalTypeOfDamage typeOfDamage;
+  final List<Enchantment>? enchantments;
 
   const UpdateWeaponEvent(this.name, this.newName, this.damage,
-      this.characteristic, this.typeOfDamage);
+      this.characteristic, this.typeOfDamage, this.enchantments);
   @override
   List<Object> get props =>
       [name, newName, damage, characteristic, typeOfDamage];
+}
+
+class EnchantWeaponEvent extends WeaponEvent {
+  final Weapon weapon;
+  final List<Enchantment>? enchantments;
+
+  const EnchantWeaponEvent(this.weapon, this.enchantments);
+  @override
+  List<Object?> get props => [weapon, enchantments];
 }
 
 class RemoveWeaponEvent extends WeaponEvent {

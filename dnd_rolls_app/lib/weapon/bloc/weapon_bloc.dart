@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:dnd_rolls_app/core/constants/enums.dart';
+import 'package:dnd_rolls_app/model/enchantment.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
+import 'package:dnd_rolls_app/services/enchantment_service.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:dnd_rolls_app/services/strike_service.dart';
 import 'package:dnd_rolls_app/services/weapon_service.dart';
@@ -14,12 +16,15 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
   final WeaponService _weaponService;
   final StrikeService _strikeService;
   final MacrosService _macrosService;
-  WeaponBloc(this._weaponService, this._strikeService, this._macrosService)
+  final EnchantmentService _enchantmentService;
+  WeaponBloc(this._weaponService, this._strikeService, this._macrosService,
+      this._enchantmentService)
       : super(RegisteringServiceState()) {
     on<RegisterServiceEvent>((event, emit) async {
       await _weaponService.init();
       await _strikeService.init();
       await _macrosService.init();
+      await _enchantmentService.init();
       add(const LoadWeaponEvent());
     });
     on<LoadWeaponEvent>((event, emit) {
@@ -44,17 +49,23 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
           break;
       }
     });
+    on<EnchantWeaponEvent>((event, emit) async {
+      await _weaponService.enchantWeapon(event.weapon, event.enchantments);
+      add(const LoadWeaponEvent());
+    });
     on<UpdateWeaponEvent>((event, emit) async {
       final result = await _weaponService.updateWeapon(
           event.name,
           event.newName,
           event.damage,
           event.characteristic,
-          event.typeOfDamage);
+          event.typeOfDamage,
+          event.enchantments);
       switch (result) {
         case CreationResult.success:
           final oldWeapon = Weapon(event.name, event.damage,
-              event.characteristic, event.typeOfDamage);
+              event.characteristic, event.typeOfDamage,
+              enchantments: event.enchantments);
           final macrosToUpdate = _macrosService.getAllMacros().where(
                 (element) => element.strikes
                     .any((element) => element.weapon.name == event.name),

@@ -1,4 +1,5 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
+import 'package:dnd_rolls_app/model/enchantment.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
@@ -27,14 +28,33 @@ class WeaponService {
     if (!Hive.isAdapterRegistered(8)) {
       Hive.registerAdapter(PhysicalTypeOfDamageAdapter());
     }
+    if (!Hive.isAdapterRegistered(9)) {
+      Hive.registerAdapter(ElementalTypeOfDamageAdapter());
+    }
+    if (!Hive.isAdapterRegistered(10)) {
+      Hive.registerAdapter(EnchantmentAdapter());
+    }
+    if (!Hive.isAdapterRegistered(11)) {
+      Hive.registerAdapter(TypeOfEnchantmentAdapter());
+    }
     _weapons = await Hive.openBox('weaponsBox');
     _seedWeapons = await Hive.openBox('seedWeaponsBox');
 
     if (_weapons.isEmpty) {
       await _weapons.add(Weapon('Гром', DamageCube.d8,
-          CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing));
+          CharacteristicsEnum.strength, PhysicalTypeOfDamage.slashing,
+          enchantments: [
+            Enchantment(
+                TypeOfEnchantment.plusHitAndDamage, '+1 к попаданию и урону',
+                hitAndDamagePlus: 1)
+          ]));
       await _weapons.add(Weapon('Молния', DamageCube.d8,
-          CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.slashing));
+          CharacteristicsEnum.dexterity, PhysicalTypeOfDamage.slashing,
+          enchantments: [
+            Enchantment(
+                TypeOfEnchantment.plusHitAndDamage, '+1 к попаданию и урону',
+                hitAndDamagePlus: 1)
+          ]));
     }
 
     _seedWeapons.clear();
@@ -80,7 +100,8 @@ class WeaponService {
       final String newName,
       final DamageCube damage,
       final CharacteristicsEnum characteristic,
-      final PhysicalTypeOfDamage typeOfDamage) async {
+      final PhysicalTypeOfDamage typeOfDamage,
+      final List<Enchantment>? enchantments) async {
     final weaponToUpdate =
         _weapons.values.firstWhere((element) => element.name == name);
     final alreadyExists = _weapons.values.any((element) =>
@@ -90,8 +111,9 @@ class WeaponService {
       return CreationResult.alreadyExists;
     }
     try {
-      final updatedWeapon =
-          Weapon(newName, damage, characteristic, typeOfDamage);
+      final updatedWeapon = Weapon(
+          newName, damage, characteristic, typeOfDamage,
+          enchantments: enchantments);
 
       final index = weaponToUpdate.key as int;
       await _weapons.put(index, updatedWeapon);
@@ -99,6 +121,18 @@ class WeaponService {
     } catch (e) {
       return CreationResult.failure;
     }
+  }
+
+  Future<void> enchantWeapon(
+      final Weapon weapon, final List<Enchantment>? enchantments) async {
+    final index = _weapons.values
+        .firstWhere((element) => element.name == weapon.name)
+        .key as int;
+
+    final enchantedWeapon = Weapon(weapon.name, weapon.damage,
+        weapon.mainCharacteristic, weapon.typeOfDamage,
+        enchantments: enchantments);
+    await _weapons.put(index, enchantedWeapon);
   }
 
   List<Weapon> getSeedWeapons() {

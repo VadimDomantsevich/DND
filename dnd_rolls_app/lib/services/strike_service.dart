@@ -5,6 +5,7 @@ import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/random_generator.dart';
 import 'package:dnd_rolls_app/model/battle_log.dart';
 import 'package:dnd_rolls_app/model/character.dart';
+import 'package:dnd_rolls_app/model/damage.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
@@ -117,6 +118,7 @@ class StrikeService {
     int secondRoll;
     int roll = firstRoll;
     logs = '';
+    List<Damage> damageList = [];
     if (strike.isAdvantage) {
       secondRoll = RandomGenerator().rollD20();
       roll = max(firstRoll, secondRoll);
@@ -131,7 +133,11 @@ class StrikeService {
       logs += (' + модификатор: $characteristicBonus');
       damage += characteristicBonus;
       logs += (' нанося $damage урона');
-      return BattleLog(logs, damage: damage);
+      damageList.add(
+          Damage(damage, physicalTypeOfDamage: strike.weapon.typeOfDamage));
+
+      //TODO: add enchantments damage
+      return BattleLog(logs, damage: damageList);
     } else {
       int characteristicBonus = getCharacteristicBonus(strike);
       logs += ('${strike.character.name} выбрасывает $roll(D20)');
@@ -147,7 +153,10 @@ class StrikeService {
         damage += characteristicBonus;
         logs +=
             (' нанося $damage ${getTypeOfDamageName(strike.weapon.typeOfDamage)} урона');
-        return BattleLog(logs, damage: damage);
+        damageList.add(
+            Damage(damage, physicalTypeOfDamage: strike.weapon.typeOfDamage));
+        //TODO: add enchantments damage
+        return BattleLog(logs, damage: damageList);
       } else {
         logs += (' и промахивается');
         return BattleLog(logs);
