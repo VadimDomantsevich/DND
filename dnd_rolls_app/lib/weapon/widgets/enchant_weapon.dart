@@ -23,12 +23,11 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
   String _dialogHeader = '';
   List<Enchantment> enchantments = [];
   int plusHitAndDamage = 1;
-  int diceCount = 1;
   DamageCube diceType = DamageCube.d6;
   String dropdownValue = Strings.chooseEnchantment;
   String dropdownTypeValue = Strings.crushing;
   final _diceCountController = TextEditingController();
-  PhysicalTypeOfDamage? physicalTypeOfDamage;
+  PhysicalTypeOfDamage? physicalTypeOfDamage = PhysicalTypeOfDamage.crushing;
   ElementalTypeOfDamage? elementalTypeOfDamage;
 
   @override
@@ -355,15 +354,13 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       setState(() {
-                        final enchantment =
-                            RepositoryProvider.of<EnchantmentService>(context)
-                                .addEnchantment(
-                                    TypeOfEnchantment.extraDamageDie,
-                                    diceCount: diceCount,
-                                    diceType: diceType,
-                                    physicalTypeOfDamage: physicalTypeOfDamage,
-                                    elementalTypeOfDamage:
-                                        elementalTypeOfDamage);
+                        final enchantment = RepositoryProvider.of<
+                                EnchantmentService>(context)
+                            .addEnchantment(TypeOfEnchantment.extraDamageDie,
+                                diceCount: int.parse(_diceCountController.text),
+                                diceType: diceType,
+                                physicalTypeOfDamage: physicalTypeOfDamage,
+                                elementalTypeOfDamage: elementalTypeOfDamage);
                         enchantments.add(enchantment);
                       });
                     }

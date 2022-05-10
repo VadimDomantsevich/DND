@@ -84,11 +84,21 @@ class EnchantmentService {
       case TypeOfEnchantment.plusHitAndDamage:
         return '+ $hitAndDamagePlus к попаданию и урону';
       case TypeOfEnchantment.extraDamageDie:
+        String resultString = '';
         if (physicalTypeOfDamage != null) {
-          return '+ ${getDiceName(diceType!)} кость ${getPhysicalTypeOfDamageString(physicalTypeOfDamage)}';
+          diceCount == 1
+              ? resultString =
+                  '+ ${getDiceName(diceType!)} кость ${getPhysicalTypeOfDamageString(physicalTypeOfDamage)}'
+              : resultString =
+                  '+ $diceCount ${getDiceName(diceType!)} костей ${getPhysicalTypeOfDamageString(physicalTypeOfDamage)}';
         } else {
-          return '+ ${getDiceName(diceType!)} кость ${getElementalTypeOfDamageString(elementalTypeOfDamage!)}';
+          diceCount == 1
+              ? resultString =
+                  '+ ${getDiceName(diceType!)} кость ${getElementalTypeOfDamageString(elementalTypeOfDamage!)}'
+              : resultString =
+                  '+ $diceCount ${getDiceName(diceType!)} костей ${getElementalTypeOfDamageString(elementalTypeOfDamage!)}';
         }
+        return resultString;
     }
   }
 
