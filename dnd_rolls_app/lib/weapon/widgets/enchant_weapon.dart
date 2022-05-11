@@ -39,55 +39,54 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
       for (var item in widget.weapon.enchantments!) {
         enchantments.add(item);
       }
-      //enchantments = widget.weapon.enchantments!;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(_dialogHeader),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.3,
-          child: enchantments.isNotEmpty
-              ? ListView.builder(
-                  primary: false,
-                  shrinkWrap: true,
-                  itemCount: enchantments.length,
-                  itemBuilder: ((context, index) {
-                    return Slidable(
-                      key: const ValueKey(1),
-                      startActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (newContext) async {
-                              {
-                                setState(() {
-                                  enchantments.removeAt(index);
-                                });
-                              }
-                            },
-                            backgroundColor: const Color(0xFFFE4A49),
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Удалить',
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        title: Text(enchantments[index].name),
-                      ),
-                    );
-                  }))
-              : Container(),
-        ),
-        Expanded(
-          child: Column(
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(_dialogHeader),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: enchantments.isNotEmpty
+                ? ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: enchantments.length,
+                    itemBuilder: ((context, index) {
+                      return Slidable(
+                        key: const ValueKey(1),
+                        startActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (newContext) async {
+                                {
+                                  setState(() {
+                                    enchantments.removeAt(index);
+                                  });
+                                }
+                              },
+                              backgroundColor: const Color(0xFFFE4A49),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Удалить',
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          title: Text(enchantments[index].name),
+                        ),
+                      );
+                    }))
+                : Container(),
+          ),
+          Column(
             children: [
               DropdownButton<String>(
                   value: dropdownValue,
@@ -113,7 +112,9 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                       }
                     });
                   }),
-              buildForm(dropdownValue),
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: buildForm(dropdownValue)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -131,8 +132,8 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
               ),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -183,7 +184,8 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
   Widget buildPlusDamageDice() {
     return Form(
       key: _formKey,
-      child: Column(
+      child: ListView(
+        shrinkWrap: true,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -262,90 +264,94 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DropdownButton<String>(
-                value: dropdownTypeValue,
-                icon: const Icon(Icons.arrow_downward),
-                items: <String>[
-                  Strings.crushing,
-                  Strings.piercing,
-                  Strings.slashing,
-                  Strings.acid,
-                  Strings.cold,
-                  Strings.fire,
-                  Strings.force,
-                  Strings.lightning,
-                  Strings.necrotic,
-                  Strings.poison,
-                  Strings.psychic,
-                  Strings.radiant,
-                  Strings.thunder
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    dropdownTypeValue = newValue!;
-                    switch (newValue) {
-                      case Strings.crushing:
-                        elementalTypeOfDamage = null;
-                        physicalTypeOfDamage = PhysicalTypeOfDamage.crushing;
-                        break;
-                      case Strings.piercing:
-                        elementalTypeOfDamage = null;
-                        physicalTypeOfDamage = PhysicalTypeOfDamage.piercing;
-                        break;
-                      case Strings.slashing:
-                        elementalTypeOfDamage = null;
-                        physicalTypeOfDamage = PhysicalTypeOfDamage.slashing;
-                        break;
-                      case Strings.acid:
-                        physicalTypeOfDamage = null;
-                        elementalTypeOfDamage = ElementalTypeOfDamage.acid;
-                        break;
-                      case Strings.cold:
-                        physicalTypeOfDamage = null;
-                        elementalTypeOfDamage = ElementalTypeOfDamage.cold;
-                        break;
-                      case Strings.fire:
-                        physicalTypeOfDamage = null;
-                        elementalTypeOfDamage = ElementalTypeOfDamage.fire;
-                        break;
-                      case Strings.force:
-                        physicalTypeOfDamage = null;
-                        elementalTypeOfDamage = ElementalTypeOfDamage.force;
-                        break;
-                      case Strings.lightning:
-                        physicalTypeOfDamage = null;
-                        elementalTypeOfDamage = ElementalTypeOfDamage.lightning;
-                        break;
-                      case Strings.necrotic:
-                        physicalTypeOfDamage = null;
-                        elementalTypeOfDamage = ElementalTypeOfDamage.necrotic;
-                        break;
-                      case Strings.poison:
-                        physicalTypeOfDamage = null;
-                        elementalTypeOfDamage = ElementalTypeOfDamage.poison;
-                        break;
-                      case Strings.psychic:
-                        physicalTypeOfDamage = null;
-                        elementalTypeOfDamage = ElementalTypeOfDamage.psychic;
-                        break;
-                      case Strings.radiant:
-                        physicalTypeOfDamage = null;
-                        elementalTypeOfDamage = ElementalTypeOfDamage.radiant;
-                        break;
-                      case Strings.thunder:
-                        physicalTypeOfDamage = null;
-                        elementalTypeOfDamage = ElementalTypeOfDamage.thunder;
-                        break;
-                    }
-                  });
-                }),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButton<String>(
+                    value: dropdownTypeValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    items: <String>[
+                      Strings.crushing,
+                      Strings.piercing,
+                      Strings.slashing,
+                      Strings.acid,
+                      Strings.cold,
+                      Strings.fire,
+                      Strings.force,
+                      Strings.lightning,
+                      Strings.necrotic,
+                      Strings.poison,
+                      Strings.psychic,
+                      Strings.radiant,
+                      Strings.thunder
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownTypeValue = newValue!;
+                        switch (newValue) {
+                          case Strings.crushing:
+                            elementalTypeOfDamage = null;
+                            physicalTypeOfDamage = PhysicalTypeOfDamage.crushing;
+                            break;
+                          case Strings.piercing:
+                            elementalTypeOfDamage = null;
+                            physicalTypeOfDamage = PhysicalTypeOfDamage.piercing;
+                            break;
+                          case Strings.slashing:
+                            elementalTypeOfDamage = null;
+                            physicalTypeOfDamage = PhysicalTypeOfDamage.slashing;
+                            break;
+                          case Strings.acid:
+                            physicalTypeOfDamage = null;
+                            elementalTypeOfDamage = ElementalTypeOfDamage.acid;
+                            break;
+                          case Strings.cold:
+                            physicalTypeOfDamage = null;
+                            elementalTypeOfDamage = ElementalTypeOfDamage.cold;
+                            break;
+                          case Strings.fire:
+                            physicalTypeOfDamage = null;
+                            elementalTypeOfDamage = ElementalTypeOfDamage.fire;
+                            break;
+                          case Strings.force:
+                            physicalTypeOfDamage = null;
+                            elementalTypeOfDamage = ElementalTypeOfDamage.force;
+                            break;
+                          case Strings.lightning:
+                            physicalTypeOfDamage = null;
+                            elementalTypeOfDamage = ElementalTypeOfDamage.lightning;
+                            break;
+                          case Strings.necrotic:
+                            physicalTypeOfDamage = null;
+                            elementalTypeOfDamage = ElementalTypeOfDamage.necrotic;
+                            break;
+                          case Strings.poison:
+                            physicalTypeOfDamage = null;
+                            elementalTypeOfDamage = ElementalTypeOfDamage.poison;
+                            break;
+                          case Strings.psychic:
+                            physicalTypeOfDamage = null;
+                            elementalTypeOfDamage = ElementalTypeOfDamage.psychic;
+                            break;
+                          case Strings.radiant:
+                            physicalTypeOfDamage = null;
+                            elementalTypeOfDamage = ElementalTypeOfDamage.radiant;
+                            break;
+                          case Strings.thunder:
+                            physicalTypeOfDamage = null;
+                            elementalTypeOfDamage = ElementalTypeOfDamage.thunder;
+                            break;
+                        }
+                      });
+                    }),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

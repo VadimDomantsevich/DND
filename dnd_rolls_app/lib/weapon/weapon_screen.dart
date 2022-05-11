@@ -145,7 +145,7 @@ class WeaponScreen extends StatelessWidget {
                     backgroundColor: const Color(0xFFFE4A49),
                     foregroundColor: Colors.white,
                     icon: Icons.delete,
-                    label: 'Удалить',
+                    //label: 'Удалить',
                   ),
                   SlidableAction(
                     onPressed: (((newContext) async =>
@@ -153,7 +153,15 @@ class WeaponScreen extends StatelessWidget {
                     backgroundColor: Colors.blue.shade200,
                     foregroundColor: Colors.white,
                     icon: Icons.create,
-                    label: 'Исправить',
+                    //label: 'Исправить',
+                  ),
+                  SlidableAction(
+                    onPressed: (((newContext) async =>
+                        {enchant(context, weapon)})),
+                    backgroundColor: Colors.deepPurpleAccent,
+                    foregroundColor: Colors.white,
+                    icon: FontAwesomeIcons.wandMagicSparkles,
+                    //label: 'Зачаровать',
                   ),
                 ],
               ),

@@ -51,6 +51,19 @@ class WeaponBloc extends Bloc<WeaponEvent, WeaponState> {
     });
     on<EnchantWeaponEvent>((event, emit) async {
       await _weaponService.enchantWeapon(event.weapon, event.enchantments);
+      final oldWeapon = Weapon(event.weapon.name, event.weapon.damage,
+          event.weapon.mainCharacteristic, event.weapon.typeOfDamage,
+          enchantments: event.enchantments);
+      final macrosToUpdate = _macrosService.getAllMacros().where(
+            (element) => element.strikes
+                .any((element) => element.weapon.name == event.weapon.name),
+          );
+      for (var macros in macrosToUpdate) {
+        List<Strike> strikes = await _strikeService.newWeaponMacrosStrikes(
+            macros, oldWeapon, _weaponService.getWeapon(event.weapon.name));
+        _macrosService.updateMacros(
+            macros.name, macros.name, macros.characterName, strikes);
+      }
       add(const LoadWeaponEvent());
     });
     on<UpdateWeaponEvent>((event, emit) async {

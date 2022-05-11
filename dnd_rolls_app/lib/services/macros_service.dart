@@ -1,4 +1,5 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
+import 'package:dnd_rolls_app/model/enchantment.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
@@ -24,6 +25,18 @@ class MacrosService {
     }
     if (!Hive.isAdapterRegistered(4)) {
       Hive.registerAdapter(DamageCubeAdapter());
+    }
+    if (!Hive.isAdapterRegistered(8)) {
+      Hive.registerAdapter(PhysicalTypeOfDamageAdapter());
+    }
+    if (!Hive.isAdapterRegistered(9)) {
+      Hive.registerAdapter(ElementalTypeOfDamageAdapter());
+    }
+    if (!Hive.isAdapterRegistered(10)) {
+      Hive.registerAdapter(EnchantmentAdapter());
+    }
+    if (!Hive.isAdapterRegistered(11)) {
+      Hive.registerAdapter(TypeOfEnchantmentAdapter());
     }
     _macros = await Hive.openBox('macrosBox');
   }

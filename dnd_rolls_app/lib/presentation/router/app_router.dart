@@ -1,6 +1,4 @@
 import 'package:dnd_rolls_app/battle/battle_screen.dart';
-import 'package:dnd_rolls_app/character/choose_character_screen.dart';
-import 'package:dnd_rolls_app/enemy/choose_enemy_screen.dart';
 import 'package:dnd_rolls_app/enemy/enemy_screen.dart';
 import 'package:dnd_rolls_app/macros/macros_screen.dart';
 import 'package:dnd_rolls_app/weapon/weapon_screen.dart';
@@ -15,13 +13,25 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const BattleScreen(),
         );
-      case '/characters':
+      case '/CharactersScreen':
+        return MaterialPageRoute(
+          builder: (_) => const CharactersScreen(),
+        );
+      case '/EnemyScreen':
+        return MaterialPageRoute(
+          builder: (_) => const EnemyScreen(),
+        );
+      case '/MacrosScreen':
         return MaterialPageRoute(
           builder: (_) => const MacrosScreen(),
         );
+      case '/WeaponScreen':
+        return MaterialPageRoute(
+          builder: (_) => const WeaponScreen(),
+        );
       default:
         return MaterialPageRoute(
-          builder: (_) => const MacrosScreen(),
+          builder: (_) => const BattleScreen(),
         );
     }
   }

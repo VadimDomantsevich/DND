@@ -2,6 +2,7 @@ import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:hive/hive.dart';
 
+
 class CharacterService {
   late Box<Character> _characters;
 

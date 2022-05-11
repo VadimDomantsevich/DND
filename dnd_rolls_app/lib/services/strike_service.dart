@@ -6,6 +6,7 @@ import 'package:dnd_rolls_app/core/random_generator.dart';
 import 'package:dnd_rolls_app/model/battle_log.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/damage.dart';
+import 'package:dnd_rolls_app/model/enchantment.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
@@ -132,11 +133,17 @@ class StrikeService {
       int characteristicBonus = getCharacteristicBonus(strike);
       logs += (' + модификатор: $characteristicBonus');
       damage += characteristicBonus;
-      logs += (' нанося $damage урона');
+      logs +=
+          (' нанося $damage ${getTypeOfDamageName(strike.weapon.typeOfDamage)} урона');
       damageList.add(
           Damage(damage, physicalTypeOfDamage: strike.weapon.typeOfDamage));
+      damageList.addAll(getEnchantmentsDamage(strike, enemy, true));
+      int finalDamage = 0;
+      for (var element in damageList) {
+        finalDamage += element.value;
+      }
+      logs += '\nВсего: $finalDamage урона';
 
-      //TODO: add enchantments damage
       return BattleLog(logs, damage: damageList);
     } else {
       int characteristicBonus = getCharacteristicBonus(strike);
@@ -145,17 +152,48 @@ class StrikeService {
       roll += characteristicBonus;
       logs +=
           (' + бонусы характеристики: $characteristicBonus и мастерства: ${strike.character.skillBonus},');
-      logs += (' итого: $roll');
+      //Enchantments
+
+      if (strike.weapon.enchantments != null &&
+          strike.weapon.enchantments!
+              .any((element) => element.hitAndDamagePlus != null)) {
+        logs += ' + бонусы зачарования: ';
+        for (var enchant in strike.weapon.enchantments!) {
+          if (enchant.hitAndDamagePlus != null) {
+            logs += '+ ${enchant.hitAndDamagePlus} ';
+            roll += enchant.hitAndDamagePlus!;
+          }
+        }
+      }
+
+      logs += ('\nИтого: $roll');
       logs += (' на попадание по ${enemy.name}');
       if (roll >= enemy.armorClass) {
         int damage = getDamage(strike, enemy);
         logs += (' + модификатор: $characteristicBonus,');
         damage += characteristicBonus;
+        //Enchantments
+        if (strike.weapon.enchantments != null &&
+            strike.weapon.enchantments!
+                .any((element) => element.hitAndDamagePlus != null)) {
+          logs += ' + бонусы зачарования: ';
+          for (var enchant in strike.weapon.enchantments!) {
+            if (enchant.hitAndDamagePlus != null) {
+              logs += '+ ${enchant.hitAndDamagePlus} ';
+              damage += enchant.hitAndDamagePlus!;
+            }
+          }
+        }
         logs +=
-            (' нанося $damage ${getTypeOfDamageName(strike.weapon.typeOfDamage)} урона');
+            (' нанося\n- $damage ${getTypeOfDamageName(strike.weapon.typeOfDamage)} урона');
         damageList.add(
             Damage(damage, physicalTypeOfDamage: strike.weapon.typeOfDamage));
-        //TODO: add enchantments damage
+        damageList.addAll(getEnchantmentsDamage(strike, enemy, false));
+        int finalDamage = 0;
+        for (var element in damageList) {
+          finalDamage += element.value;
+        }
+        logs += '\nВсего: $finalDamage урона';
         return BattleLog(logs, damage: damageList);
       } else {
         logs += (' и промахивается');
@@ -226,6 +264,102 @@ class StrikeService {
     }
 
     return weaponDamage;
+  }
+
+  List<Damage> getEnchantmentsDamage(
+      Strike strike, Enemy enemy, bool isCritical) {
+    int damage = 0;
+    List<Damage> damageList = [];
+    if (strike.weapon.enchantments != null &&
+        strike.weapon.enchantments!
+            .any((element) => element.diceCount != null)) {
+      for (var enchant in strike.weapon.enchantments!) {
+        switch (enchant.typeOfEnchantment) {
+          case TypeOfEnchantment.plusHitAndDamage:
+            break;
+          case TypeOfEnchantment.extraDamageDie:
+            int index = 0;
+            int currentDamage = 0;
+            logs += '\n';
+            if (isCritical) {
+              while (index < enchant.diceCount! * 2) {
+                damage = RandomGenerator().rollDamage(enchant.diceType!);
+                logs += ' + $damage${getDamageCubeString(enchant.diceType!)}';
+                currentDamage += damage;
+                index++;
+              }
+            } else {
+              while (index < enchant.diceCount!) {
+                damage = RandomGenerator().rollDamage(enchant.diceType!);
+                logs += ' + $damage${getDamageCubeString(enchant.diceType!)}';
+                currentDamage += damage;
+                index++;
+              }
+            }
+
+            logs += '\n- $currentDamage ${getTypeOfDamageString(enchant)}';
+            damageList.add(Damage(currentDamage,
+                physicalTypeOfDamage: enchant.physicalTypeOfDamage,
+                elementalTypeOfDamage: enchant.elementalTypeOfDamage));
+        }
+      }
+      return damageList;
+    } else {
+      return [];
+    }
+  }
+
+  String getTypeOfDamageString(Enchantment enchantment) {
+    if (enchantment.physicalTypeOfDamage != null) {
+      switch (enchantment.physicalTypeOfDamage!) {
+        case PhysicalTypeOfDamage.crushing:
+          return Strings.crushingDamage + ' урона';
+        case PhysicalTypeOfDamage.piercing:
+          return Strings.piercingDamage + ' урона';
+        case PhysicalTypeOfDamage.slashing:
+          return Strings.slashingDamage + ' урона';
+      }
+    } else {
+      switch (enchantment.elementalTypeOfDamage!) {
+        case ElementalTypeOfDamage.acid:
+          return Strings.acidDamage;
+        case ElementalTypeOfDamage.cold:
+          return Strings.coldDamage;
+        case ElementalTypeOfDamage.fire:
+          return Strings.fireDamage;
+        case ElementalTypeOfDamage.force:
+          return Strings.forceDamage;
+        case ElementalTypeOfDamage.lightning:
+          return Strings.lightningDamage;
+        case ElementalTypeOfDamage.necrotic:
+          return Strings.necroticDamage;
+        case ElementalTypeOfDamage.poison:
+          return Strings.poisonDamage;
+        case ElementalTypeOfDamage.psychic:
+          return Strings.psychicDamage;
+        case ElementalTypeOfDamage.radiant:
+          return Strings.radiantDamage;
+        case ElementalTypeOfDamage.thunder:
+          return Strings.thunderDamage;
+      }
+    }
+  }
+
+  String getDamageCubeString(DamageCube damageCube) {
+    switch (damageCube) {
+      case DamageCube.d4:
+        return '(d4)';
+      case DamageCube.d6:
+        return '(d6)';
+      case DamageCube.d8:
+        return '(d8)';
+      case DamageCube.d10:
+        return '(d10)';
+      case DamageCube.d12:
+        return '(d12)';
+      case DamageCube.d6x2:
+        return '(2d6)';
+    }
   }
 
   int getCriticalDamage(Strike strike, Enemy enemy) {
