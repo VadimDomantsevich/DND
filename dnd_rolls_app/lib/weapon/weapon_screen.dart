@@ -1,6 +1,7 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
-import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
+import 'package:dnd_rolls_app/core/themes/app_theme.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/enchantment.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
@@ -52,7 +53,7 @@ class WeaponScreen extends StatelessWidget {
             }
           },
           builder: ((context, state) {
-            return buildListView(context, state);
+            return containerRadialGradienWrap(buildListView(context, state));
           }),
         ),
       ),
@@ -76,30 +77,33 @@ class WeaponScreen extends StatelessWidget {
                               BlocProvider.of<WeaponBloc>(context)
                                   .add(RemoveWeaponEvent(weapon.name))
                             }),
-                        backgroundColor: const Color(0xFFFE4A49),
-                        foregroundColor: Colors.white,
+                        backgroundColor:
+                            AppTheme.deleteActionPaneBacgroundColor,
+                        foregroundColor: AppTheme.actionPaneForegroundColor,
                         icon: Icons.delete,
                         //label: 'Удалить',
                       ),
                       SlidableAction(
                         onPressed: (((newContext) async =>
                             {update(context, weapon)})),
-                        backgroundColor: Colors.blue.shade200,
-                        foregroundColor: Colors.white,
+                        backgroundColor: AppTheme.editActionPaneBackgroundColor,
+                        foregroundColor: AppTheme.actionPaneForegroundColor,
                         icon: Icons.create,
                         //label: 'Исправить',
                       ),
                       SlidableAction(
                         onPressed: (((newContext) async =>
                             {enchant(context, weapon)})),
-                        backgroundColor: Colors.deepPurpleAccent,
-                        foregroundColor: Colors.white,
+                        backgroundColor:
+                            AppTheme.enchantActionPaneBackgroundColor,
+                        foregroundColor: AppTheme.actionPaneForegroundColor,
                         icon: FontAwesomeIcons.wandMagicSparkles,
                         //label: 'Зачаровать',
                       ),
                     ],
                   ),
                   child: ListTile(
+                    trailing: const Icon(Icons.check_circle_outline),
                     onTap: () {
                       BlocProvider.of<WeaponBloc>(context)
                           .add(SelectWeaponEvent(weapon));
@@ -142,31 +146,36 @@ class WeaponScreen extends StatelessWidget {
                           BlocProvider.of<WeaponBloc>(context)
                               .add(RemoveWeaponEvent(weapon.name))
                         }),
-                    backgroundColor: const Color(0xFFFE4A49),
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppTheme.deleteActionPaneBacgroundColor,
+                    foregroundColor: AppTheme.actionPaneForegroundColor,
                     icon: Icons.delete,
                     //label: 'Удалить',
                   ),
                   SlidableAction(
                     onPressed: (((newContext) async =>
                         {update(context, weapon)})),
-                    backgroundColor: Colors.blue.shade200,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppTheme.editActionPaneBackgroundColor,
+                    foregroundColor: AppTheme.actionPaneForegroundColor,
                     icon: Icons.create,
                     //label: 'Исправить',
                   ),
                   SlidableAction(
                     onPressed: (((newContext) async =>
                         {enchant(context, weapon)})),
-                    backgroundColor: Colors.deepPurpleAccent,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppTheme.enchantActionPaneBackgroundColor,
+                    foregroundColor: AppTheme.actionPaneForegroundColor,
                     icon: FontAwesomeIcons.wandMagicSparkles,
                     //label: 'Зачаровать',
                   ),
                 ],
               ),
               child: ListTile(
-                selected: state.weapon == weapon,
+                trailing: state.weapon.name == weapon.name
+                    ? Icon(
+                        Icons.check_circle,
+                        color: Theme.of(context).primaryColor,
+                      )
+                    : const Icon(Icons.check_circle_outline),
                 onTap: () {
                   if (state.weapon != weapon) {
                     BlocProvider.of<WeaponBloc>(context)
@@ -278,9 +287,7 @@ class WeaponScreen extends StatelessWidget {
         builder: (context) => Dialog(
               child: EnchantWeapon(weapon: weapon),
             ));
-    if (result.isNotEmpty) {
-      BlocProvider.of<WeaponBloc>(context)
-          .add(EnchantWeaponEvent(weapon, result));
-    }
+    BlocProvider.of<WeaponBloc>(context)
+        .add(EnchantWeaponEvent(weapon, result));
   }
 }

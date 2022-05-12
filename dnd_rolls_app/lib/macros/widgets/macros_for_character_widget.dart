@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/core/themes/app_theme.dart';
 import 'package:dnd_rolls_app/macros/bloc/macros_bloc.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
@@ -41,18 +42,20 @@ Widget buildMacrosForCharacter(BuildContext context, String characterName) {
                           SlidableAction(
                             onPressed: ((newContext) async => {
                                   BlocProvider.of<MacrosBloc>(context).add(
-                                      RemoveMacrosEvent(macros.name,
-                                          macros.characterName))
+                                      RemoveMacrosEvent(
+                                          macros.name, macros.characterName))
                                 }),
-                            backgroundColor: const Color(0xFFFE4A49),
-                            foregroundColor: Colors.white,
+                            backgroundColor:
+                                AppTheme.deleteActionPaneBacgroundColor,
+                            foregroundColor: AppTheme.actionPaneForegroundColor,
                             icon: Icons.delete,
                           ),
                           SlidableAction(
                             onPressed: (((newContext) async =>
                                 {update(context, macros)})),
-                            backgroundColor: Colors.blue.shade200,
-                            foregroundColor: Colors.white,
+                            backgroundColor:
+                                AppTheme.editActionPaneBackgroundColor,
+                            foregroundColor: AppTheme.actionPaneForegroundColor,
                             icon: Icons.create,
                           ),
                         ],

@@ -1,6 +1,7 @@
 import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
-import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
+import 'package:dnd_rolls_app/core/themes/app_theme.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
@@ -43,84 +44,88 @@ class _UpdateMacrosState extends State<UpdateMacros> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(_dialogHeader),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextFormField(
-            controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Название макроса',
-            ),
-            validator: (value) {
-              if (value != null &&
-                  RepositoryProvider.of<MacrosService>(context)
-                      .getCharacterMacros(widget.characterName!)
-                      .any((element) =>
-                          element.name.toLowerCase() == value.toLowerCase())) {
-                if (widget.macros != null &&
-                    widget.macros!.name.toLowerCase() == value.toLowerCase()) {
-                  return null;
-                } else {
-                  return 'Макрос уже существует';
+    return containerRadialGradienWrap(SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(_dialogHeader),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Название макроса',
+              ),
+              validator: (value) {
+                if (value != null &&
+                    RepositoryProvider.of<MacrosService>(context)
+                        .getCharacterMacros(widget.characterName!)
+                        .any((element) =>
+                            element.name.toLowerCase() ==
+                            value.toLowerCase())) {
+                  if (widget.macros != null &&
+                      widget.macros!.name.toLowerCase() ==
+                          value.toLowerCase()) {
+                    return null;
+                  } else {
+                    return 'Макрос уже существует';
+                  }
                 }
-              }
-              return (value == null || value.isEmpty)
-                  ? 'Поле не должно быть пустым'
-                  : null;
-            },
+                return (value == null || value.isEmpty)
+                    ? 'Поле не должно быть пустым'
+                    : null;
+              },
+            ),
           ),
-        ),
-        buildStrikes(),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              elevatedButtonWrap(
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: const Text(Strings.cancel)),
-              ),
-              elevatedButtonWrap(
-                ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        if (widget.macros != null) {
-                          final result = [
-                            widget.macros!.name,
-                            _nameController.text,
-                            widget.macros!.characterName,
-                            RepositoryProvider.of<MacrosService>(context)
-                                .getMacros(widget.macros!.name,
-                                    widget.macros!.characterName)
-                                .strikes
-                          ];
-                          Navigator.of(context).pop(result);
-                        } else {
-                          final result = [
-                            _nameController.text,
-                            widget.characterName,
-                            strikes
-                          ];
-                          Navigator.of(context).pop(result);
+          buildStrikes(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                elevatedButtonWrap(
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: const Text(Strings.cancel)),
+                ),
+                elevatedButtonWrap(
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          if (widget.macros != null) {
+                            final result = [
+                              widget.macros!.name,
+                              _nameController.text,
+                              widget.macros!.characterName,
+                              RepositoryProvider.of<MacrosService>(context)
+                                  .getMacros(widget.macros!.name,
+                                      widget.macros!.characterName)
+                                  .strikes
+                            ];
+                            Navigator.of(context).pop(result);
+                          } else {
+                            final result = [
+                              _nameController.text,
+                              widget.characterName,
+                              strikes
+                            ];
+                            Navigator.of(context).pop(result);
+                          }
                         }
-                      }
-                    },
-                    child: const Text(Strings.save)),
-              ),
-            ],
-          ),
-        )
-      ]),
-    );
+                      },
+                      child: const Text(Strings.save)),
+                ),
+              ],
+            ),
+          )
+        ]),
+      ),
+    ));
   }
 
   Widget buildStrikes() {
@@ -147,8 +152,9 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                                   strikes.remove(strike);
                                 }))
                               }),
-                          backgroundColor: const Color(0xFFFE4A49),
-                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              AppTheme.deleteActionPaneBacgroundColor,
+                          foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.delete,
                           label: 'Удалить',
                         ),

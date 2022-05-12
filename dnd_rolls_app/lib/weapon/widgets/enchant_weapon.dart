@@ -1,6 +1,7 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
-import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
+import 'package:dnd_rolls_app/core/themes/app_theme.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/model/enchantment.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:dnd_rolls_app/services/enchantment_service.dart';
@@ -44,7 +45,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return containerRadialGradienWrap(SingleChildScrollView(
       child: Column(
         children: [
           Padding(
@@ -72,8 +73,10 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                                   });
                                 }
                               },
-                              backgroundColor: const Color(0xFFFE4A49),
-                              foregroundColor: Colors.white,
+                              backgroundColor:
+                                  AppTheme.deleteActionPaneBacgroundColor,
+                              foregroundColor:
+                                  AppTheme.actionPaneForegroundColor,
                               icon: Icons.delete,
                               label: 'Удалить',
                             ),
@@ -134,7 +137,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
           ),
         ],
       ),
-    );
+    ));
   }
 
   Widget buildForm(String typeOfEnchantment) {
@@ -297,15 +300,18 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                         switch (newValue) {
                           case Strings.crushing:
                             elementalTypeOfDamage = null;
-                            physicalTypeOfDamage = PhysicalTypeOfDamage.crushing;
+                            physicalTypeOfDamage =
+                                PhysicalTypeOfDamage.crushing;
                             break;
                           case Strings.piercing:
                             elementalTypeOfDamage = null;
-                            physicalTypeOfDamage = PhysicalTypeOfDamage.piercing;
+                            physicalTypeOfDamage =
+                                PhysicalTypeOfDamage.piercing;
                             break;
                           case Strings.slashing:
                             elementalTypeOfDamage = null;
-                            physicalTypeOfDamage = PhysicalTypeOfDamage.slashing;
+                            physicalTypeOfDamage =
+                                PhysicalTypeOfDamage.slashing;
                             break;
                           case Strings.acid:
                             physicalTypeOfDamage = null;
@@ -325,27 +331,33 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                             break;
                           case Strings.lightning:
                             physicalTypeOfDamage = null;
-                            elementalTypeOfDamage = ElementalTypeOfDamage.lightning;
+                            elementalTypeOfDamage =
+                                ElementalTypeOfDamage.lightning;
                             break;
                           case Strings.necrotic:
                             physicalTypeOfDamage = null;
-                            elementalTypeOfDamage = ElementalTypeOfDamage.necrotic;
+                            elementalTypeOfDamage =
+                                ElementalTypeOfDamage.necrotic;
                             break;
                           case Strings.poison:
                             physicalTypeOfDamage = null;
-                            elementalTypeOfDamage = ElementalTypeOfDamage.poison;
+                            elementalTypeOfDamage =
+                                ElementalTypeOfDamage.poison;
                             break;
                           case Strings.psychic:
                             physicalTypeOfDamage = null;
-                            elementalTypeOfDamage = ElementalTypeOfDamage.psychic;
+                            elementalTypeOfDamage =
+                                ElementalTypeOfDamage.psychic;
                             break;
                           case Strings.radiant:
                             physicalTypeOfDamage = null;
-                            elementalTypeOfDamage = ElementalTypeOfDamage.radiant;
+                            elementalTypeOfDamage =
+                                ElementalTypeOfDamage.radiant;
                             break;
                           case Strings.thunder:
                             physicalTypeOfDamage = null;
-                            elementalTypeOfDamage = ElementalTypeOfDamage.thunder;
+                            elementalTypeOfDamage =
+                                ElementalTypeOfDamage.thunder;
                             break;
                         }
                       });

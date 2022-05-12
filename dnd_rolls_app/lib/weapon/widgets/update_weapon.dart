@@ -1,6 +1,7 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
-import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
+import 'package:dnd_rolls_app/core/themes/app_theme.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:dnd_rolls_app/services/weapon_service.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,191 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    if (widget.weapon == null) {
+      return containerRadialGradienWrap(buildCreateWeaponForm());
+    } else {
+      return containerRadialGradienWrap(buildEditWeaponForm());
+    }
+  }
+
+  Widget buildEditWeaponForm() {
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(_dialogHeader),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.55,
+                      child: TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(MdiIcons.swordCross),
+                          labelText: 'Название оружия',
+                        ),
+                        validator: (value) {
+                          if (value != null &&
+                              RepositoryProvider.of<WeaponService>(context)
+                                  .getWeapons()
+                                  .any((element) =>
+                                      element.name.toLowerCase() ==
+                                      value.toLowerCase())) {
+                            if (widget.weapon != null &&
+                                widget.weapon!.name.toLowerCase() ==
+                                    value.toLowerCase()) {
+                              return null;
+                            } else {
+                              return 'Оружие уже существует';
+                            }
+                          }
+                          return (value == null || value.isEmpty)
+                              ? 'Поле не должно быть пустым'
+                              : null;
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: () {
+                            decrementDamage(_damage);
+                          },
+                          mini: true,
+                          child: const Icon(Icons.arrow_back),
+                        ),
+                        buildDamageWidget(_damage),
+                        FloatingActionButton(
+                          onPressed: () {
+                            incrementDamage(_damage);
+                          },
+                          mini: true,
+                          child: const Icon(Icons.arrow_forward),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: () {
+                            decrementCharacteristic(_characteristic);
+                          },
+                          mini: true,
+                          child: const Icon(Icons.arrow_back),
+                        ),
+                        buildCharacteristicWidget(_characteristic),
+                        FloatingActionButton(
+                          onPressed: () {
+                            incrementCharacteristic(_characteristic);
+                          },
+                          mini: true,
+                          child: const Icon(Icons.arrow_forward),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FloatingActionButton(
+                        onPressed: (() {
+                          decrementTypeOfDamage(_typeOfDamage);
+                        }),
+                        mini: true,
+                        child: const Icon(Icons.arrow_back),
+                      ),
+                      buildTypeOfDamageWidget(_typeOfDamage),
+                      FloatingActionButton(
+                          onPressed: (() {
+                            incrementTypeOfDamage(_typeOfDamage);
+                          }),
+                          mini: true,
+                          child: const Icon(Icons.arrow_forward)),
+                    ],
+                  ),
+                ))
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  elevatedButtonWrap(
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: const Text(Strings.cancel),
+                    ),
+                  ),
+                  elevatedButtonWrap(
+                    ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            if (widget.weapon == null) {
+                              final result = [
+                                _nameController.text,
+                                _damage,
+                                _characteristic,
+                                _typeOfDamage
+                              ];
+                              Navigator.of(context).pop(result);
+                            } else {
+                              final result = [
+                                widget.weapon!.name,
+                                _nameController.text,
+                                _damage,
+                                _characteristic,
+                                _typeOfDamage,
+                                widget.weapon!.enchantments
+                              ];
+                              Navigator.of(context).pop(result);
+                            }
+                          }
+                        },
+                        child: const Text(Strings.save)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildCreateWeaponForm() {
+    return ListView(
+      primary: false,
+      shrinkWrap: true,
       children: [
         Form(
           key: _formKey,
@@ -210,75 +395,84 @@ class _UpdateWeaponState extends State<UpdateWeapon> {
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-        DropdownButton<String>(
-          value: dropdownValue,
-          icon: const Icon(Icons.arrow_downward),
-          items: <String>[
-            Strings.chooseStandartWeapon,
-            Strings.simpleMelee,
-            Strings.simpleRanged,
-            Strings.militaryMelee,
-            Strings.militaryRanged
-          ].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownValue = newValue!;
-              switch (newValue) {
-                case Strings.simpleMelee:
-                  RepositoryProvider.of<WeaponService>(context)
-                      .fillSimpleMeleeWeapons();
-                  seedWeapons = RepositoryProvider.of<WeaponService>(context)
-                      .getSeedWeapons();
-                  break;
-                case Strings.simpleRanged:
-                  RepositoryProvider.of<WeaponService>(context)
-                      .fillSimpleRangedWeapons();
-                  seedWeapons = RepositoryProvider.of<WeaponService>(context)
-                      .getSeedWeapons();
-                  break;
-                case Strings.militaryMelee:
-                  RepositoryProvider.of<WeaponService>(context)
-                      .fillMilitaryMeleeWeapons();
-                  seedWeapons = RepositoryProvider.of<WeaponService>(context)
-                      .getSeedWeapons();
-                  break;
-                case Strings.militaryRanged:
-                  RepositoryProvider.of<WeaponService>(context)
-                      .fillMilitaryRangedWeapons();
-                  seedWeapons = RepositoryProvider.of<WeaponService>(context)
-                      .getSeedWeapons();
-                  break;
-                default:
-                  seedWeapons.clear();
-              }
-            });
-          },
-        ),
-        Expanded(
-          child: ListView(
-            children: [
-              ...seedWeapons.map(
-                (weapon) => ListTile(
-                  title: Text(
-                    weapon.name,
-                    textAlign: TextAlign.center,
-                  ),
-                  selected: _nameController.text == weapon.name,
-                  onTap: () {
-                    setState(() {
-                      _nameController.text = weapon.name;
-                      _damage = weapon.damage;
-                      _characteristic = weapon.mainCharacteristic;
-                      _typeOfDamage = weapon.typeOfDamage;
-                    });
+              DropdownButton<String>(
+                value: dropdownValue,
+                icon: const Icon(Icons.arrow_downward),
+                items: <String>[
+                  Strings.chooseStandartWeapon,
+                  Strings.simpleMelee,
+                  Strings.simpleRanged,
+                  Strings.militaryMelee,
+                  Strings.militaryRanged
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                    switch (newValue) {
+                      case Strings.simpleMelee:
+                        RepositoryProvider.of<WeaponService>(context)
+                            .fillSimpleMeleeWeapons();
+                        seedWeapons =
+                            RepositoryProvider.of<WeaponService>(context)
+                                .getSeedWeapons();
+                        break;
+                      case Strings.simpleRanged:
+                        RepositoryProvider.of<WeaponService>(context)
+                            .fillSimpleRangedWeapons();
+                        seedWeapons =
+                            RepositoryProvider.of<WeaponService>(context)
+                                .getSeedWeapons();
+                        break;
+                      case Strings.militaryMelee:
+                        RepositoryProvider.of<WeaponService>(context)
+                            .fillMilitaryMeleeWeapons();
+                        seedWeapons =
+                            RepositoryProvider.of<WeaponService>(context)
+                                .getSeedWeapons();
+                        break;
+                      case Strings.militaryRanged:
+                        RepositoryProvider.of<WeaponService>(context)
+                            .fillMilitaryRangedWeapons();
+                        seedWeapons =
+                            RepositoryProvider.of<WeaponService>(context)
+                                .getSeedWeapons();
+                        break;
+                      default:
+                        seedWeapons.clear();
+                    }
+                  });
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: seedWeapons.length,
+                  itemBuilder: (context, index) {
+                    return listTileWrap(
+                      ListTile(
+                        title: Text(
+                          seedWeapons[index].name,
+                          textAlign: TextAlign.center,
+                        ),
+                        selected:
+                            _nameController.text == seedWeapons[index].name,
+                        onTap: () {
+                          setState(() {
+                            _nameController.text = seedWeapons[index].name;
+                            _damage = seedWeapons[index].damage;
+                            _characteristic =
+                                seedWeapons[index].mainCharacteristic;
+                            _typeOfDamage = seedWeapons[index].typeOfDamage;
+                          });
+                        },
+                      ),
+                    );
                   },
                 ),
               ),

@@ -1,5 +1,5 @@
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
-import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/macros/characters_macros_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -61,9 +61,10 @@ Widget buildSelectedBoth(BuildContext context, SelectedBothState state) {
                                   itemBuilder: (context, index) {
                                     return ListTile(
                                       trailing: index == state.selectedIndex
-                                          ? const Icon(
+                                          ? Icon(
                                               Icons.check_circle,
-                                              color: Colors.green,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             )
                                           : null,
                                       onTap: () {

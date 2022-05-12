@@ -1,3 +1,4 @@
+import 'package:dnd_rolls_app/core/themes/app_theme.dart';
 import 'package:dnd_rolls_app/presentation/router/app_router.dart';
 import 'package:dnd_rolls_app/services/battle_service.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
@@ -8,6 +9,7 @@ import 'package:dnd_rolls_app/services/strike_service.dart';
 import 'package:dnd_rolls_app/services/weapon_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -36,10 +38,16 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'DND',
         onGenerateRoute: appRouter.onGenerateRoutes,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+        theme: AppTheme.lightTheme,
+
+        /* theme: ThemeData(
+          //const Color.fromARGB(255, 253, 238, 213)
+          primarySwatch: Colors.orange,
+          textTheme: GoogleFonts.aliceTextTheme(),
+          
+          scaffoldBackgroundColor: const Color.fromARGB(255, 253, 238, 213),
           visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
+        ), */
       ),
     );
   }

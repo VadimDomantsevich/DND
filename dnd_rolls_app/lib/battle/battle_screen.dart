@@ -9,6 +9,7 @@ import 'package:dnd_rolls_app/battle/widgets/everyone_attacked_widget.dart';
 import 'package:dnd_rolls_app/battle/widgets/selected_both_widget.dart';
 import 'package:dnd_rolls_app/battle/widgets/selected_enemy_widget.dart';
 import 'package:dnd_rolls_app/battle/widgets/selected_macros_widget.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/services/battle_service.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:flutter/material.dart';
@@ -49,28 +50,29 @@ class _BattleScreenState extends State<BattleScreen> {
             }
           }
         }, builder: ((context, state) {
+          Widget widget = Container();
           if (state is BattleInitial) {
-            return buildBattleInitial(context, state);
+            widget = buildBattleInitial(context, state);
           } else if (state is EnemiesLoadedState) {
-            return buildEnemiesLoaded(context, state);
+            widget = buildEnemiesLoaded(context, state);
           } else if (state is CharactersLoadedState) {
-            return buildCharactersLoaded(context, state);
+            widget = buildCharactersLoaded(context, state);
           } else if (state is BothLoadedState) {
-            return buildBothLoaded(context, state);
+            widget = buildBothLoaded(context, state);
           } else if (state is BattleIsOnState) {
-            return buildBattleIsOn(context, state);
+            widget = buildBattleIsOn(context, state);
           } else if (state is SelectedEnemyState) {
-            return buildSelectedEnemy(context, state);
+            widget = buildSelectedEnemy(context, state);
           } else if (state is SelectedMacrosState) {
-            return buildSelectedMacros(context, state);
+            widget = buildSelectedMacros(context, state);
           } else if (state is SelectedBothState) {
-            return buildSelectedBoth(context, state);
+            widget = buildSelectedBoth(context, state);
           } else if (state is EveryoneAttackedState) {
-            return buildEveryoneAttacked(context, state);
+            widget = buildEveryoneAttacked(context, state);
           } else if (state is BattleIsOverState) {
-            return buildBattleIsOver(context, state);
+            widget = buildBattleIsOver(context, state);
           }
-          return Container();
+          return containerRadialGradienWrap(widget);
         })),
       ),
     );

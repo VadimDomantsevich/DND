@@ -60,9 +60,10 @@ Widget buildSelectedEnemy(BuildContext context, SelectedEnemyState state) {
                                   itemBuilder: (context, index) {
                                     return ListTile(
                                       trailing: index == state.selectedIndex
-                                          ? const Icon(
+                                          ? Icon(
                                               Icons.check_circle,
-                                              color: Colors.green,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             )
                                           : null,
                                       onTap: () {

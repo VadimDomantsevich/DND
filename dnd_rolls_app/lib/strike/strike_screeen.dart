@@ -1,5 +1,5 @@
 import 'package:dnd_rolls_app/core/constants/strings.dart';
-import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:dnd_rolls_app/services/strike_service.dart';
@@ -35,7 +35,7 @@ class _StrikeScreenState extends State<StrikeScreen> {
       child: BlocBuilder<StrikeBloc, StrikeState>(
         builder: (context, state) {
           if (state is StrikeLoadedState) {
-            return Column(
+            return containerRadialGradienWrap(Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -57,9 +57,9 @@ class _StrikeScreenState extends State<StrikeScreen> {
                   ],
                 )
               ],
-            );
+            ));
           } else if (state is SelectedStrikeState) {
-            return Column(
+            return containerRadialGradienWrap(Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -95,7 +95,7 @@ class _StrikeScreenState extends State<StrikeScreen> {
                   ],
                 ),
               ],
-            );
+            ));
           } else {
             return Container();
           }

@@ -1,6 +1,7 @@
 import 'package:dnd_rolls_app/character/bloc/character_bloc.dart'
     as character_bloc;
 import 'package:dnd_rolls_app/core/constants/strings.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/macros/bloc/macros_bloc.dart';
 import 'package:dnd_rolls_app/macros/widgets/update_macros.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
@@ -31,7 +32,7 @@ class MacrosScreen extends StatelessWidget {
             character_bloc.CharacterState>(
           builder: ((context, state) {
             if (state is character_bloc.CharactersNamesLoadedState) {
-              return ListView(
+              return containerRadialGradienWrap(ListView(
                 shrinkWrap: true,
                 children: [
                   ...state.names.map(
@@ -47,7 +48,7 @@ class MacrosScreen extends StatelessWidget {
                     },
                   ),
                 ],
-              );
+              ));
             }
             return Container();
           }),

@@ -1,7 +1,8 @@
 import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
 import 'package:dnd_rolls_app/character/widgets/update_character.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
-import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
+import 'package:dnd_rolls_app/core/themes/app_theme.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
@@ -45,7 +46,7 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
             }
           },
           builder: ((context, state) {
-            return buildListView(context, state);
+            return containerRadialGradienWrap(buildListView(context, state));
           }),
         ),
       ),
@@ -91,16 +92,18 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                                 BlocProvider.of<CharacterBloc>(context)
                                     .add(RemoveCharacterEvent(character.name))
                               }),
-                          backgroundColor: const Color(0xFFFE4A49),
-                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              AppTheme.deleteActionPaneBacgroundColor,
+                          foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.delete,
                           label: 'Удалить',
                         ),
                         SlidableAction(
                           onPressed: (((newContext) async =>
                               {update(context, character)})),
-                          backgroundColor: Colors.blue.shade200,
-                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              AppTheme.editActionPaneBackgroundColor,
+                          foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.create,
                           label: 'Исправить',
                         ),
@@ -154,61 +157,67 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
         children: [
           ...state.characters.map(
             (character) {
-              return Slidable(
-                key: const ValueKey(0),
-                startActionPane: ActionPane(
-                  motion: const ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: ((newContext) async => {
-                            BlocProvider.of<CharacterBloc>(context)
-                                .add(RemoveCharacterEvent(character.name))
-                          }),
-                      backgroundColor: const Color(0xFFFE4A49),
-                      foregroundColor: Colors.white,
-                      icon: Icons.delete,
-                      label: 'Удалить',
-                    ),
-                    SlidableAction(
-                      onPressed: (((newContext) async =>
-                          {update(context, character)})),
-                      backgroundColor: Colors.blue.shade200,
-                      foregroundColor: Colors.white,
-                      icon: Icons.create,
-                      label: 'Исправить',
-                    ),
-                  ],
-                ),
-                child: ListTile(
-                  trailing: selectedCharacters
-                          .map((e) => e.name)
-                          .where((element) => element == character.name)
-                          .isNotEmpty
-                      ? const Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                        )
-                      : const Icon(
-                          Icons.check_circle_outline,
-                          color: Colors.grey,
+              return Column(
+                children: [
+                  Slidable(
+                    key: const ValueKey(0),
+                    startActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: ((newContext) async => {
+                                BlocProvider.of<CharacterBloc>(context)
+                                    .add(RemoveCharacterEvent(character.name))
+                              }),
+                          backgroundColor:
+                              AppTheme.deleteActionPaneBacgroundColor,
+                          foregroundColor: AppTheme.actionPaneForegroundColor,
+                          icon: Icons.delete,
+                          label: 'Удалить',
                         ),
-                  onTap: () {
-                    if (selectedCharacters.contains(character)) {
-                      setState(() {
-                        selectedCharacters.remove(character);
-                      });
-                      BlocProvider.of<CharacterBloc>(context).add(
-                          UnselectCharacterEvent(
-                              character, selectedCharacters));
-                    } else {
-                      setState(() {});
-                      BlocProvider.of<CharacterBloc>(context).add(
-                          SelectCharacterEvent(character, selectedCharacters));
-                    }
-                  },
-                  title: Text(
-                      '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}'),
-                ),
+                        SlidableAction(
+                          onPressed: (((newContext) async =>
+                              {update(context, character)})),
+                          backgroundColor:
+                              AppTheme.editActionPaneBackgroundColor,
+                          foregroundColor: AppTheme.actionPaneForegroundColor,
+                          icon: Icons.create,
+                          label: 'Исправить',
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      trailing: selectedCharacters
+                              .map((e) => e.name)
+                              .where((element) => element == character.name)
+                              .isNotEmpty
+                          ? Icon(
+                              Icons.check_circle,
+                              color: Theme.of(context).primaryColor,
+                            )
+                          : const Icon(
+                              Icons.check_circle_outline,
+                            ),
+                      onTap: () {
+                        if (selectedCharacters.contains(character)) {
+                          setState(() {
+                            selectedCharacters.remove(character);
+                          });
+                          BlocProvider.of<CharacterBloc>(context).add(
+                              UnselectCharacterEvent(
+                                  character, selectedCharacters));
+                        } else {
+                          setState(() {});
+                          BlocProvider.of<CharacterBloc>(context).add(
+                              SelectCharacterEvent(
+                                  character, selectedCharacters));
+                        }
+                      },
+                      title: Text(
+                          '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}'),
+                    ),
+                  ),
+                ],
               );
             },
           ),

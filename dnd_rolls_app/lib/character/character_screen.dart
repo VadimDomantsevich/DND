@@ -1,12 +1,15 @@
 import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
 import 'package:dnd_rolls_app/character/widgets/update_character.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
+import 'package:dnd_rolls_app/core/themes/app_theme.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CharactersScreen extends StatelessWidget {
   const CharactersScreen({Key? key}) : super(key: key);
@@ -17,7 +20,7 @@ class CharactersScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           Strings.charactersScreenTitle,
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).copyWith().textTheme.headline4,
         ),
       ),
       body: BlocProvider(
@@ -40,7 +43,7 @@ class CharactersScreen extends StatelessWidget {
           },
           builder: ((context, state) {
             if (state is CharacterLoadedState) {
-              return ListView(
+              return containerRadialGradienWrap(ListView(
                 children: [
                   ...state.characters.map(
                     (character) {
@@ -54,16 +57,20 @@ class CharactersScreen extends StatelessWidget {
                                     BlocProvider.of<CharacterBloc>(context).add(
                                         RemoveCharacterEvent(character.name))
                                   }),
-                              backgroundColor: const Color(0xFFFE4A49),
-                              foregroundColor: Colors.white,
+                              backgroundColor:
+                                  AppTheme.deleteActionPaneBacgroundColor,
+                              foregroundColor:
+                                  AppTheme.actionPaneForegroundColor,
                               icon: Icons.delete,
                               label: 'Удалить',
                             ),
                             SlidableAction(
                               onPressed: (((newContext) async =>
                                   {update(context, character)})),
-                              backgroundColor: Colors.blue.shade200,
-                              foregroundColor: Colors.white,
+                              backgroundColor:
+                                  AppTheme.editActionPaneBackgroundColor,
+                              foregroundColor:
+                                  AppTheme.actionPaneForegroundColor,
                               icon: Icons.create,
                               label: 'Исправить',
                             ),
@@ -100,7 +107,7 @@ class CharactersScreen extends StatelessWidget {
                     },
                   ),
                 ],
-              );
+              ));
             }
             return Container();
           }),

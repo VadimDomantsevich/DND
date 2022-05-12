@@ -1,4 +1,6 @@
 import 'package:dnd_rolls_app/battle/bloc/battle_bloc.dart';
+import 'package:dnd_rolls_app/core/themes/app_theme.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/macros/bloc/macros_bloc.dart';
 import 'package:dnd_rolls_app/model/macros.dart';
 import 'package:dnd_rolls_app/services/battle_service.dart';
@@ -30,125 +32,132 @@ Widget buildSelectableMacrosForCharacter(
       },
       builder: ((context, state) {
         if (state is MacrosLoadedState) {
-          return ListView(shrinkWrap: true, children: [
-            ...state.macros.map(
-              (macros) {
-                if (state.macros.isNotEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 2.0),
-                    child: Slidable(
-                      key: const ValueKey(0),
-                      startActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: ((newContext) async => {
-                                  BlocProvider.of<MacrosBloc>(context).add(
-                                      RemoveMacrosEvent(
-                                          macros.name, macros.characterName))
-                                }),
-                            backgroundColor: const Color(0xFFFE4A49),
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                          ),
-                          SlidableAction(
-                            onPressed: (((newContext) async =>
-                                {update(context, macros)})),
-                            backgroundColor: Colors.blue.shade200,
-                            foregroundColor: Colors.white,
-                            icon: Icons.create,
-                          ),
-                        ],
-                      ),
-                      child: BlocBuilder<BattleBloc, BattleState>(
-                        builder: (context, state) {
-                          if (RepositoryProvider.of<BattleService>(context)
-                              .battle
-                              .whoAttacked
-                              .map((e) => e.name)
-                              .contains(characterName)) {
-                            return ListTile(
-                              title: Text(macros.name),
-                            );
-                          }
-                          if (state is SelectedMacrosState) {
-                            return ListTile(
-                              trailing: state.selectedMacros == macros
-                                  ? const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                    )
-                                  : null,
-                              onTap: () {
-                                BlocProvider.of<BattleBloc>(context)
-                                    .add(SelectMacrosEvent(macros));
-                              },
-                              title: Text(macros.name),
-                            );
-                          } else if (state is SelectedEnemyState) {
-                            return ListTile(
-                              onTap: () {
-                                BlocProvider.of<BattleBloc>(context).add(
-                                    SelectMacrosEvent(macros,
-                                        selectedEnemy: state.selectedEnemy,
-                                        selectedIndex: state.selectedIndex));
-                              },
-                              title: Text(macros.name),
-                            );
-                          } else if (state is SelectedBothState) {
-                            return ListTile(
-                              trailing: state.selectedMacros == macros
-                                  ? const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                    )
-                                  : null,
-                              onTap: () {
-                                BlocProvider.of<BattleBloc>(context).add(
-                                    SelectMacrosEvent(macros,
-                                        selectedEnemy: state.selectedEnemy,
-                                        selectedIndex: state.selectedIndex));
-                              },
-                              title: Text(macros.name),
-                            );
-                          } else {
-                            return ListTile(
-                              onTap: () {
-                                BlocProvider.of<BattleBloc>(context)
-                                    .add(SelectMacrosEvent(macros));
-                              },
-                              title: Text(macros.name),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            ),
-            ListTile(
-              title: const Text('Создать новый макрос'),
-              trailing: const Icon(Icons.add_box_outlined),
-              onTap: () async {
-                List<dynamic> result = await showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        child: UpdateMacros(
-                          characterName: characterName,
+          return ListView(
+            shrinkWrap: true,
+            children: [
+              ...state.macros.map(
+                (macros) {
+                  if (state.macros.isNotEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 2.0),
+                      child: Slidable(
+                        key: const ValueKey(0),
+                        startActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: ((newContext) async => {
+                                    BlocProvider.of<MacrosBloc>(context).add(
+                                        RemoveMacrosEvent(
+                                            macros.name, macros.characterName))
+                                  }),
+                              backgroundColor:
+                                  AppTheme.deleteActionPaneBacgroundColor,
+                              foregroundColor:
+                                  AppTheme.actionPaneForegroundColor,
+                              icon: Icons.delete,
+                            ),
+                            SlidableAction(
+                              onPressed: (((newContext) async =>
+                                  {update(context, macros)})),
+                              backgroundColor:
+                                  AppTheme.editActionPaneBackgroundColor,
+                              foregroundColor:
+                                  AppTheme.actionPaneForegroundColor,
+                              icon: Icons.create,
+                            ),
+                          ],
                         ),
-                      );
-                    });
-                if (result.isNotEmpty) {
-                  BlocProvider.of<MacrosBloc>(context)
-                      .add(AddMacrosEvent(result[0], result[1], result[2]));
-                }
-              },
-            )
-          ]);
+                        child: BlocBuilder<BattleBloc, BattleState>(
+                          builder: (context, state) {
+                            if (RepositoryProvider.of<BattleService>(context)
+                                .battle
+                                .whoAttacked
+                                .map((e) => e.name)
+                                .contains(characterName)) {
+                              return ListTile(
+                                title: Text(macros.name),
+                              );
+                            }
+                            if (state is SelectedMacrosState) {
+                              return ListTile(
+                                trailing: state.selectedMacros == macros
+                                    ? Icon(
+                                        Icons.check_circle,
+                                        color: Theme.of(context).primaryColor,
+                                      )
+                                    : null,
+                                onTap: () {
+                                  BlocProvider.of<BattleBloc>(context)
+                                      .add(SelectMacrosEvent(macros));
+                                },
+                                title: Text(macros.name),
+                              );
+                            } else if (state is SelectedEnemyState) {
+                              return ListTile(
+                                onTap: () {
+                                  BlocProvider.of<BattleBloc>(context).add(
+                                      SelectMacrosEvent(macros,
+                                          selectedEnemy: state.selectedEnemy,
+                                          selectedIndex: state.selectedIndex));
+                                },
+                                title: Text(macros.name),
+                              );
+                            } else if (state is SelectedBothState) {
+                              return ListTile(
+                                trailing: state.selectedMacros == macros
+                                    ? Icon(
+                                        Icons.check_circle,
+                                        color: Theme.of(context).primaryColor,
+                                      )
+                                    : null,
+                                onTap: () {
+                                  BlocProvider.of<BattleBloc>(context).add(
+                                      SelectMacrosEvent(macros,
+                                          selectedEnemy: state.selectedEnemy,
+                                          selectedIndex: state.selectedIndex));
+                                },
+                                title: Text(macros.name),
+                              );
+                            } else {
+                              return ListTile(
+                                onTap: () {
+                                  BlocProvider.of<BattleBloc>(context)
+                                      .add(SelectMacrosEvent(macros));
+                                },
+                                title: Text(macros.name),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
+              ListTile(
+                title: const Text('Создать новый макрос'),
+                trailing: const Icon(Icons.add_box_outlined),
+                onTap: () async {
+                  List<dynamic> result = await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          child: UpdateMacros(
+                            characterName: characterName,
+                          ),
+                        );
+                      });
+                  if (result.isNotEmpty) {
+                    BlocProvider.of<MacrosBloc>(context)
+                        .add(AddMacrosEvent(result[0], result[1], result[2]));
+                  }
+                },
+              )
+            ],
+          );
         } else {
           return Container();
         }

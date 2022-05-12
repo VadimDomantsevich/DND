@@ -1,6 +1,6 @@
 import 'package:dnd_rolls_app/core/constants/enums.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
-import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:flutter/material.dart';
@@ -46,129 +46,133 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text(_dialogHeader),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: 230,
-                    child: TextFormField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.person),
-                        labelText: 'Имя персонажа',
-                      ),
-                      validator: (value) {
-                        if (value != null &&
-                            RepositoryProvider.of<CharacterService>(context)
-                                .getCharacters()
-                                .any((element) =>
-                                    element.name.toLowerCase() ==
-                                    value.toLowerCase())) {
-                          if (widget.character != null &&
-                              widget.character!.name.toLowerCase() ==
-                                  value.toLowerCase()) {
-                            return null;
-                          } else {
-                            return 'Персонаж уже существует';
-                          }
-                        }
-                        return (value == null || value.isEmpty)
-                            ? 'Поле не должно быть пустым'
-                            : null;
-                      },
-                    ),
-                  ),
-                  FloatingActionButton(
-                    mini: true,
-                    onPressed: () {
-                      decrementSkillBonus(_skillBonusValue);
-                    },
-                    tooltip: 'Уменьшить',
-                    child: const Icon(Icons.remove),
-                  ),
-                  Column(
+    return SingleChildScrollView(
+      child: containerRadialGradienWrap(
+        Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(_dialogHeader),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Бонус'),
-                      Text('$_skillBonusValue'),
-                    ],
-                  ),
-                  FloatingActionButton(
-                    mini: true,
-                    onPressed: () {
-                      incrementSkillBonus(_skillBonusValue);
-                    },
-                    tooltip: 'Увеличить',
-                    child: const Icon(Icons.add),
-                  ),
-                ]),
-          ),
-          buildCharacteristic(CharacteristicsEnum.strength),
-          buildCharacteristic(CharacteristicsEnum.dexterity),
-          buildCharacteristic(CharacteristicsEnum.constitution),
-          buildCharacteristic(CharacteristicsEnum.intelligence),
-          buildCharacteristic(CharacteristicsEnum.wisdom),
-          buildCharacteristic(CharacteristicsEnum.charisma),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                elevatedButtonWrap(
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: const Text(Strings.cancel),
-                  ),
+                      SizedBox(
+                        width: 230,
+                        child: TextFormField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.person),
+                            labelText: 'Имя персонажа',
+                          ),
+                          validator: (value) {
+                            if (value != null &&
+                                RepositoryProvider.of<CharacterService>(context)
+                                    .getCharacters()
+                                    .any((element) =>
+                                        element.name.toLowerCase() ==
+                                        value.toLowerCase())) {
+                              if (widget.character != null &&
+                                  widget.character!.name.toLowerCase() ==
+                                      value.toLowerCase()) {
+                                return null;
+                              } else {
+                                return 'Персонаж уже существует';
+                              }
+                            }
+                            return (value == null || value.isEmpty)
+                                ? 'Поле не должно быть пустым'
+                                : null;
+                          },
+                        ),
+                      ),
+                      FloatingActionButton(
+                        mini: true,
+                        onPressed: () {
+                          decrementSkillBonus(_skillBonusValue);
+                        },
+                        tooltip: 'Уменьшить',
+                        child: const Icon(Icons.remove),
+                      ),
+                      Column(
+                        children: [
+                          const Text('Бонус'),
+                          Text('$_skillBonusValue'),
+                        ],
+                      ),
+                      FloatingActionButton(
+                        mini: true,
+                        onPressed: () {
+                          incrementSkillBonus(_skillBonusValue);
+                        },
+                        tooltip: 'Увеличить',
+                        child: const Icon(Icons.add),
+                      ),
+                    ]),
+              ),
+              buildCharacteristic(CharacteristicsEnum.strength),
+              buildCharacteristic(CharacteristicsEnum.dexterity),
+              buildCharacteristic(CharacteristicsEnum.constitution),
+              buildCharacteristic(CharacteristicsEnum.intelligence),
+              buildCharacteristic(CharacteristicsEnum.wisdom),
+              buildCharacteristic(CharacteristicsEnum.charisma),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    elevatedButtonWrap(
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                        child: const Text(Strings.cancel),
+                      ),
+                    ),
+                    elevatedButtonWrap(
+                      ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (widget.character != null) {
+                                final result = [
+                                  widget.character!.name,
+                                  _nameController.text,
+                                  _skillBonusValue,
+                                  _strengthValue,
+                                  _dexterityValue,
+                                  _constitutionValue,
+                                  _intelligenceValue,
+                                  _wisdomValue,
+                                  _charismaValue
+                                ];
+                                Navigator.of(context).pop(result);
+                              } else {
+                                final result = [
+                                  _nameController.text,
+                                  _skillBonusValue,
+                                  _strengthValue,
+                                  _dexterityValue,
+                                  _constitutionValue,
+                                  _intelligenceValue,
+                                  _wisdomValue,
+                                  _charismaValue
+                                ];
+                                Navigator.of(context).pop(result);
+                              }
+                            }
+                          },
+                          child: const Text(Strings.save)),
+                    ),
+                  ],
                 ),
-                elevatedButtonWrap(
-                  ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          if (widget.character != null) {
-                            final result = [
-                              widget.character!.name,
-                              _nameController.text,
-                              _skillBonusValue,
-                              _strengthValue,
-                              _dexterityValue,
-                              _constitutionValue,
-                              _intelligenceValue,
-                              _wisdomValue,
-                              _charismaValue
-                            ];
-                            Navigator.of(context).pop(result);
-                          } else {
-                            final result = [
-                              _nameController.text,
-                              _skillBonusValue,
-                              _strengthValue,
-                              _dexterityValue,
-                              _constitutionValue,
-                              _intelligenceValue,
-                              _wisdomValue,
-                              _charismaValue
-                            ];
-                            Navigator.of(context).pop(result);
-                          }
-                        }
-                      },
-                      child: const Text(Strings.save)),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

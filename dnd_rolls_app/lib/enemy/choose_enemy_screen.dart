@@ -1,5 +1,6 @@
 import 'package:dnd_rolls_app/core/constants/strings.dart';
-import 'package:dnd_rolls_app/core/widgets/elevated_button_wrap.dart';
+import 'package:dnd_rolls_app/core/themes/app_theme.dart';
+import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/enemy/bloc/enemy_bloc.dart';
 import 'package:dnd_rolls_app/enemy/widgets/update_enemy.dart';
 import 'package:dnd_rolls_app/model/enemy.dart';
@@ -21,7 +22,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Выбор противников',
+          'Противники',
           style: Theme.of(context).textTheme.headline4,
         ),
       ),
@@ -43,7 +44,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
             }
           },
           builder: ((context, state) {
-            return buildListView(context, state);
+            return containerRadialGradienWrap(buildListView(context, state));
           }),
         ),
       ),
@@ -59,47 +60,54 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
         child: ListView(
           children: [
             ...state.enemies.map(
-              (enemy) => Slidable(
-                key: const ValueKey(1),
-                startActionPane: ActionPane(
-                  motion: const ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: ((newContext) async => {
-                            BlocProvider.of<EnemyBloc>(context)
-                                .add(RemoveEnemyEvent(enemy.name))
-                          }),
-                      backgroundColor: const Color(0xFFFE4A49),
-                      foregroundColor: Colors.white,
-                      icon: Icons.delete,
-                      label: 'Удалить',
+              (enemy) => Column(
+                children: [
+                  Slidable(
+                    key: const ValueKey(1),
+                    startActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: ((newContext) async => {
+                                BlocProvider.of<EnemyBloc>(context)
+                                    .add(RemoveEnemyEvent(enemy.name))
+                              }),
+                          backgroundColor: AppTheme.deleteActionPaneBacgroundColor,
+                          foregroundColor: AppTheme.actionPaneForegroundColor,
+                          icon: Icons.delete,
+                          label: 'Удалить',
+                        ),
+                        SlidableAction(
+                          onPressed: (((newContext) async =>
+                              {update(context, enemy)})),
+                          backgroundColor: AppTheme.editActionPaneBackgroundColor,
+                          foregroundColor: AppTheme.actionPaneForegroundColor,
+                          icon: Icons.create,
+                          label: 'Исправить',
+                        ),
+                      ],
                     ),
-                    SlidableAction(
-                      onPressed: (((newContext) async =>
-                          {update(context, enemy)})),
-                      backgroundColor: Colors.blue.shade200,
-                      foregroundColor: Colors.white,
-                      icon: Icons.create,
-                      label: 'Исправить',
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: ListTile(
+                            trailing: const Icon(
+                              Icons.check_circle_outline,
+                            ),
+                            onTap: () {
+                              BlocProvider.of<EnemyBloc>(context).add(
+                                  SelectEnemyEvent(enemy, selectedEnemies,
+                                      selectedEnemiesCount));
+                            },
+                            title: Text(
+                                '${enemy.name} ${enemy.health} ${enemy.armorClass}'),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  child: ListTile(
-                    trailing: const Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.grey,
-                    ),
-                    onTap: () {
-                      BlocProvider.of<EnemyBloc>(context).add(
-                          SelectEnemyEvent(enemy, selectedEnemies,
-                              selectedEnemiesCount));
-                    },
-                    title: Text(
-                        '${enemy.name} ${enemy.health} ${enemy.armorClass}'),
                   ),
-                ),
+                ],
               ),
             ),
             ListTile(
@@ -140,16 +148,18 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                                 BlocProvider.of<EnemyBloc>(context)
                                     .add(RemoveEnemyEvent(enemy.name))
                               }),
-                          backgroundColor: const Color(0xFFFE4A49),
-                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              AppTheme.deleteActionPaneBacgroundColor,
+                          foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.delete,
                           label: 'Удалить',
                         ),
                         SlidableAction(
                           onPressed: (((newContext) async =>
                               {update(context, enemy)})),
-                          backgroundColor: Colors.blue.shade200,
-                          foregroundColor: Colors.white,
+                          backgroundColor:
+                              AppTheme.editActionPaneBackgroundColor,
+                          foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.create,
                           label: 'Исправить',
                         ),
@@ -164,13 +174,12 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                                     .map((e) => e.name)
                                     .where((element) => element == enemy.name)
                                     .isNotEmpty
-                                ? const Icon(
+                                ? Icon(
                                     Icons.check_circle,
-                                    color: Colors.green,
+                                    color: Theme.of(context).primaryColor,
                                   )
                                 : const Icon(
                                     Icons.check_circle_outline,
-                                    color: Colors.grey,
                                   ),
                             onTap: () {
                               if (selectedEnemies.contains(enemy)) {
