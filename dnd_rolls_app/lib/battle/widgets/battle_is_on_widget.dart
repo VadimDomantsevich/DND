@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 Widget buildBattleIsOn(BuildContext context, BattleIsOnState state) {
   final ScrollController _controller = ScrollController();
 
-  SchedulerBinding.instance?.addPostFrameCallback((_) {
+  SchedulerBinding.instance.addPostFrameCallback((_) {
     _controller.jumpTo(_controller.position.maxScrollExtent);
   });
 

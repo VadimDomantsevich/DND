@@ -34,13 +34,13 @@ class EnemyScreen extends StatelessWidget {
                     builder: (context) => AlertDialog(
                           title: const Text("Ошибка"),
                           content: Text(state.error!),
-                        ));
+                        ),);
               }
             }
           },
-          builder: ((context, state) {
+          builder: (context, state) {
             return containerRadialGradienWrap(buildListView(context, state));
-          }),
+          },
         ),
       ),
     );
@@ -59,19 +59,19 @@ class EnemyScreen extends StatelessWidget {
                   motion: const ScrollMotion(),
                   children: [
                     SlidableAction(
-                      onPressed: ((newContext) async => {
+                      onPressed: (newContext) async => {
                             BlocProvider.of<EnemyBloc>(context)
                                 .add(RemoveEnemyEvent(enemy.name))
-                          }),
-                      backgroundColor: AppTheme.deleteActionPaneBacgroundColor,
+                          },
+                      backgroundColor: AppTheme.deleteSlidableActionBacgroundColor,
                       foregroundColor: AppTheme.actionPaneForegroundColor,
                       icon: Icons.delete,
                       label: 'Удалить',
                     ),
                     SlidableAction(
-                      onPressed: (((newContext) async =>
-                          {update(context, enemy)})),
-                      backgroundColor: AppTheme.editActionPaneBackgroundColor,
+                      onPressed: (newContext) async =>
+                          {update(context, enemy)},
+                      backgroundColor: AppTheme.editSlidableActionBackgroundColor,
                       foregroundColor: AppTheme.actionPaneForegroundColor,
                       icon: Icons.create,
                       label: 'Исправить',
@@ -88,7 +88,7 @@ class EnemyScreen extends StatelessWidget {
               title: const Text('Создать нового противника'),
               trailing: const Icon(Icons.add_box_outlined),
               onTap: () async {
-                List<dynamic> result = await showDialog(
+                /* List<dynamic> result = await showDialog(
                     context: context,
                     builder: (context) => const Dialog(
                           child: UpdateEnemy(),
@@ -96,7 +96,7 @@ class EnemyScreen extends StatelessWidget {
                 if (result.isNotEmpty) {
                   BlocProvider.of<EnemyBloc>(context)
                       .add(AddEnemyEvent(result[0], result[1], result[2]));
-                }
+                } */
               },
             )
           ],
@@ -107,7 +107,7 @@ class EnemyScreen extends StatelessWidget {
   }
 
   Future<void> update(BuildContext context, Enemy enemy) async {
-    List<dynamic> result = await showDialog(
+    /* List<dynamic> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
               child: UpdateEnemy(enemy: enemy),
@@ -115,6 +115,6 @@ class EnemyScreen extends StatelessWidget {
     if (result.isNotEmpty) {
       BlocProvider.of<EnemyBloc>(context)
           .add(UpdateEnemyEvent(result[0], result[1], result[2], result[3]));
-    }
+    } */
   }
 }

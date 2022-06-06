@@ -38,7 +38,7 @@ Widget buildEnemiesLoaded(BuildContext context, EnemiesLoadedState state) {
                               child: elevatedButtonWrap(
                             ElevatedButton(
                                 onPressed: () async {
-                                  List<Character> characters = await showDialog(
+                                  /* List<Character> characters = await showDialog(
                                       context: context,
                                       builder: (context) => const Dialog(
                                             child: ChooseCharacterScreen(),
@@ -46,7 +46,7 @@ Widget buildEnemiesLoaded(BuildContext context, EnemiesLoadedState state) {
                                   if (characters.isNotEmpty) {
                                     BlocProvider.of<BattleBloc>(context)
                                         .add(LoadCharactersEvent(characters));
-                                  }
+                                  } */
                                 },
                                 child: const Text(Strings.chooseCharacters)),
                           )),
@@ -72,7 +72,7 @@ Widget buildEnemiesLoaded(BuildContext context, EnemiesLoadedState state) {
                                   child: elevatedButtonWrap(
                                 ElevatedButton(
                                     onPressed: () async {
-                                      List<Enemy> enemies = await showDialog(
+                                      /* List<Enemy> enemies = await showDialog(
                                           context: context,
                                           builder: (context) => const Dialog(
                                                 child: ChooseEnemyScreen(),
@@ -80,7 +80,7 @@ Widget buildEnemiesLoaded(BuildContext context, EnemiesLoadedState state) {
                                       if (enemies.isNotEmpty) {
                                         BlocProvider.of<BattleBloc>(context)
                                             .add(LoadEnemiesEvent(enemies));
-                                      }
+                                      } */
                                     },
                                     child: const Text(Strings.chooseEnemies)),
                               )),

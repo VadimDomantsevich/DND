@@ -1,0 +1,78 @@
+{
+    "language": "English",
+    "@language": {
+        "description": "The current Language"
+    },
+    "characters": "Characters",
+    "@characters": {
+        "description": "Characters AppBar title"
+    },
+    "createNewCharacter": "Create new character",
+    "@createNewCharacter": {
+        "description": "Create new character listTile title"
+    },
+    "characterCreation": "Character creation",
+    "@characterCreation": {
+        "description": "Create character AppBar title"
+    },
+    "editing": "Editing",
+    "@editing": {
+        "description": "Editing AppBar title"
+    },
+    "characterName": "Character name",
+    "@characterName": {
+        "description": "Character name TextFormField labelText"
+    },
+    "characterAlreadyExists": "Character already exists",
+    "@characterAlreadyExists": {
+        "description": "Character already exists TextFormField errorText"
+    },
+    "fieldIsEmpty": "Field must not be empty",
+    "@fieldIsEmpty": {
+        "description": "Field must not be empty TextFormField errorText"
+    },
+    "decrement": "Decrement",
+    "@decrement": {
+        "description": "Decrement tooltip"
+    },
+    "increment": "Increment",
+    "@increment": {
+        "description": "Increment tooltip"
+    },
+    "bonus": "Bonus",
+    "@bonus": {
+        "description": "Bonus text"
+    },
+    "skillBonus": "Skill bonus",
+    "@skillBonus": {
+        "description": "Skill bonus text"
+    },
+    "strength": "Strength",
+    "@strength": {
+        "description": "Strength text"
+    },
+    "dexterity": "Dexterity",
+    "@dexterity": {
+        "description": "Dexterity text"
+    },
+    "constitution": "Constitution",
+    "@constitution": {
+        "description": "Constitution text"
+    },
+    "intelligence": "Intelligence",
+    "@intelligence": {
+        "description": "Intelligence text"
+    },
+    "wisdom": "Wisdom",
+    "@wisdom": {
+        "description": "Wisdom text"
+    },
+    "charisma": "Charisma",
+    "@charisma": {
+        "description": "Charisma text"
+    },
+    "save": "Save",
+    "@save": {
+        "description": "Save text"
+    }
+}

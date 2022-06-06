@@ -1,11 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:dnd_rolls_app/core/constants/enums.dart';
+import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../../model/character.dart';
 
 part 'character_event.dart';
 part 'character_state.dart';
@@ -26,14 +25,15 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     });
     on<AddCharacterEvent>((event, emit) {
       final result = _characterService.addCharacter(
-          event.name,
-          event.skillBonus,
-          event.strength,
-          event.dexterity,
-          event.constitution,
-          event.intelligence,
-          event.wisdom,
-          event.charisma);
+        event.name,
+        event.skillBonus,
+        event.strength,
+        event.dexterity,
+        event.constitution,
+        event.intelligence,
+        event.wisdom,
+        event.charisma,
+      );
       switch (result) {
         case CreationResult.success:
           add(const LoadCharacterEvent());
@@ -44,42 +44,58 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
           break;
         case CreationResult.alreadyExists:
           final characters = _characterService.getCharacters();
-          emit(CharacterLoadedState(characters,
-              error: 'Персонаж с таким именем уже существует'));
+          emit(
+            CharacterLoadedState(
+              characters,
+              error: 'Персонаж с таким именем уже существует',
+            ),
+          );
           break;
       }
     });
     on<UpdateCharacterEvent>((event, emit) async {
       final result = await _characterService.updateCharacter(
-          event.name,
-          event.newName,
-          event.skillBonus,
-          event.strength,
-          event.dexterity,
-          event.constitution,
-          event.intelligence,
-          event.wisdom,
-          event.charisma);
+        event.name,
+        event.newName,
+        event.skillBonus,
+        event.strength,
+        event.dexterity,
+        event.constitution,
+        event.intelligence,
+        event.wisdom,
+        event.charisma,
+      );
       switch (result) {
         case CreationResult.success:
           if (event.name != event.newName) {
             final oldMacros = _macrosService.getCharacterMacros(event.name);
-            for (var macros in oldMacros) {
+            for (final macros in oldMacros) {
               _macrosService.updateMacrosCharacterName(
-                  macros.name, macros.characterName, event.newName);
+                macros.name,
+                macros.characterName,
+                event.newName,
+              );
             }
           }
           add(const LoadCharacterEvent());
           break;
         case CreationResult.failure:
           final characters = _characterService.getCharacters();
-          emit(CharacterLoadedState(characters,
-              error: 'Не удалось отредактировать'));
+          emit(
+            CharacterLoadedState(
+              characters,
+              error: 'Не удалось отредактировать',
+            ),
+          );
           break;
         case CreationResult.alreadyExists:
           final characters = _characterService.getCharacters();
-          emit(CharacterLoadedState(characters,
-              error: 'Персонаж с таким именем уже существует'));
+          emit(
+            CharacterLoadedState(
+              characters,
+              error: 'Персонаж с таким именем уже существует',
+            ),
+          );
           break;
       }
     });
@@ -124,5 +140,7 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
       _characterService.removeCharacter(event.name);
       add(const LoadCharacterEvent());
     });
+
+    add(RegisterServiceEvent());
   }
 }

@@ -37,7 +37,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
     _dialogHeader = 'Зачарование оружия ${widget.weapon.name}';
     _diceCountController.text = '1';
     if (widget.weapon.enchantments != null) {
-      for (var item in widget.weapon.enchantments!) {
+      for (final item in widget.weapon.enchantments!) {
         enchantments.add(item);
       }
     }
@@ -59,7 +59,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                     primary: false,
                     shrinkWrap: true,
                     itemCount: enchantments.length,
-                    itemBuilder: ((context, index) {
+                    itemBuilder: (context, index) {
                       return Slidable(
                         key: const ValueKey(1),
                         startActionPane: ActionPane(
@@ -74,7 +74,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                                 }
                               },
                               backgroundColor:
-                                  AppTheme.deleteActionPaneBacgroundColor,
+                                  AppTheme.deleteSlidableActionBacgroundColor,
                               foregroundColor:
                                   AppTheme.actionPaneForegroundColor,
                               icon: Icons.delete,
@@ -86,7 +86,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                           title: Text(enchantments[index].name),
                         ),
                       );
-                    }))
+                    },)
                 : Container(),
           ),
           Column(
@@ -114,10 +114,10 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                           break;
                       }
                     });
-                  }),
+                  },),
               SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
-                  child: buildForm(dropdownValue)),
+                  child: buildForm(dropdownValue),),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -125,19 +125,19 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                       onPressed: () {
                         Navigator.of(context).pop(false);
                       },
-                      child: const Text(Strings.cancel))),
+                      child: const Text(Strings.cancel),),),
                   elevatedButtonWrap(ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop(enchantments);
                       },
-                      child: const Text(Strings.save))),
+                      child: const Text(Strings.save),),),
                 ],
               ),
             ],
           ),
         ],
       ),
-    ));
+    ),);
   }
 
   Widget buildForm(String typeOfEnchantment) {
@@ -160,7 +160,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.25,
-                child: buildCounter()),
+                child: buildCounter(),),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -172,11 +172,11 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                           RepositoryProvider.of<EnchantmentService>(context)
                               .addEnchantment(
                                   TypeOfEnchantment.plusHitAndDamage,
-                                  hitAndDamagePlus: plusHitAndDamage);
+                                  hitAndDamagePlus: plusHitAndDamage,);
                       enchantments.add(enchantment);
                     });
                   },
-                  child: const Text('Добавить'))),
+                  child: const Text('Добавить'),),),
             ),
           )
         ],
@@ -209,7 +209,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           keyboardType: const TextInputType.numberWithOptions(
-                              decimal: false, signed: true),
+                              signed: true,),
                           controller: _diceCountController,
                           decoration: const InputDecoration(
                             prefixIcon: Icon(FontAwesomeIcons.cubes),
@@ -361,7 +361,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                             break;
                         }
                       });
-                    }),
+                    },),
               ),
             ],
           ),
@@ -378,12 +378,12 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
                                 diceCount: int.parse(_diceCountController.text),
                                 diceType: diceType,
                                 physicalTypeOfDamage: physicalTypeOfDamage,
-                                elementalTypeOfDamage: elementalTypeOfDamage);
+                                elementalTypeOfDamage: elementalTypeOfDamage,);
                         enchantments.add(enchantment);
                       });
                     }
                   },
-                  child: const Text('Добавить'))),
+                  child: const Text('Добавить'),),),
             ),
           )
         ],
@@ -477,7 +477,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
 
   void incrementDamage(DamageCube damage) {
     setState(() {
-      int index = DamageCube.values
+      final int index = DamageCube.values
           .firstWhere((element) => element.name == damage.name)
           .index;
       if (index == DamageCube.values.length - 2) {
@@ -490,7 +490,7 @@ class _EnchantWeaponState extends State<EnchantWeapon> {
 
   void decrementDamage(DamageCube damage) {
     setState(() {
-      int index = DamageCube.values
+      final int index = DamageCube.values
           .firstWhere((element) => element.name == damage.name)
           .index;
       if (index == 0) {

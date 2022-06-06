@@ -39,13 +39,13 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                     builder: (context) => AlertDialog(
                           title: const Text("Ошибка"),
                           content: Text(state.error!),
-                        ));
+                        ),);
               }
             }
           },
-          builder: ((context, state) {
+          builder: (context, state) {
             return containerRadialGradienWrap(buildListView(context, state));
-          }),
+          },
         ),
       ),
     );
@@ -53,8 +53,8 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
 
   Widget buildListView(BuildContext context, EnemyState state) {
     if (state is EnemyLoadedState) {
-      List<Enemy> selectedEnemies = [];
-      List<int> selectedEnemiesCount = [];
+      final List<Enemy> selectedEnemies = [];
+      final List<int> selectedEnemiesCount = [];
       return Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: ListView(
@@ -68,19 +68,19 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                          onPressed: ((newContext) async => {
+                          onPressed: (newContext) async => {
                                 BlocProvider.of<EnemyBloc>(context)
                                     .add(RemoveEnemyEvent(enemy.name))
-                              }),
-                          backgroundColor: AppTheme.deleteActionPaneBacgroundColor,
+                              },
+                          backgroundColor: AppTheme.deleteSlidableActionBacgroundColor,
                           foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.delete,
                           label: 'Удалить',
                         ),
                         SlidableAction(
-                          onPressed: (((newContext) async =>
-                              {update(context, enemy)})),
-                          backgroundColor: AppTheme.editActionPaneBackgroundColor,
+                          onPressed: (newContext) async =>
+                              {update(context, enemy)},
+                          backgroundColor: AppTheme.editSlidableActionBackgroundColor,
                           foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.create,
                           label: 'Исправить',
@@ -98,10 +98,10 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                             onTap: () {
                               BlocProvider.of<EnemyBloc>(context).add(
                                   SelectEnemyEvent(enemy, selectedEnemies,
-                                      selectedEnemiesCount));
+                                      selectedEnemiesCount,),);
                             },
                             title: Text(
-                                '${enemy.name} ${enemy.health} ${enemy.armorClass}'),
+                                '${enemy.name} ${enemy.health} ${enemy.armorClass}',),
                           ),
                         ),
                       ],
@@ -114,7 +114,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
               title: const Text('Создать нового противника'),
               trailing: const Icon(Icons.add_box_outlined),
               onTap: () async {
-                List<dynamic> result = await showDialog(
+                /* List<dynamic> result = await showDialog(
                     context: context,
                     builder: (context) => const Dialog(
                           child: UpdateEnemy(),
@@ -122,15 +122,15 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                 if (result.isNotEmpty) {
                   BlocProvider.of<EnemyBloc>(context)
                       .add(AddEnemyEvent(result[0], result[1], result[2]));
-                }
+                } */
               },
             )
           ],
         ),
       );
     } else if (state is SelectedEnemyState) {
-      List<Enemy> selectedEnemies = state.selectedEnemies;
-      List<int> selectedEnemiesCount = state.selectedEnemiesCount;
+      final List<Enemy> selectedEnemies = state.selectedEnemies;
+      final List<int> selectedEnemiesCount = state.selectedEnemiesCount;
       return Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: ListView(
@@ -144,21 +144,21 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                          onPressed: ((newContext) async => {
+                          onPressed: (newContext) async => {
                                 BlocProvider.of<EnemyBloc>(context)
                                     .add(RemoveEnemyEvent(enemy.name))
-                              }),
+                              },
                           backgroundColor:
-                              AppTheme.deleteActionPaneBacgroundColor,
+                              AppTheme.deleteSlidableActionBacgroundColor,
                           foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.delete,
                           label: 'Удалить',
                         ),
                         SlidableAction(
-                          onPressed: (((newContext) async =>
-                              {update(context, enemy)})),
+                          onPressed: (newContext) async =>
+                              {update(context, enemy)},
                           backgroundColor:
-                              AppTheme.editActionPaneBackgroundColor,
+                              AppTheme.editSlidableActionBackgroundColor,
                           foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.create,
                           label: 'Исправить',
@@ -192,18 +192,18 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                                     UnselectEnemyEvent(
                                         enemy,
                                         state.selectedEnemies,
-                                        state.selectedEnemiesCount));
+                                        state.selectedEnemiesCount,),);
                               } else {
                                 setState(() {});
                                 BlocProvider.of<EnemyBloc>(context).add(
                                     SelectEnemyEvent(
                                         enemy,
                                         state.selectedEnemies,
-                                        state.selectedEnemiesCount));
+                                        state.selectedEnemiesCount,),);
                               }
                             },
                             title: Text(
-                                '${enemy.name} ${enemy.health} ${enemy.armorClass}'),
+                                '${enemy.name} ${enemy.health} ${enemy.armorClass}',),
                           ),
                         ),
                         buildCounter(context, enemy, state)
@@ -217,7 +217,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
               title: const Text('Создать нового противника'),
               trailing: const Icon(Icons.add_box_outlined),
               onTap: () async {
-                List<dynamic> result = await showDialog(
+                /* List<dynamic> result = await showDialog(
                     context: context,
                     builder: (context) => const Dialog(
                           child: UpdateEnemy(),
@@ -225,16 +225,16 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                 if (result.isNotEmpty) {
                   BlocProvider.of<EnemyBloc>(context)
                       .add(AddEnemyEvent(result[0], result[1], result[2]));
-                }
+                } */
               },
             ),
             elevatedButtonWrap(
               ElevatedButton(
                   onPressed: () {
-                    List<Enemy> result = [];
-                    for (var enemy in state.selectedEnemies) {
+                    final List<Enemy> result = [];
+                    for (final enemy in state.selectedEnemies) {
                       int i = 0;
-                      int index = state.selectedEnemies.indexOf(enemy);
+                      final int index = state.selectedEnemies.indexOf(enemy);
                       while (i < state.selectedEnemiesCount[index]) {
                         result.add(enemy);
                         i++;
@@ -242,7 +242,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                     }
                     Navigator.of(context).pop(result);
                   },
-                  child: const Text(Strings.choose)),
+                  child: const Text(Strings.choose),),
             ),
           ],
         ),
@@ -269,7 +269,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
                     });
                     BlocProvider.of<EnemyBloc>(context).add(
                         UpdateSelectedEnemyCount(
-                            state.selectedEnemies, state.selectedEnemiesCount));
+                            state.selectedEnemies, state.selectedEnemiesCount,),);
                   }
                 },
                 mini: true,
@@ -288,7 +288,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
 
                   BlocProvider.of<EnemyBloc>(context).add(
                       UpdateSelectedEnemyCount(
-                          state.selectedEnemies, state.selectedEnemiesCount));
+                          state.selectedEnemies, state.selectedEnemiesCount,),);
                 },
                 mini: true,
                 child: const Icon(Icons.arrow_forward),
@@ -303,7 +303,7 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
   }
 
   Future<void> update(BuildContext context, Enemy enemy) async {
-    List<dynamic> result = await showDialog(
+    /* List<dynamic> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
               child: UpdateEnemy(enemy: enemy),
@@ -311,6 +311,6 @@ class _ChooseEnemyScreenState extends State<ChooseEnemyScreen> {
     if (result.isNotEmpty) {
       BlocProvider.of<EnemyBloc>(context)
           .add(UpdateEnemyEvent(result[0], result[1], result[2], result[3]));
-    }
+    } */
   }
 }

@@ -1,5 +1,4 @@
-import 'package:dnd_rolls_app/character/bloc/character_bloc.dart'
-    as character_bloc;
+import 'package:dnd_rolls_app/character/bloc_equatable/character_bloc.dart';
 import 'package:dnd_rolls_app/macros/widgets/selectable_macros_widget.dart';
 import 'package:dnd_rolls_app/model/character.dart';
 import 'package:dnd_rolls_app/services/character_service.dart';
@@ -18,15 +17,14 @@ class CharactersMacrosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<character_bloc.CharacterBloc>(
-      create: (characterContext) => character_bloc.CharacterBloc(
+    return BlocProvider<CharacterBloc>(
+      create: (characterContext) => CharacterBloc(
           RepositoryProvider.of<CharacterService>(characterContext),
           RepositoryProvider.of<MacrosService>(context))
-        ..add(character_bloc.GetCharactersNamesEvent(characters)),
-      child: BlocBuilder<character_bloc.CharacterBloc,
-          character_bloc.CharacterState>(
+        ..add(GetCharactersNamesEvent(characters)),
+      child: BlocBuilder<CharacterBloc, CharacterState>(
         builder: ((context, state) {
-          if (state is character_bloc.CharactersNamesLoadedState) {
+          if (state is CharactersNamesLoadedState) {
             return ListView(
               shrinkWrap: true,
               children: [

@@ -17,6 +17,7 @@ enum CharacteristicsEnum {
   @HiveField(5)
   charisma
 }
+
 @HiveType(typeId: 4)
 enum DamageCube {
   @HiveField(0)
@@ -76,3 +77,5 @@ enum TypeOfEnchantment {
 }
 
 enum CreationResult { success, failure, alreadyExists }
+
+enum FieldError { empty, invalid }

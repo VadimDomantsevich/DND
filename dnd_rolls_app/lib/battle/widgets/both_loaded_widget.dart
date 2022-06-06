@@ -15,14 +15,15 @@ Widget buildBothLoaded(BuildContext context, BothLoadedState state) {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: DecoratedBox(
-            decoration: BoxDecoration(border: Border.all(width: 1)),
+            decoration: BoxDecoration(border: Border.all()),
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.6,
               child: Column(
                 children: [
                   DecoratedBox(
                     decoration: const BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1))),
+                      border: Border(bottom: BorderSide()),
+                    ),
                     child: Center(
                       child: Text(
                         'Бой',
@@ -44,8 +45,8 @@ Widget buildBothLoaded(BuildContext context, BothLoadedState state) {
                               itemBuilder: (context, index) {
                                 return ListTile(
                                   title: Center(
-                                      child:
-                                          Text(state.characters[index].name)),
+                                    child: Text(state.characters[index].name),
+                                  ),
                                 );
                               },
                             ),
@@ -53,17 +54,16 @@ Widget buildBothLoaded(BuildContext context, BothLoadedState state) {
                                 child: elevatedButtonWrap(
                               ElevatedButton(
                                   onPressed: () async {
-                                    List<Character> characters =
+                                    /* final List<Character> characters =
                                         await showDialog(
-                                            context: context,
-                                            builder: (context) => const Dialog(
-                                                  child:
-                                                      ChooseCharacterScreen(),
-                                                ));
-                                    if (characters.isNotEmpty) {
-                                      BlocProvider.of<BattleBloc>(context)
-                                          .add(LoadCharactersEvent(characters));
-                                    }
+                                      context: context,
+                                      builder: (context) => const Dialog(
+                                        child: ChooseCharacterScreen(),
+                                      ),
+                                    );
+                                    if (characters.isEmpty) return;
+                                    BlocProvider.of<BattleBloc>(context)
+                                        .add(LoadCharactersEvent(characters)); */
                                   },
                                   child: const Text(Strings.chooseCharacters)),
                             )),
@@ -94,7 +94,7 @@ Widget buildBothLoaded(BuildContext context, BothLoadedState state) {
                                   child: elevatedButtonWrap(
                                 ElevatedButton(
                                     onPressed: () async {
-                                      List<Enemy> enemies = await showDialog(
+                                      /* List<Enemy> enemies = await showDialog(
                                           context: context,
                                           builder: (context) => const Dialog(
                                                 child: ChooseEnemyScreen(),
@@ -102,7 +102,7 @@ Widget buildBothLoaded(BuildContext context, BothLoadedState state) {
                                       if (enemies.isNotEmpty) {
                                         BlocProvider.of<BattleBloc>(context)
                                             .add(LoadEnemiesEvent(enemies));
-                                      }
+                                      } */
                                     },
                                     child: const Text(Strings.chooseEnemies)),
                               )),

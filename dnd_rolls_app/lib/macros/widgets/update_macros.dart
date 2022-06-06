@@ -1,4 +1,4 @@
-import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
+import 'package:dnd_rolls_app/character/bloc_equatable/character_bloc.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/themes/app_theme.dart';
 import 'package:dnd_rolls_app/core/widgets/wraps.dart';
@@ -65,7 +65,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                         .getCharacterMacros(widget.characterName!)
                         .any((element) =>
                             element.name.toLowerCase() ==
-                            value.toLowerCase())) {
+                            value.toLowerCase(),)) {
                   if (widget.macros != null &&
                       widget.macros!.name.toLowerCase() ==
                           value.toLowerCase()) {
@@ -91,7 +91,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                       onPressed: () {
                         Navigator.of(context).pop(false);
                       },
-                      child: const Text(Strings.cancel)),
+                      child: const Text(Strings.cancel),),
                 ),
                 elevatedButtonWrap(
                   ElevatedButton(
@@ -104,7 +104,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                               widget.macros!.characterName,
                               RepositoryProvider.of<MacrosService>(context)
                                   .getMacros(widget.macros!.name,
-                                      widget.macros!.characterName)
+                                      widget.macros!.characterName,)
                                   .strikes
                             ];
                             Navigator.of(context).pop(result);
@@ -118,14 +118,14 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                           }
                         }
                       },
-                      child: const Text(Strings.save)),
+                      child: const Text(Strings.save),),
                 ),
               ],
             ),
           )
-        ]),
+        ],),
       ),
-    ));
+    ),);
   }
 
   Widget buildStrikes() {
@@ -133,7 +133,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
       return BlocProvider(
         create: (context) => CharacterBloc(
             RepositoryProvider.of<CharacterService>(context),
-            RepositoryProvider.of<MacrosService>(context))
+            RepositoryProvider.of<MacrosService>(context),)
           ..add(GetCharacterEvent(widget.macros!.characterName)),
         child: BlocBuilder<CharacterBloc, CharacterState>(
           builder: (context, state) {
@@ -147,18 +147,18 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                       startActionPane:
                           ActionPane(motion: const ScrollMotion(), children: [
                         SlidableAction(
-                          onPressed: ((_) => {
-                                setState((() {
+                          onPressed: (_) => {
+                                setState(() {
                                   strikes.remove(strike);
-                                }))
-                              }),
+                                },)
+                              },
                           backgroundColor:
-                              AppTheme.deleteActionPaneBacgroundColor,
+                              AppTheme.deleteSlidableActionBacgroundColor,
                           foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.delete,
                           label: 'Удалить',
                         ),
-                      ]),
+                      ],),
                       child: ListTile(
                         title: Text(strike.name),
                       ),
@@ -168,19 +168,19 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                     title: const Text('Добавить удар'),
                     trailing: const Icon(Icons.add_box_outlined),
                     onTap: () async {
-                      Strike? strike = await showDialog(
+                      final Strike? strike = await showDialog(
                           context: context,
                           builder: (context) => Dialog(
                                 child: WeaponScreen(
                                   character: state.character,
                                 ),
-                              ));
+                              ),);
                       if (widget.macros != null) {
                         setState(() {
                           strikes =
                               RepositoryProvider.of<MacrosService>(context)
                                   .getMacros(widget.macros!.name,
-                                      widget.macros!.characterName)
+                                      widget.macros!.characterName,)
                                   .strikes;
 
                           if (strike != null) {
@@ -208,7 +208,7 @@ class _UpdateMacrosState extends State<UpdateMacros> {
       return BlocProvider(
         create: (context) => CharacterBloc(
             RepositoryProvider.of<CharacterService>(context),
-            RepositoryProvider.of<MacrosService>(context))
+            RepositoryProvider.of<MacrosService>(context),)
           ..add(GetCharacterEvent(widget.characterName!)),
         child: BlocBuilder<CharacterBloc, CharacterState>(
           builder: (context, state) {
@@ -217,29 +217,29 @@ class _UpdateMacrosState extends State<UpdateMacros> {
                 title: const Text('Добавить удар'),
                 trailing: const Icon(Icons.add_box_outlined),
                 onTap: () async {
-                  Strike? strike = await showDialog(
+                  final Strike? strike = await showDialog(
                       context: context,
                       builder: (context) => Dialog(
                             child: WeaponScreen(
                               character: state.character,
                             ),
-                          ));
+                          ),);
                   if (widget.macros != null) {
                     setState(() {
                       if (strike != null) {
                         RepositoryProvider.of<MacrosService>(context)
                             .getMacros(widget.macros!.name,
-                                widget.macros!.characterName)
+                                widget.macros!.characterName,)
                             .strikes
                             .add(strike);
                         RepositoryProvider.of<MacrosService>(context)
                             .getMacros(widget.macros!.name,
-                                widget.macros!.characterName)
+                                widget.macros!.characterName,)
                             .save();
                       }
                       strikes = RepositoryProvider.of<MacrosService>(context)
                           .getMacros(
-                              widget.macros!.name, widget.macros!.characterName)
+                              widget.macros!.name, widget.macros!.characterName,)
                           .strikes;
                     });
                   } else if (strike != null) {

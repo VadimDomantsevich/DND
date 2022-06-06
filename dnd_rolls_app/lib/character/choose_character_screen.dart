@@ -1,4 +1,5 @@
-import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
+
+import 'package:dnd_rolls_app/character/bloc_equatable/character_bloc.dart';
 import 'package:dnd_rolls_app/character/widgets/update_character.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/themes/app_theme.dart';
@@ -30,7 +31,7 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
       body: BlocProvider(
         create: (context) => CharacterBloc(
             RepositoryProvider.of<CharacterService>(context),
-            RepositoryProvider.of<MacrosService>(context))
+            RepositoryProvider.of<MacrosService>(context),)
           ..add(RegisterServiceEvent()),
         child: BlocConsumer<CharacterBloc, CharacterState>(
           listener: (context, state) {
@@ -41,20 +42,20 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                     builder: (context) => AlertDialog(
                           title: const Text("Ошибка"),
                           content: Text(state.error!),
-                        ));
+                        ),);
               }
             }
           },
-          builder: ((context, state) {
+          builder: (context, state) {
             return containerRadialGradienWrap(buildListView(context, state));
-          }),
+          },
         ),
       ),
     );
   }
 
   Future<void> update(BuildContext context, Character character) async {
-    List<dynamic> result = await showDialog(
+    /* List<dynamic> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
               child: UpdateCharacter(character: character),
@@ -70,12 +71,12 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
           result[6],
           result[7],
           result[8]));
-    }
+    } */
   }
 
   Widget buildListView(BuildContext context, CharacterState state) {
     if (state is CharacterLoadedState) {
-      List<Character> selectedCharacters = [];
+      final List<Character> selectedCharacters = [];
       return ListView(
         children: [
           ...state.characters.map(
@@ -88,21 +89,21 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                          onPressed: ((newContext) async => {
+                          onPressed: (newContext) async => {
                                 BlocProvider.of<CharacterBloc>(context)
                                     .add(RemoveCharacterEvent(character.name))
-                              }),
+                              },
                           backgroundColor:
-                              AppTheme.deleteActionPaneBacgroundColor,
+                              AppTheme.deleteSlidableActionBacgroundColor,
                           foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.delete,
                           label: 'Удалить',
                         ),
                         SlidableAction(
-                          onPressed: (((newContext) async =>
-                              {update(context, character)})),
+                          onPressed: (newContext) async =>
+                              {update(context, character)},
                           backgroundColor:
-                              AppTheme.editActionPaneBackgroundColor,
+                              AppTheme.editSlidableActionBackgroundColor,
                           foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.create,
                           label: 'Исправить',
@@ -117,10 +118,10 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                       onTap: () {
                         BlocProvider.of<CharacterBloc>(context).add(
                             SelectCharacterEvent(
-                                character, selectedCharacters));
+                                character, selectedCharacters,),);
                       },
                       title: Text(
-                          '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}'),
+                          '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}',),
                     ),
                   ),
                 ],
@@ -131,7 +132,7 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
             title: const Text('Создать нового персонажа'),
             trailing: const Icon(Icons.add_box_outlined),
             onTap: () async {
-              List<dynamic> result = await showDialog(
+              /* List<dynamic> result = await showDialog(
                   context: context,
                   builder: (context) => const Dialog(
                         child: UpdateCharacter(),
@@ -146,13 +147,13 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                     result[5],
                     result[6],
                     result[7]));
-              }
+              } */
             },
           ),
         ],
       );
     } else if (state is SelectedCharacterState) {
-      List<Character> selectedCharacters = state.selectedCharacters;
+      final List<Character> selectedCharacters = state.selectedCharacters;
       return ListView(
         children: [
           ...state.characters.map(
@@ -165,21 +166,21 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                          onPressed: ((newContext) async => {
+                          onPressed: (newContext) async => {
                                 BlocProvider.of<CharacterBloc>(context)
                                     .add(RemoveCharacterEvent(character.name))
-                              }),
+                              },
                           backgroundColor:
-                              AppTheme.deleteActionPaneBacgroundColor,
+                              AppTheme.deleteSlidableActionBacgroundColor,
                           foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.delete,
                           label: 'Удалить',
                         ),
                         SlidableAction(
-                          onPressed: (((newContext) async =>
-                              {update(context, character)})),
+                          onPressed: (newContext) async =>
+                              {update(context, character)},
                           backgroundColor:
-                              AppTheme.editActionPaneBackgroundColor,
+                              AppTheme.editSlidableActionBackgroundColor,
                           foregroundColor: AppTheme.actionPaneForegroundColor,
                           icon: Icons.create,
                           label: 'Исправить',
@@ -205,16 +206,16 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                           });
                           BlocProvider.of<CharacterBloc>(context).add(
                               UnselectCharacterEvent(
-                                  character, selectedCharacters));
+                                  character, selectedCharacters,),);
                         } else {
                           setState(() {});
                           BlocProvider.of<CharacterBloc>(context).add(
                               SelectCharacterEvent(
-                                  character, selectedCharacters));
+                                  character, selectedCharacters,),);
                         }
                       },
                       title: Text(
-                          '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}'),
+                          '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}',),
                     ),
                   ),
                 ],
@@ -225,7 +226,7 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
             title: const Text('Создать нового персонажа'),
             trailing: const Icon(Icons.add_box_outlined),
             onTap: () async {
-              List<dynamic> result = await showDialog(
+              /* List<dynamic> result = await showDialog(
                   context: context,
                   builder: (context) => const Dialog(
                         child: UpdateCharacter(),
@@ -240,7 +241,7 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                     result[5],
                     result[6],
                     result[7]));
-              }
+              } */
             },
           ),
           elevatedButtonWrap(
@@ -249,7 +250,7 @@ class _ChooseCharacterScreenState extends State<ChooseCharacterScreen> {
                   final result = state.selectedCharacters;
                   Navigator.of(context).pop(result);
                 },
-                child: const Text(Strings.choose)),
+                child: const Text(Strings.choose),),
           )
         ],
       );

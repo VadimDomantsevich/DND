@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 Widget buildSelectedBoth(BuildContext context, SelectedBothState state) {
   final ScrollController _controller = ScrollController();
 
-  SchedulerBinding.instance?.addPostFrameCallback((_) {
+  SchedulerBinding.instance.addPostFrameCallback((_) {
     _controller.jumpTo(_controller.position.maxScrollExtent);
   });
   return SafeArea(

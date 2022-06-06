@@ -1,5 +1,5 @@
-import 'package:dnd_rolls_app/character/bloc/character_bloc.dart'
-    as character_bloc;
+
+import 'package:dnd_rolls_app/character/bloc_equatable/character_bloc.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/macros/bloc/macros_bloc.dart';
@@ -23,15 +23,15 @@ class MacrosScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.headline4,
         ),
       ),
-      body: BlocProvider<character_bloc.CharacterBloc>(
-        create: (characterContext) => character_bloc.CharacterBloc(
+      body: BlocProvider<CharacterBloc>(
+        create: (characterContext) => CharacterBloc(
             RepositoryProvider.of<CharacterService>(characterContext),
             RepositoryProvider.of<MacrosService>(context))
-          ..add(character_bloc.GetAllCharactersNamesEvent()),
-        child: BlocBuilder<character_bloc.CharacterBloc,
-            character_bloc.CharacterState>(
+          ..add(GetAllCharactersNamesEvent()),
+        child: BlocBuilder<CharacterBloc,
+            CharacterState>(
           builder: ((context, state) {
-            if (state is character_bloc.CharactersNamesLoadedState) {
+            if (state is CharactersNamesLoadedState) {
               return containerRadialGradienWrap(ListView(
                 shrinkWrap: true,
                 children: [
@@ -58,7 +58,7 @@ class MacrosScreen extends StatelessWidget {
   }
 
   Future<void> update(BuildContext context, Macros macros) async {
-    List<dynamic> result = await showDialog(
+    /* List<dynamic> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
               child: UpdateMacros(
@@ -69,6 +69,6 @@ class MacrosScreen extends StatelessWidget {
     if (result.isNotEmpty) {
       BlocProvider.of<MacrosBloc>(context)
           .add(UpdateMacrosEvent(result[0], result[1], result[2], result[3]));
-    }
+    } */
   }
 }

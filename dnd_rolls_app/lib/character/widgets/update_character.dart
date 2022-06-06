@@ -59,60 +59,63 @@ class _UpdateCharacterState extends State<UpdateCharacter> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 230,
-                        child: TextFormField(
-                          controller: _nameController,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            labelText: 'Имя персонажа',
-                          ),
-                          validator: (value) {
-                            if (value != null &&
-                                RepositoryProvider.of<CharacterService>(context)
-                                    .getCharacters()
-                                    .any((element) =>
-                                        element.name.toLowerCase() ==
-                                        value.toLowerCase())) {
-                              if (widget.character != null &&
-                                  widget.character!.name.toLowerCase() ==
-                                      value.toLowerCase()) {
-                                return null;
-                              } else {
-                                return 'Персонаж уже существует';
-                              }
-                            }
-                            return (value == null || value.isEmpty)
-                                ? 'Поле не должно быть пустым'
-                                : null;
-                          },
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 230,
+                      child: TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.person),
+                          labelText: 'Имя персонажа',
                         ),
-                      ),
-                      FloatingActionButton(
-                        mini: true,
-                        onPressed: () {
-                          decrementSkillBonus(_skillBonusValue);
+                        validator: (value) {
+                          if (value != null &&
+                              RepositoryProvider.of<CharacterService>(context)
+                                  .getCharacters()
+                                  .any(
+                                    (element) =>
+                                        element.name.toLowerCase() ==
+                                        value.toLowerCase(),
+                                  )) {
+                            if (widget.character != null &&
+                                widget.character!.name.toLowerCase() ==
+                                    value.toLowerCase()) {
+                              return null;
+                            } else {
+                              return 'Персонаж уже существует';
+                            }
+                          }
+                          return (value == null || value.isEmpty)
+                              ? 'Поле не должно быть пустым'
+                              : null;
                         },
-                        tooltip: 'Уменьшить',
-                        child: const Icon(Icons.remove),
                       ),
-                      Column(
-                        children: [
-                          const Text('Бонус'),
-                          Text('$_skillBonusValue'),
-                        ],
-                      ),
-                      FloatingActionButton(
-                        mini: true,
-                        onPressed: () {
-                          incrementSkillBonus(_skillBonusValue);
-                        },
-                        tooltip: 'Увеличить',
-                        child: const Icon(Icons.add),
-                      ),
-                    ]),
+                    ),
+                    FloatingActionButton(
+                      mini: true,
+                      onPressed: () {
+                        decrementSkillBonus(_skillBonusValue);
+                      },
+                      tooltip: 'Уменьшить',
+                      child: const Icon(Icons.remove),
+                    ),
+                    Column(
+                      children: [
+                        const Text('Бонус'),
+                        Text('$_skillBonusValue'),
+                      ],
+                    ),
+                    FloatingActionButton(
+                      mini: true,
+                      onPressed: () {
+                        incrementSkillBonus(_skillBonusValue);
+                      },
+                      tooltip: 'Увеличить',
+                      child: const Icon(Icons.add),
+                    ),
+                  ],
+                ),
               ),
               buildCharacteristic(CharacteristicsEnum.strength),
               buildCharacteristic(CharacteristicsEnum.dexterity),

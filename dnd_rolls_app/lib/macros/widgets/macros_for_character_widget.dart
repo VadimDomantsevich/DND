@@ -10,9 +10,9 @@ import 'update_macros.dart';
 
 Widget buildMacrosForCharacter(BuildContext context, String characterName) {
   return BlocProvider<MacrosBloc>(
-    create: ((macrosContext) =>
+    create: (macrosContext) =>
         MacrosBloc(RepositoryProvider.of<MacrosService>(macrosContext))
-          ..add(LoadCharacterMacrosEvent(characterName))),
+          ..add(LoadCharacterMacrosEvent(characterName)),
     child: BlocConsumer<MacrosBloc, MacrosState>(
       listener: (context, state) {
         if (state is MacrosLoadedState) {
@@ -22,11 +22,11 @@ Widget buildMacrosForCharacter(BuildContext context, String characterName) {
                 builder: (context) => AlertDialog(
                       title: const Text('Ошибка'),
                       content: Text(state.error!),
-                    ));
+                    ),);
           }
         }
       },
-      builder: ((context, state) {
+      builder: (context, state) {
         if (state is MacrosLoadedState) {
           return ListView(shrinkWrap: true, children: [
             ...state.macros.map(
@@ -40,21 +40,21 @@ Widget buildMacrosForCharacter(BuildContext context, String characterName) {
                         motion: const ScrollMotion(),
                         children: [
                           SlidableAction(
-                            onPressed: ((newContext) async => {
+                            onPressed: (newContext) async => {
                                   BlocProvider.of<MacrosBloc>(context).add(
                                       RemoveMacrosEvent(
-                                          macros.name, macros.characterName))
-                                }),
+                                          macros.name, macros.characterName,),)
+                                },
                             backgroundColor:
-                                AppTheme.deleteActionPaneBacgroundColor,
+                                AppTheme.deleteSlidableActionBacgroundColor,
                             foregroundColor: AppTheme.actionPaneForegroundColor,
                             icon: Icons.delete,
                           ),
                           SlidableAction(
-                            onPressed: (((newContext) async =>
-                                {update(context, macros)})),
+                            onPressed: (newContext) async =>
+                                {update(context, macros)},
                             backgroundColor:
-                                AppTheme.editActionPaneBackgroundColor,
+                                AppTheme.editSlidableActionBackgroundColor,
                             foregroundColor: AppTheme.actionPaneForegroundColor,
                             icon: Icons.create,
                           ),
@@ -74,7 +74,7 @@ Widget buildMacrosForCharacter(BuildContext context, String characterName) {
               title: const Text('Создать новый макрос'),
               trailing: const Icon(Icons.add_box_outlined),
               onTap: () async {
-                List<dynamic> result = await showDialog(
+                /* List<dynamic> result = await showDialog(
                     context: context,
                     builder: (context) {
                       return Dialog(
@@ -86,20 +86,20 @@ Widget buildMacrosForCharacter(BuildContext context, String characterName) {
                 if (result.isNotEmpty) {
                   BlocProvider.of<MacrosBloc>(context)
                       .add(AddMacrosEvent(result[0], result[1], result[2]));
-                }
+                } */
               },
             )
-          ]);
+          ],);
         } else {
           return Container();
         }
-      }),
+      },
     ),
   );
 }
 
 Future<void> update(BuildContext context, Macros macros) async {
-  List<dynamic> result = await showDialog(
+  /* List<dynamic> result = await showDialog(
       context: context,
       builder: (context) => Dialog(
             child: UpdateMacros(
@@ -110,5 +110,5 @@ Future<void> update(BuildContext context, Macros macros) async {
   if (result.isNotEmpty) {
     BlocProvider.of<MacrosBloc>(context)
         .add(UpdateMacrosEvent(result[0], result[1], result[2], result[3]));
-  }
+  } */
 }

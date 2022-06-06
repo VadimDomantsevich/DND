@@ -1,4 +1,5 @@
-import 'package:dnd_rolls_app/character/bloc/character_bloc.dart';
+
+import 'package:dnd_rolls_app/character/bloc_equatable/character_bloc.dart';
 import 'package:dnd_rolls_app/character/widgets/update_character.dart';
 import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/themes/app_theme.dart';
@@ -26,7 +27,7 @@ class CharactersScreen extends StatelessWidget {
       body: BlocProvider(
         create: (context) => CharacterBloc(
             RepositoryProvider.of<CharacterService>(context),
-            RepositoryProvider.of<MacrosService>(context))
+            RepositoryProvider.of<MacrosService>(context),)
           ..add(RegisterServiceEvent()),
         child: BlocConsumer<CharacterBloc, CharacterState>(
           listener: (context, state) {
@@ -37,11 +38,11 @@ class CharactersScreen extends StatelessWidget {
                     builder: (context) => AlertDialog(
                           title: const Text("Ошибка"),
                           content: Text(state.error!),
-                        ));
+                        ),);
               }
             }
           },
-          builder: ((context, state) {
+          builder: (context, state) {
             if (state is CharacterLoadedState) {
               return containerRadialGradienWrap(ListView(
                 children: [
@@ -53,22 +54,22 @@ class CharactersScreen extends StatelessWidget {
                           motion: const ScrollMotion(),
                           children: [
                             SlidableAction(
-                              onPressed: ((newContext) async => {
+                              onPressed: (newContext) async => {
                                     BlocProvider.of<CharacterBloc>(context).add(
-                                        RemoveCharacterEvent(character.name))
-                                  }),
+                                        RemoveCharacterEvent(character.name),)
+                                  },
                               backgroundColor:
-                                  AppTheme.deleteActionPaneBacgroundColor,
+                                  AppTheme.deleteSlidableActionBacgroundColor,
                               foregroundColor:
                                   AppTheme.actionPaneForegroundColor,
                               icon: Icons.delete,
                               label: 'Удалить',
                             ),
                             SlidableAction(
-                              onPressed: (((newContext) async =>
-                                  {update(context, character)})),
+                              onPressed: (newContext) async =>
+                                  {update(context, character)},
                               backgroundColor:
-                                  AppTheme.editActionPaneBackgroundColor,
+                                  AppTheme.editSlidableActionBackgroundColor,
                               foregroundColor:
                                   AppTheme.actionPaneForegroundColor,
                               icon: Icons.create,
@@ -78,7 +79,7 @@ class CharactersScreen extends StatelessWidget {
                         ),
                         child: ListTile(
                           title: Text(
-                              '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}'),
+                              '${character.name} ${character.skillBonus} ${character.strength} ${character.dexterity} ${character.constitution} ${character.intelligence} ${character.wisdom} ${character.charisma}',),
                         ),
                       );
                     },
@@ -87,7 +88,7 @@ class CharactersScreen extends StatelessWidget {
                     title: const Text('Создать нового персонажа'),
                     trailing: const Icon(Icons.add_box_outlined),
                     onTap: () async {
-                      List<dynamic> result = await showDialog(
+                      /* List<dynamic> result = await showDialog(
                           context: context,
                           builder: (context) => const Dialog(
                                 child: UpdateCharacter(),
@@ -103,21 +104,21 @@ class CharactersScreen extends StatelessWidget {
                                 result[5],
                                 result[6],
                                 result[7]));
-                      }
+                      } */
                     },
                   ),
                 ],
-              ));
+              ),);
             }
             return Container();
-          }),
+          },
         ),
       ),
     );
   }
 
   Future<void> update(BuildContext context, Character character) async {
-    List<dynamic> result = await showDialog(
+    /* List<dynamic> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
               child: UpdateCharacter(character: character),
@@ -133,6 +134,6 @@ class CharactersScreen extends StatelessWidget {
           result[6],
           result[7],
           result[8]));
-    }
+    } */
   }
 }

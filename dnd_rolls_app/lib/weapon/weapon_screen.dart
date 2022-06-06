@@ -3,17 +3,12 @@ import 'package:dnd_rolls_app/core/constants/strings.dart';
 import 'package:dnd_rolls_app/core/themes/app_theme.dart';
 import 'package:dnd_rolls_app/core/widgets/wraps.dart';
 import 'package:dnd_rolls_app/model/character.dart';
-import 'package:dnd_rolls_app/model/enchantment.dart';
-import 'package:dnd_rolls_app/model/strike.dart';
 import 'package:dnd_rolls_app/model/weapon.dart';
 import 'package:dnd_rolls_app/services/enchantment_service.dart';
 import 'package:dnd_rolls_app/services/macros_service.dart';
 import 'package:dnd_rolls_app/services/strike_service.dart';
 import 'package:dnd_rolls_app/services/weapon_service.dart';
-import 'package:dnd_rolls_app/strike/strike_screeen.dart';
 import 'package:dnd_rolls_app/weapon/bloc/weapon_bloc.dart';
-import 'package:dnd_rolls_app/weapon/widgets/enchant_weapon.dart';
-import 'package:dnd_rolls_app/weapon/widgets/update_weapon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -34,27 +29,27 @@ class WeaponScreen extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) => WeaponBloc(
-            RepositoryProvider.of<WeaponService>(context),
-            RepositoryProvider.of<StrikeService>(context),
-            RepositoryProvider.of<MacrosService>(context),
-            RepositoryProvider.of<EnchantmentService>(context))
-          ..add(RegisterServiceEvent()),
+          RepositoryProvider.of<WeaponService>(context),
+          RepositoryProvider.of<StrikeService>(context),
+          RepositoryProvider.of<MacrosService>(context),
+          RepositoryProvider.of<EnchantmentService>(context),
+        )..add(RegisterServiceEvent()),
         child: BlocConsumer<WeaponBloc, WeaponState>(
           listener: (context, state) {
             if (state is WeaponLoadedState) {
               if (state.error != null) {
                 showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          title: const Text("Ошибка"),
-                          content: Text(state.error!),
-                        ));
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Ошибка"),
+                    content: Text(state.error!),
+                  ),
+                );
               }
             }
           },
-          builder: ((context, state) {
-            return containerRadialGradienWrap(buildListView(context, state));
-          }),
+          builder: (context, state) =>
+              containerRadialGradienWrap(buildListView(context, state)),
         ),
       ),
     );
@@ -73,29 +68,29 @@ class WeaponScreen extends StatelessWidget {
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(
-                        onPressed: ((newContext) async => {
+                        onPressed: (newContext) async => {
                               BlocProvider.of<WeaponBloc>(context)
                                   .add(RemoveWeaponEvent(weapon.name))
-                            }),
+                            },
                         backgroundColor:
-                            AppTheme.deleteActionPaneBacgroundColor,
+                            AppTheme.deleteSlidableActionBacgroundColor,
                         foregroundColor: AppTheme.actionPaneForegroundColor,
                         icon: Icons.delete,
                         //label: 'Удалить',
                       ),
                       SlidableAction(
-                        onPressed: (((newContext) async =>
-                            {update(context, weapon)})),
-                        backgroundColor: AppTheme.editActionPaneBackgroundColor,
+                        onPressed: (newContext) async =>
+                            {update(context, weapon)},
+                        backgroundColor: AppTheme.editSlidableActionBackgroundColor,
                         foregroundColor: AppTheme.actionPaneForegroundColor,
                         icon: Icons.create,
                         //label: 'Исправить',
                       ),
                       SlidableAction(
-                        onPressed: (((newContext) async =>
-                            {enchant(context, weapon)})),
+                        onPressed: (newContext) async =>
+                            {enchant(context, weapon)},
                         backgroundColor:
-                            AppTheme.enchantActionPaneBackgroundColor,
+                            AppTheme.enchantSlidableActionBackgroundColor,
                         foregroundColor: AppTheme.actionPaneForegroundColor,
                         icon: FontAwesomeIcons.wandMagicSparkles,
                         //label: 'Зачаровать',
@@ -109,7 +104,7 @@ class WeaponScreen extends StatelessWidget {
                           .add(SelectWeaponEvent(weapon));
                     },
                     title: Text(
-                        '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)} ${getTypeOfDamageName(weapon.typeOfDamage)}'),
+                        '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)} ${getTypeOfDamageName(weapon.typeOfDamage)}',),
                   ),
                 ),
               ],
@@ -119,7 +114,7 @@ class WeaponScreen extends StatelessWidget {
             title: const Text('Создать новое оружие'),
             trailing: const Icon(Icons.add_box_outlined),
             onTap: () async {
-              List<dynamic> result = await showDialog(
+              /* List<dynamic> result = await showDialog(
                   context: context,
                   builder: (context) => const Dialog(
                         child: UpdateWeapon(),
@@ -127,7 +122,7 @@ class WeaponScreen extends StatelessWidget {
               if (result.isNotEmpty) {
                 BlocProvider.of<WeaponBloc>(context).add(
                     AddWeaponEvent(result[0], result[1], result[2], result[3]));
-              }
+              } */
             },
           ),
         ],
@@ -142,27 +137,27 @@ class WeaponScreen extends StatelessWidget {
                 motion: const ScrollMotion(),
                 children: [
                   SlidableAction(
-                    onPressed: ((newContext) async => {
+                    onPressed: (newContext) async => {
                           BlocProvider.of<WeaponBloc>(context)
                               .add(RemoveWeaponEvent(weapon.name))
-                        }),
-                    backgroundColor: AppTheme.deleteActionPaneBacgroundColor,
+                        },
+                    backgroundColor: AppTheme.deleteSlidableActionBacgroundColor,
                     foregroundColor: AppTheme.actionPaneForegroundColor,
                     icon: Icons.delete,
                     //label: 'Удалить',
                   ),
                   SlidableAction(
-                    onPressed: (((newContext) async =>
-                        {update(context, weapon)})),
-                    backgroundColor: AppTheme.editActionPaneBackgroundColor,
+                    onPressed: (newContext) async =>
+                        {update(context, weapon)},
+                    backgroundColor: AppTheme.editSlidableActionBackgroundColor,
                     foregroundColor: AppTheme.actionPaneForegroundColor,
                     icon: Icons.create,
                     //label: 'Исправить',
                   ),
                   SlidableAction(
-                    onPressed: (((newContext) async =>
-                        {enchant(context, weapon)})),
-                    backgroundColor: AppTheme.enchantActionPaneBackgroundColor,
+                    onPressed: (newContext) async =>
+                        {enchant(context, weapon)},
+                    backgroundColor: AppTheme.enchantSlidableActionBackgroundColor,
                     foregroundColor: AppTheme.actionPaneForegroundColor,
                     icon: FontAwesomeIcons.wandMagicSparkles,
                     //label: 'Зачаровать',
@@ -186,7 +181,7 @@ class WeaponScreen extends StatelessWidget {
                   }
                 },
                 title: Text(
-                    '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)} ${getTypeOfDamageName(weapon.typeOfDamage)}'),
+                    '${weapon.name} ${getDamageName(weapon.damage)} ${getCharacteristicName(weapon.mainCharacteristic)} ${getTypeOfDamageName(weapon.typeOfDamage)}',),
               ),
             ),
           ),
@@ -194,7 +189,7 @@ class WeaponScreen extends StatelessWidget {
             title: const Text('Создать новое оружие'),
             trailing: const Icon(Icons.add_box_outlined),
             onTap: () async {
-              List<dynamic> result = await showDialog(
+              /* List<dynamic> result = await showDialog(
                   context: context,
                   builder: (context) => const Dialog(
                         child: UpdateWeapon(),
@@ -202,21 +197,21 @@ class WeaponScreen extends StatelessWidget {
               if (result.isNotEmpty) {
                 BlocProvider.of<WeaponBloc>(context).add(
                     AddWeaponEvent(result[0], result[1], result[2], result[3]));
-              }
+              } */
             },
           ),
           elevatedButtonWrap(
             ElevatedButton(
                 onPressed: () async {
-                  Strike strike = await showDialog(
+                  /* Strike strike = await showDialog(
                       context: context,
                       builder: (context) => Dialog(
                             child: StrikeScreen(
                                 character: character!, weapon: state.weapon),
                           ));
-                  Navigator.of(context).pop(strike);
+                  Navigator.of(context).pop(strike); */
                 },
-                child: const Text(Strings.choose)),
+                child: const Text(Strings.choose),),
           )
         ],
       );
@@ -270,7 +265,7 @@ class WeaponScreen extends StatelessWidget {
   }
 
   Future<void> update(BuildContext context, Weapon weapon) async {
-    List<dynamic> result = await showDialog(
+    /* List<dynamic> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
               child: UpdateWeapon(weapon: weapon),
@@ -278,16 +273,16 @@ class WeaponScreen extends StatelessWidget {
     if (result.isNotEmpty) {
       BlocProvider.of<WeaponBloc>(context).add(UpdateWeaponEvent(
           result[0], result[1], result[2], result[3], result[4], result[5]));
-    }
+    } */
   }
 
   Future<void> enchant(BuildContext context, Weapon weapon) async {
-    List<Enchantment> result = await showDialog(
+    /* List<Enchantment> result = await showDialog(
         context: context,
         builder: (context) => Dialog(
               child: EnchantWeapon(weapon: weapon),
             ));
     BlocProvider.of<WeaponBloc>(context)
-        .add(EnchantWeaponEvent(weapon, result));
+        .add(EnchantWeaponEvent(weapon, result)); */
   }
 }

@@ -9,7 +9,7 @@ Widget buildEveryoneAttacked(
     BuildContext context, EveryoneAttackedState state) {
   final ScrollController _controller = ScrollController();
 
-  SchedulerBinding.instance?.addPostFrameCallback((_) {
+  SchedulerBinding.instance.addPostFrameCallback((_) {
     _controller.jumpTo(_controller.position.maxScrollExtent);
   });
   return SafeArea(
