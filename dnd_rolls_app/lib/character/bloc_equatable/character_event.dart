@@ -14,6 +14,27 @@ class LoadCharacterEvent extends CharacterEvent {
   List<Object> get props => [];
 }
 
+class GetAllCharactersNamesEvent extends CharacterEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class GetCharactersNamesEvent extends CharacterEvent {
+  final List<Character> characters;
+
+  const GetCharactersNamesEvent(this.characters);
+  @override
+  List<Object> get props => [characters];
+}
+
+class GetCharacterEvent extends CharacterEvent {
+  final String characterName;
+
+  const GetCharacterEvent(this.characterName);
+  @override
+  List<Object> get props => [characterName];
+}
+
 class AddCharacterEvent extends CharacterEvent {
   final String name;
   final int skillBonus;
@@ -79,6 +100,24 @@ class UpdateCharacterEvent extends CharacterEvent {
         wisdom,
         charisma
       ];
+}
+
+class SelectCharacterEvent extends CharacterEvent {
+  final Character character;
+  final List<Character> selectedCharacters;
+
+  const SelectCharacterEvent(this.character, this.selectedCharacters);
+  @override
+  List<Object> get props => [character, selectedCharacters];
+}
+
+class UnselectCharacterEvent extends CharacterEvent {
+  final Character character;
+  final List<Character> selectedCharacters;
+
+  const UnselectCharacterEvent(this.character, this.selectedCharacters);
+  @override
+  List<Object> get props => [character, selectedCharacters];
 }
 
 class RemoveCharacterEvent extends CharacterEvent {
