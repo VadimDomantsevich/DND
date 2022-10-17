@@ -1,0 +1,21 @@
+{
+    "language": "Русский",
+    "characters": "Персонажи",
+    "createNewCharacter": "Создать нового персонажа",
+    "characterCreation": "Создание персонажа",
+    "editing": "Редактирование",
+    "characterName": "Имя персонажа",
+    "characterAlreadyExists": "Персонаж уже существует",
+    "fieldIsEmpty": "Поле не должно быть пустым",
+    "decrement": "Уменьшить",
+    "increment": "Увеличить",
+    "bonus": "Бонус",
+    "skillBonus": "Бонус мастерства",
+    "strength": "Сила",
+    "dexterity": "Ловкость",
+    "constitution": "Выносливость",
+    "intelligence": "Интеллект",
+    "wisdom": "Мудрость",
+    "charisma": "Харизма",
+    "save": "Сохранить"
+}
